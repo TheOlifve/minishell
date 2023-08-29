@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/07/27 13:30:40 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/08/29 14:41:11 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,3 +90,4 @@ int	ft_export(t_ms *ms, char *str)
 	writ_to_file(ms, str, i, get_next_line(ms->cache));
 	return (0);
 }
+
