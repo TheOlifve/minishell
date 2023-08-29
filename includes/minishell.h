@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/29 13:17:39 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/08/29 18:46:16 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_ms
 	int		cmd;
 	int		fd[2];
 	int		cache;
+	int		index;
 	int		tok_cnt;
 	int		builtins;
 	int		dol_check;
@@ -138,7 +139,8 @@ void	sig2(int sig);
 void	new1(t_lcmd *new);
 void	ft_free2(t_ms *ms);
 void	check_dol(t_ms *ms);
-void	exit_mode(int n, t_ms *ms);
+void	ft_search(t_ms *ms);
+int		exit_mode(int n, t_ms *ms);
 void	pipe_close(t_pipex *pipex);
 void	ctrld(char *line, t_ms *ms);
 void	pars(t_lexer *lex, t_ms *ms);

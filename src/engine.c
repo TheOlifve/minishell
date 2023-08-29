@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/29 13:26:17 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:50:07 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	exec_cmd(t_ms *ms, int i)
 {
 	int		pid;
 	char	**cmd;
+	int		ptr[1];
 
 	cmd = ft_split(cmd_builder(ms, i), ' ');
 	pid = fork();
@@ -83,8 +84,9 @@ void	exec_cmd(t_ms *ms, int i)
 		printf("minishell: %s: command not found\n", cmd[0]);
 		exit_mode(7, ms);
 	}
-	while (wait(NULL) != -1)
+	while (wait(ptr) != -1)
 		;
+	ms->bb = ptr[0];
 }
 
 int	cmd_find(t_ms *ms, int i)
@@ -135,6 +137,7 @@ int	ft_pipe_cmd(t_ms *ms, int i)
 		i++;
 	}
 	ms->p_argv = ft_split(str, '|');
+	ms->index = i;
 	pipex(ms, i, ms->p_argv);
 	return (i);
 }
@@ -147,17 +150,20 @@ int	engine(t_ms *ms)
 	while (*ms->lcmd && ms->lcmd[i])
 	{
 		ms->builtins = 0;
-		
+		ms->index = i;
 		if (ms->lcmd[i]->lpp)
 			i = ft_pipe_cmd(ms, i);
 		else
 		{
+			ms->index = i;
 			if (cmd_find(ms, i) == 2)
 				exec_cmd(ms, i);
 		}
+		if (ms->bb > 0)
+				break ;
+		else if (ms->bb == 0)
+			
 		i++;
-		// dprintf(2, "!\n");
 	}
-	// dprintf(2, "!\n");
 	return (0);
 }

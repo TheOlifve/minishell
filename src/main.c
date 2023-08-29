@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/29 13:05:34 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:52:08 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	main2(t_ms *ms, int	i)
 	ms->cmd = 0;
 	ms->pp = 0;
 	ms->bb = 0;
+	ms->index = 0;
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);

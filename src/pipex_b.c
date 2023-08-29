@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/29 13:09:43 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:50:12 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,20 @@ void	child(t_ms *ms, t_pipex *pipex, char **argv, int i)
 			perr("Error", ms);
 		j = cmd_find_p(ms, cmd_args, i);
 		if (j == 1)
-			perr("minishell error", ms);
+		{
+			pipe_close(pipex);
+			exit_mode (2, ms);
+		}
 		else if (j == 2)
 		{
 			pipe_close(pipex);
 			execve(cmd_args[0], cmd_args, ms->envp1);
+			if (pipex->index == 0)
+				dup2(0, STDOUT);
 			printf("minishell: %s: command not found\n", cmd_args[0]);
 			exit_mode (7, ms);
 		}
-		exit_mode (7, ms);
+		exit_mode(7, ms);
 	}
 }
 
@@ -93,6 +98,7 @@ int	pipex(t_ms *ms, int i, char **argv)
 {
 	t_pipex	pipex;
 	int		num;
+	int		ptr[1];
 
 	num = -1;
 	pipex.cmd_cnt = 0;
@@ -110,7 +116,8 @@ int	pipex(t_ms *ms, int i, char **argv)
 		pipex.index += 1;
 	}
 	pipe_close(&pipex);
-	while (wait(NULL) != -1)
+	while (wait(ptr) != -1)
 		;
+	ms->bb = ptr[0];
 	return (0);
 }
