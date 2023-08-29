@@ -52,5 +52,5 @@ Mkfile.old
 dkms.conf
 cache
 readline/
-asd
+readline-8.2/
 .DS_Store
