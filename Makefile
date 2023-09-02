@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/08/29 15:20:13 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/08/31 12:19:03 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC = 	src/main.c				\
 		src/pipex_b.c			\
 		src/free.c				\
 		src/utils.c				\
+		src/utils2.c			\
 		src/signal.c			\
 		src/pp_bb.c				\
 		src/heredoc.c

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/29 13:34:13 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/08/31 11:39:05 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,36 @@ char	*trim_dol(char *str)
 	return (tmp);
 }
 
-void	check_dol(t_ms *ms)
+void	check_dol2(t_ms *ms, int i, int j)
 {
-	int		i;
-	int		j;
+	char	*tmp;
+
+	ms->str[i][j] = 32;
+	while (ms->str[i][++j] != 39)
+		;
+	ms->str[i][j] = 32;
+	tmp = ft_strdup(ms->str[i]);
+	free(ms->str[i]);
+	ms->str[i] = ft_strtrim(tmp, " ");
+	free(tmp);
+}
+
+void	check_dol(t_ms *ms, int	i, int j)
+{
 	char	*tmp;
 	char	*tmp2;
 
-	i = 0;
-	j = -1;
 	while (ms->str && ms->str[i])
 	{
 		j = -1;
 		while (ms->str && ms->str[i] && ms->str[i][++j])
 		{
-			if (ms->str[i][j] == '$')
+			if (ms->str[i][j] == 39 && ms->str[i][j + 1] == '$')
+			{
+				check_dol2(ms, i, j);
+				break ;
+			}
+			else if (ms->str[i][j] == '$')
 			{
 				tmp = dol_check(ms, ms->str[i]);
 				tmp2 = trim_dol(ms->str[i]);

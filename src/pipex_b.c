@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/29 19:50:12 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/02 02:45:48 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,6 @@ int	cmd_find_p(t_ms *ms, char **cmd, int i)
 	return (2);
 }
 
-void	ft_dup2(int read, int write, t_ms *ms)
-{
-	if (dup2(read, 0) < 0)
-		perr("Error", ms);
-	if (dup2(write, 1) < 0)
-		perr("Error", ms);
-}
-
 void	pipe_open(t_pipex *pipex, t_ms *ms)
 {
 	int	i;
@@ -58,6 +50,26 @@ void	pipe_open(t_pipex *pipex, t_ms *ms)
 		pipe(pipex->fd[i]);
 }
 
+void	exec_cmd(t_ms *ms, int i)
+{
+	int		pid;
+	char	**cmd;
+	int		ptr[1];
+
+	cmd = ft_split(cmd_builder(ms, i, ft_strdup(""), NULL), ' ');
+	pid = fork();
+	if (pid == 0)
+	{
+		execve (cmd[0], cmd, ms->envp1);
+		printf("minishell: %s: command not found\n", cmd[0]);
+		exit_mode(7, ms);
+	}
+	while (wait(ptr) != -1)
+		;
+	if (ptr[0] > 0)
+		ft_search(ms);
+}
+
 void	child(t_ms *ms, t_pipex *pipex, char **argv, int i)
 {
 	int		j;
@@ -74,33 +86,21 @@ void	child(t_ms *ms, t_pipex *pipex, char **argv, int i)
 			ft_dup2(pipex->fd[pipex->index - 1][0], pipex->fd[pipex->index][1], ms);
 		cmd_args = ft_split(argv[pipex->cmd_crnt], ' ');
 		if (!cmd_args)
+		{
 			perr("Error", ms);
+			exit_mode(7, ms);
+		}
 		j = cmd_find_p(ms, cmd_args, i);
-		if (j == 1)
-		{
-			pipe_close(pipex);
-			exit_mode (2, ms);
-		}
-		else if (j == 2)
-		{
-			pipe_close(pipex);
-			execve(cmd_args[0], cmd_args, ms->envp1);
-			if (pipex->index == 0)
-				dup2(0, STDOUT);
-			printf("minishell: %s: command not found\n", cmd_args[0]);
-			exit_mode (7, ms);
-		}
-		exit_mode(7, ms);
+		child_help(pipex, ms, cmd_args, j);
+		exit(0);
 	}
 }
 
-int	pipex(t_ms *ms, int i, char **argv)
+int	pipex(t_ms *ms, int i, char **argv, int	num)
 {
 	t_pipex	pipex;
-	int		num;
 	int		ptr[1];
 
-	num = -1;
 	pipex.cmd_cnt = 0;
 	pipex.cmd_crnt = 0;
 	pipex.index = 0;
@@ -110,7 +110,7 @@ int	pipex(t_ms *ms, int i, char **argv)
 	pipex.pipes_cnt = pipex.cmd_cnt - 1;
 	pipe_open(&pipex, ms);
 	while (++num <= pipex.pipes_cnt)
-	{	
+	{
 		child(ms, &pipex, argv, i);
 		pipex.cmd_crnt++;
 		pipex.index += 1;
@@ -118,6 +118,7 @@ int	pipex(t_ms *ms, int i, char **argv)
 	pipe_close(&pipex);
 	while (wait(ptr) != -1)
 		;
-	ms->bb = ptr[0];
+	if (ptr[0] > 0)
+		ft_search(ms);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 14:38:53 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/24 11:34:17 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/08/31 12:12:54 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
 	if (n < 2)
 		return (NULL);
 	ms->dol = ms->dol - 1;
-	ptr[n - 1] = '\0';
 	fd = open("cache", O_RDONLY);
 	str = get_next_line(fd);
 	while (str)
@@ -47,7 +46,7 @@ char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
 				str, ft_strlen(ptr) + 1) == 0)
 		{
 			str2 = ft_strtrim(str, "\n");
-			ft = (str2 + n);
+			ft = check_ft(str2 + n, 0);
 		}
 		free(str);
 		str = get_next_line(fd);

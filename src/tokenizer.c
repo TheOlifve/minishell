@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/29 19:36:34 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/02 09:26:27 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	tokenizer(t_ms *m, t_lexer **lexer)
 	cnt_for_alloc(m, 0, -1);
 	split_by(m, 0, -1);
 	m->str = ft_split(m->args_tmp, ' ');
-	check_dol(m);
+	check_dol(m, 0, -1);
 	tabs(m);
 	cnt_for_alloc(m, 1, -1);
 	(*lexer) = lstnew();
@@ -126,7 +126,7 @@ void	tokenizer(t_ms *m, t_lexer **lexer)
 		lstadd_back(lexer, lstnew());
 	l_analys(m, lexer);
 	pars(*lexer, m);
-	engine(m);
+	engine(m, 0, -1);
 	// int	j;
 
 	// j = -1;
@@ -179,4 +179,5 @@ void	tokenizer(t_ms *m, t_lexer **lexer)
     //     printf("%s\n", m->lcmd[2]->tree);
     //     m->lcmd[2] = m->lcmd[2]->next;
     // }
+	// engine(m, 0, 0);
 }

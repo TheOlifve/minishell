@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/29 19:44:31 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/01 18:01:24 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	perr(char *str, t_ms *ms)
 {
 	perror(str);
 	ft_search(ms);
-	(void)ms;
+	// (void)ms;
 	return (1);
 }
 

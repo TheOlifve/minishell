@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:59:02 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/29 12:45:52 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/08/31 12:35:02 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	sig2(int sig)
 	if (sig == SIGINT)
 	{
 		printf("\n");
-		// rl_replace_line("", 0);
-		//rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 		(void) sig;

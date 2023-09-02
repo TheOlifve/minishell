@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 18:17:31 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/24 14:03:13 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/02 10:06:31 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,26 @@
 
 void	op(t_lexer *lex, t_ms *ms, t_lcmd **lcmd)
 {
-	if (lex->kw && lex->next->kw
+	if ((lex->kw && lex->next && lex->next->kw
 		&& lex->kw[0] == '|' && lex->next->kw[0] != '|')
+		|| (lex->kw && !lex->next && lex->kw[0] == '|'))
 	{
 		(*lcmd)->lpp = "+";
-		lex = lex->next;
+		if (lex->next)
+			lex = lex->next;
 	}
-	else if (lex->kw && lex->next->kw
-		&& lex->kw[0] == '&' && lex->kw[1] == '&')
+	else if (lex->kw && lex->kw[0] == '&' && lex->kw[1] == '&')
 	{
 		(*lcmd)->lb = "+";
-		lex = lex->next;
+		if (lex->next)
+			lex = lex->next;
 	}
-	else if (lex->kw && lex->next->kw
+	else if (lex->kw && lex->next && lex->next->kw
 		&& lex->kw[0] == '|' && lex->next->kw[0] == '|')
 	{
 		(*lcmd)->tree = "+";
-		lex = lex->next->next;
+		if (lex->next->next)
+			lex = lex->next->next;
 	}
 	pars(lex, ms);
 }
@@ -74,13 +77,7 @@ int	help(char *lex, t_ms *ms, int i, char *ptr)
 		free(ptr);
 		ptr = ft_strjoin(str[i], join);
 		if (access(ptr, X_OK) == 0)
-		{
-			free(join);
-			ms->ptr = ptr;
-			if (ft_strncmp(lex, "./", 2) == 0)
-				ms->ptr = lex;
-			return (1);
-		}
+			return (help_helper(join, ptr, lex, ms));
 		if (ft_strncmp(lex, "./", 2) == 0)
 		{
 			ms->ptr = lex;
@@ -133,6 +130,7 @@ void	pars(t_lexer *lex, t_ms *ms)
 	ms->lcmd[ms->i] = lcmd;
 	while (lex)
 	{
+		//prior(lex);
 		if (lex->id && lex->id[0] == 'w')
 			lcmd_add_back(&lcmd, (word(lex, ms, NULL)), ms);
 		else if (lex->id && lex->id[0] == 'o')

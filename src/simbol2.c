@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/24 00:21:27 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/08/31 11:00:42 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,21 @@ void	path(t_ms *ms, int i, int n)
 	}
 }
 
-int	str_join(t_ms *ms, int i, char c)
+int	str_join(t_ms *ms, int i, char c) 
 {
+	int	n;
+	
+	n = 0;
 	ms->x = i;
-	if (c == 34 && ms->c2 % 2 != 0)
+	if (c == 39 && ms->args_old[i + 1] == '$')
+	{
+		while(ms->args_old[++i] != 39)
+			n++;
+		n++;
+		ms->c2++;
+		return (-n);
+	}
+	else if (c == 34 && ms->c2 % 2 != 0)
 		;
 	else if (c == 39 && ms->c1 % 2 != 0)
 		;

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/29 19:52:08 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/02 09:21:32 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ void	main2(t_ms *ms, int	i)
 	ms->c2 = 0;
 	ms->pos = 0;
 	ms->cmd = 0;
-	ms->pp = 0;
+	ms->pp = -1;
 	ms->bb = 0;
-	ms->index = 0;
+	ms->error = 0;
+	ms->index = -1;
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);
@@ -61,6 +62,7 @@ void	loop(t_ms *m_s, t_lexer *lexer)
 			tokenizer(m_s, &lexer);
 			free(m_s->args_old);
 		}
+		
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -73,6 +75,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc > 1)
 	{
 		perror("minishell_ERROR");
+		system ("leaks minishell");
 		exit (0);
 	}
 	(void) argv;
@@ -80,6 +83,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		m_s.envp = envp;
 		loop(&m_s, &lexer);
+		// ft_free2(&m_s);
 	}
 	unlink ("cache");
 }

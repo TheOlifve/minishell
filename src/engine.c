@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/29 19:50:07 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/02 09:25:49 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,8 @@ char	*ft_join(char *str, char *str2, int i)
 	}
 }
 
-char	*cmd_builder(t_ms *ms, int i)
+char	*cmd_builder(t_ms *ms, int i, char *tmp, char *cmd)
 {
-	char	*tmp;
-	char	*cmd;
-
-	tmp = ft_strdup("");
-	cmd = NULL;
 	while (ms->lcmd[i])
 	{
 		if (ms->lcmd[i]->cmd)
@@ -65,28 +60,12 @@ char	*cmd_builder(t_ms *ms, int i)
 		if (ms->lcmd[i]->word)
 			cmd = ft_join(tmp, ms->lcmd[i]->word, 1);
 		tmp = ft_strdup(cmd);
-		ms->lcmd[i] = ms->lcmd[i]->next;
+		if (ms->lcmd[i]->next)
+			ms->lcmd[i] = ms->lcmd[i]->next;
+		else
+			break ;
 	}
 	return (cmd);
-}
-
-void	exec_cmd(t_ms *ms, int i)
-{
-	int		pid;
-	char	**cmd;
-	int		ptr[1];
-
-	cmd = ft_split(cmd_builder(ms, i), ' ');
-	pid = fork();
-	if (pid == 0)
-	{
-		execve (cmd[0], cmd, ms->envp1);
-		printf("minishell: %s: command not found\n", cmd[0]);
-		exit_mode(7, ms);
-	}
-	while (wait(ptr) != -1)
-		;
-	ms->bb = ptr[0];
 }
 
 int	cmd_find(t_ms *ms, int i)
@@ -125,7 +104,7 @@ int	ft_pipe_cmd(t_ms *ms, int i)
 	while (ms->lcmd[i])
 	{
 		ptr = ms->lcmd[i];
-		tmp = cmd_builder(ms, i);
+		tmp = cmd_builder(ms, i, ft_strdup(""), NULL);
 		ms->lcmd[i] = ptr;
 		tmp2 = ft_join(str, tmp, 2);
 		free(str);
@@ -138,31 +117,33 @@ int	ft_pipe_cmd(t_ms *ms, int i)
 	}
 	ms->p_argv = ft_split(str, '|');
 	ms->index = i;
-	pipex(ms, i, ms->p_argv);
+	pipex(ms, i, ms->p_argv, -1);
 	return (i);
 }
 
-int	engine(t_ms *ms)
+int	engine(t_ms *ms, int i, int n)
 {
-	int	i;
-
-	i = 0;
+	new7(ms);
 	while (*ms->lcmd && ms->lcmd[i])
 	{
-		ms->builtins = 0;
-		ms->index = i;
+		if (!ms->lcmd[i])
+			break ;
+		n = eng(ms, i);
 		if (ms->lcmd[i]->lpp)
 			i = ft_pipe_cmd(ms, i);
 		else
 		{
-			ms->index = i;
 			if (cmd_find(ms, i) == 2)
 				exec_cmd(ms, i);
 		}
-		if (ms->bb > 0)
-				break ;
-		else if (ms->bb == 0)
-			
+		if ((ms->bb == 8 && n == -1)
+			|| (i == n && ms->error == 0))
+			break ;
+		else if (ms->error == 1 && n >= 0)
+		{
+			engine(ms, n + 1, 0);
+			break ;
+		}
 		i++;
 	}
 	return (0);
