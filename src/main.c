@@ -62,7 +62,25 @@ void	loop(t_ms *m_s, t_lexer *lexer)
 			tokenizer(m_s, &lexer);
 			free(m_s->args_old);
 		}
-		
+}
+
+void	ft_shlvl(char **envp)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (envp[++i])
+	{
+		if (ft_strncmp(envp[i], "SHLVL=", 6) == 0)
+		{
+			envp[i] += 6;
+			j = ft_atoi(envp[i]);
+			j += 1;
+			envp[i] = ft_strjoin("SHLVL=", ft_itoa(j));
+			break;
+		}
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -79,11 +97,11 @@ int	main(int argc, char **argv, char **envp)
 		exit (0);
 	}
 	(void) argv;
+	ft_shlvl(envp);
 	while (1)
 	{
 		m_s.envp = envp;
 		loop(&m_s, &lexer);
-		// ft_free2(&m_s);
 	}
 	unlink ("cache");
 }

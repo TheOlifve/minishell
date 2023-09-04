@@ -60,7 +60,7 @@ void	exec_cmd(t_ms *ms, int i)
 	pid = fork();
 	if (pid == 0)
 	{
-		execve (cmd[0], cmd, ms->envp1);
+		execve (cmd[0], cmd, ms->envp);
 		printf("minishell: %s: command not found\n", cmd[0]);
 		exit_mode(7, ms);
 	}

@@ -72,7 +72,7 @@ int	help(char *lex, t_ms *ms, int i, char *ptr)
 
 	str = ft_split(ms->path, ':');
 	join = ft_strjoin("/", lex);
-	while (str[++i])
+	while (str && str[++i])
 	{
 		free(ptr);
 		ptr = ft_strjoin(str[i], join);
