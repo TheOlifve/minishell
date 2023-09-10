@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/02 09:21:32 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/08 02:07:41 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	main_sig(void)
 void	main2(t_ms *ms, int	i)
 {
 	main_sig();
+	
 	while (ms->envp[++i])
 		if (ft_strncmp(ms->envp[i], "PATH=", 5) == 0)
 			ms->path = ms->envp[i] + 5;
@@ -64,14 +65,12 @@ void	loop(t_ms *m_s, t_lexer *lexer)
 		}
 }
 
-void	ft_shlvl(char **envp)
+void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 {
-	int	i;
-	int	j;
-
-	i = -1;
+	int		j;
+	char	**env;
+	
 	while (envp[++i])
-	{
 		if (ft_strncmp(envp[i], "SHLVL=", 6) == 0)
 		{
 			envp[i] += 6;
@@ -80,7 +79,19 @@ void	ft_shlvl(char **envp)
 			envp[i] = ft_strjoin("SHLVL=", ft_itoa(j));
 			break;
 		}
+	i = 0;
+	while (envp[i])
+		i++;
+	env = malloc(sizeof(char *) * (i));
+	i = -1;
+	while (envp[++i])
+	{
+		if (ft_strncmp(envp[i], "OLDPWD=", 7) == 0)
+			i++;
+		env[n++] = envp[i];
 	}
+	env[n] = NULL;
+	ms->envp = env;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -97,11 +108,8 @@ int	main(int argc, char **argv, char **envp)
 		exit (0);
 	}
 	(void) argv;
-	ft_shlvl(envp);
+	ft_shlvl(envp, &m_s, -1, 0);
 	while (1)
-	{
-		m_s.envp = envp;
 		loop(&m_s, &lexer);
-	}
-	unlink ("cache");
+	//unlink ("cache");
 }

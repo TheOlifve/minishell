@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 14:38:53 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/31 12:12:54 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/08 16:02:04 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,25 @@ char	*dol(char *str, char *ft, int n)
 	return (ft);
 }
 
-char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
+void	dol_cmp(int fd, char *str)
+{
+	close (fd);
+	if (str)
+		free(str);
+}
+
+char	*dollar2(t_ms *ms, char *ptr, char *ft)
 {
 	char	*str2;
 	char	*str;
 	int		fd;
 
-	if (n < 2)
+	if (!ptr)
 		return (NULL);
-	ms->dol = ms->dol - 1;
 	fd = open("cache", O_RDONLY);
+	ptr = slash(ms, ptr, 0);
+	if (ptr[0] == '\0')
+		return (ft_strdup("$"));
 	str = get_next_line(fd);
 	while (str)
 	{
@@ -46,28 +55,13 @@ char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
 				str, ft_strlen(ptr) + 1) == 0)
 		{
 			str2 = ft_strtrim(str, "\n");
-			ft = check_ft(str2 + n, 0);
+			ft = check_ft(ms, str2, 0);
 		}
 		free(str);
 		str = get_next_line(fd);
 	}
-	close (fd);
-	if (str)
-		free(str);
+	dol_cmp(fd, str);
 	return (ft);
-}
-
-int	dol_count(char *str, int i)
-{
-	int	n;
-
-	n = 0;
-	while (str && str[i] && str[i] != 36)
-	{
-		i++;
-		n++;
-	}
-	return (n + 1);
 }
 
 char	*dollar(t_ms *ms, char *str, int i, int n)
@@ -78,22 +72,23 @@ char	*dollar(t_ms *ms, char *str, int i, int n)
 
 	ft = NULL;
 	ft2 = NULL;
-	while (str && str[i])
-	{
+	while (str && str[++i])
 		if (str && str[i] == '$')
 		{
+			if (ms->ft2)
+				ms->ft2  = NULL;
 			ptr = dol2(NULL, str, i, n);
-			while (ptr[n])
-				n++;
-			ft = dollar2(ms, ptr, n + 1, NULL);
+			ft = dollar2(ms, ptr, NULL);
+			if (!ft && ms->ft2)
+				ft = ms->ft2;
+			else if (ft[0] == '$' && ms->ft2)
+				ft = ft_strjoin(ft, ms->ft2);
 			if (ft2)
 				ft = ft_strjoin(ft2, ft);
 			if (ms->dol != 0)
 				ft2 = ft;
 			free(ptr);
 		}
-		i++;
-	}
 	return (ft);
 }
 
@@ -105,12 +100,14 @@ char	*dol_check(t_ms *ms, char *ptr)
 	i = -1;
 	ft = NULL;
 	ms->dol = 0;
+	ms->ft2 = NULL;
 	while (ptr[++i])
 	{
+		
 		if (ptr[i] == '$')
 			ms->dol++;
 	}
 	if (ms->dol > 0)
-		ft = dollar(ms, ptr, 0, 0);
+		ft = dollar(ms, ptr, -1, 0);		
 	return (ft);
 }

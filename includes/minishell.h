@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/02 02:54:18 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/08 13:33:26 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct s_ms
 	int		tok_cnt;
 	int		builtins;
 	int		dol_check;
+	char	*ft2;
 	char	*ptr;
 	char	*path;
 	char	*args;
@@ -133,10 +134,11 @@ int		pipex(t_ms *ms, int i, char **argv, int	num);
 int		help_helper(char *join, char *ptr, char *lex, t_ms *ms);
 char	**path_x(char **envp);
 char	*get_next_line(int fd);
-char	*check_ft(char *ft, int n);
 char	*dol_check(t_ms *ms, char *ptr);
+char	*check_ft(t_ms *ms, char *ft, int i);
 char	*ft_join(char *str, char *str2, int i);
 char	*dol2(char *ptr, char *str, int i, int n);
+char	*slash(t_ms *ms, char *ptr, int i);
 char	*cmd_builder(t_ms *ms, int i, char *tmp, char *cmd);
 void	home(void);
 void	navak1(void);

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 18:17:31 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/02 10:06:31 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/06 14:51:25 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*flag(t_lexer *lex, t_ms *ms)
 	if (lex->next)
 		lex = lex->next;
 	ms->f = 0;
-	while (lex->kw && lex->kw[0] == '-')
+	while (lex->kw && lex->kw[0] == '-' && ft_isalpha(lex->kw[1]) == 1)
 	{
 		ms->f++;
 		if (!ptr)
