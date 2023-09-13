@@ -12,41 +12,82 @@
 
 #include "../includes/minishell.h"
 
-void	del_from_file(t_ms *ms, char *str, char *tmp)
+int	check_var1(char *str)
 {
-	char	*tmp2;
+	int	i;
 
-	while (tmp)
+	i = 0;
+	if (!str)
+		return (1);
+	if ((str[0] > 64 && str[0] < 91)
+			|| (str[0] > 96 && str[0] < 123)
+				|| (str[0] == '_'))
+		;
+	else
+		return (ERR("unset", str));
+	while (str && str[i])
 	{
-		if (!ft_strncmp(tmp, str, ft_strlen(str)))
-			;
+		if (((str[i] > 64 && str[i] < 91)
+				|| (str[i] > 96 && str[i] < 123)
+				|| (str[i] > 47 && str[i] < 58))
+				|| str[i] == '_')
+				i++;
 		else
-		{
-			tmp2 = ft_strjoin(ms->us_tmp, tmp);
-			if (ms->us_tmp)
-				free(ms->us_tmp);
-			ms->us_tmp = ft_strdup(tmp2);
-			free(tmp);
-			free(tmp2);
-		}
-		tmp = get_next_line(ms->cache);
+			return (ERR("unset", str));
 	}
-	unlink("cache");
-	ms->cache = open("cache", O_RDWR | O_APPEND | O_CREAT, 0644);
-	write(ms->cache, ms->us_tmp, ft_strlen(ms->us_tmp));
-	write(ms->cache, "\n", 1);
-	free(ms->us_tmp);
+	return (0);
+}
+
+int	ft_remove(t_ms *ms, int pos, char **tmp)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (ms->cache && ms->cache[i])
+		i++;
+	free(ms->cache);
+	ms->cache = malloc(sizeof(char *) * i);
+	ms->cache[i - 1] = NULL;
+	i = 0;
+	while (tmp && tmp[j] && ms->cache[i])
+	{
+		if (j != pos)
+		{
+			ms->cache[i] = tmp[j];
+			i++;
+			j++;
+		}
+		else
+			j++;
+	}
+	return (0);
 }
 
 int	ft_unset(t_ms *ms, char *str)
 {
-	char	*tmp;
+	int		i;
+	char	*str2;
+	char	**tmp;
 
-	ms->cache = open("cache", O_RDWR | O_APPEND | O_CREAT, 0644);
-	if (ms->cache < 0)
+	if (check_var1(str) == 0)
+		;
+	else
 		return (1);
-	tmp = get_next_line(ms->cache);
-	ms->us_tmp = ft_strdup("");
-	del_from_file(ms, str, tmp);
+	i = 0;
+	if (!ms->cache)
+		return (1);
+	str2 = ft_strdup(str);
+	str = ft_strjoin(str2, "=");
+	free(str2);
+	tmp = caching(ms->cache);
+	while (tmp && tmp[i])
+	{
+		if (ft_strncmp(tmp[i], str, ft_strlen(str)) == 0)
+			ft_remove(ms, i, tmp);
+		i++;
+	}
+	free(str);
 	return (0);
 }

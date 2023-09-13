@@ -12,6 +12,12 @@
 
 #include "../includes/minishell.h"
 
+int	ERR(char *error, char *str)
+{
+	printf("minishell: %s: '%s': not a valid identifier\n", error, str);
+	return (1);
+}
+
 int	perr(char *str, t_ms *ms)
 {
 	perror(str);
