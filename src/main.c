@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/08 02:07:41 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/18 14:21:00 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	loop(t_ms *m_s, t_lexer *lexer)
 		if (simbol(m_s, -1) != 0)
 		{
 			free(m_s->args_old);
-			free(m_s->args);
 			perror("minishell_ERROR");
 		}
 		else
@@ -63,6 +62,8 @@ void	loop(t_ms *m_s, t_lexer *lexer)
 			tokenizer(m_s, &lexer);
 			free(m_s->args_old);
 		}
+		//system ("leaks minishell");
+		
 }
 
 void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
@@ -82,7 +83,7 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 	i = 0;
 	while (envp[i])
 		i++;
-	env = malloc(sizeof(char *) * (i));
+	env = malloc(sizeof(char *) * (i + 1));
 	i = -1;
 	while (envp[++i])
 	{
@@ -111,5 +112,4 @@ int	main(int argc, char **argv, char **envp)
 	ft_shlvl(envp, &m_s, -1, 0);
 	while (1)
 		loop(&m_s, &lexer);
-	//unlink ("cache");
 }

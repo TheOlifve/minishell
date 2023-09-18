@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 13:01:20 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/24 13:55:24 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/18 21:59:05 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	infos(char **info, t_ms *ms)
 {
+	if (info[1] && (info[1][0] == '<' || info[1][0] == '>'))
+		return (3);
 	if (ms->cmd == 0 && help(info[0], ms, -1, NULL) != 0)
 	{
 		ms->cmd = 1;
@@ -21,11 +23,6 @@ int	infos(char **info, t_ms *ms)
 	}
 	else if (access(info[0], F_OK) == 0)
 		return (2);
-	else if (info[1])
-	{
-		if (info[1][0] == '<' || info[1][0] == '>')
-			return (3);
-	}
 	return (4);
 }
 

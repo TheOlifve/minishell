@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 18:17:31 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/06 14:51:25 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/17 22:35:03 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,6 @@ void	pars(t_lexer *lex, t_ms *ms)
 	ms->lcmd[ms->i] = lcmd;
 	while (lex)
 	{
-		//prior(lex);
 		if (lex->id && lex->id[0] == 'w')
 			lcmd_add_back(&lcmd, (word(lex, ms, NULL)), ms);
 		else if (lex->id && lex->id[0] == 'o')

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/07 22:33:34 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/19 00:38:26 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ int	cd(t_ms *ms, int i, int j)
 		return (pwd(ms, 0));
 	}
 	ptr = ft_strdup(ms->lcmd[i]->next->file);
-	//printf("%s\n", ptr);
 	ft_chdir(ms, ptr, i, j);
 	free (ptr);
 	return (0);

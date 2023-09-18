@@ -6,11 +6,66 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:39:01 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/08 14:00:14 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/19 00:54:17 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	ft_isit(t_ms *ms, char i, int n)
+{
+	if (i == 34 || i == 39 || i == 46 || i == 33 || i == 35 || i == 37
+		|| i == 40 || i == 41 || i == 43 || i == 44 || i == 45 || i == 47
+		|| i == 59 || i == 58 || i == 64 || i == 91 || i == 93
+		|| i == 94 || i == 123 || i == 125 || i == 124 || i == 126 || i == 36
+		|| i == 32 || i == '\t' || ( n == ms->dol2 + 2
+		&& ft_isdigit(ms->args_old[ms->dol2 + 2]) == 1
+		&& ft_isdigit(ms->args_old[ms->dol2 + 1]) == 1) || i == '=' || (n > 0
+		&& ms->args_old[n - 1] == 42) || (n > 0 && ms->args_old[n - 1] == 92))
+		return (1);
+	return (0);
+}
+
+int	dol_prep2(t_ms *ms, char *ptr, int x, int i)
+{
+	char	*tmp;
+	int 	y;
+	
+	if (x == 1 && ptr[0] == '$' && ptr[1] == '\0')
+		tmp = ft_strdup("$");
+	else
+		tmp = dol_check(ms, ptr);
+	y = ft_strlen(tmp);
+	ms->num = ms->num - ft_strlen(ptr) + ft_strlen(tmp);
+	free(ptr);
+	ptr = ft_strjoin2(ft_substr(ms->args_old, 0, ms->dol2), tmp);
+	tmp = ft_substr(ms->args_old, i, ft_strlen(ms->args_old));
+	ms->args_old = ft_strjoin2(ptr, tmp);
+	free(ptr);
+	free(tmp);
+	return (y);
+}
+
+int	dol_prep(t_ms *ms, int i, int x, int y)
+{
+	char	*ptr;
+
+	ms->dol2 = i;
+	y = ms->dol2;
+	while (ms->args_old && ms->args_old[++i])
+	{
+		if (ms->args_old[i] == 36 && ms->args_old[i + 1] == 36)
+			i++;
+		if (ft_isit(ms, ms->args_old[i], i) == 1)
+			break ;
+	}
+	ptr = malloc(sizeof(char) * (i - ms->dol2 + 1)); 
+	while (ms && ms->args_old && ++x != (i - ms->dol2))
+		ptr[x] = ms->args_old[y++];
+	ptr[x] = '\0';
+	y = dol_prep2(ms, ptr, x, i);
+	return (ms->dol2 + y - 1);
+}
 
 char	*dol2(char *ptr, char *str, int i, int n)
 {
@@ -28,73 +83,3 @@ char	*dol2(char *ptr, char *str, int i, int n)
 	return (ptr);
 }
 
-char	*trim_dol(char *str)
-{
-	int		i;
-	int		j;
-	char	*tmp;
-
-	i = 0;
-	j = -1;
-	while (str && str[i++] != '$')
-		;
-	tmp = malloc(i * sizeof(char));
-	while (++j < i)
-		tmp[j] = str[j];
-	tmp[j - 1] = '\0';
-	return (tmp);
-}
-
-void	check_dol2(t_ms *ms, int i, int j)
-{
-	char	*tmp;
-
-	ms->str[i][j] = 32;
-	while (ms->str[i][++j] != 39)
-		;
-	ms->str[i][j] = 32;
-	tmp = ft_strdup(ms->str[i]);
-	free(ms->str[i]);
-	ms->str[i] = ft_strtrim(tmp, " ");
-	free(tmp);
-}
-
-char	*dol_helper(t_ms *ms, int i)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = dol_check(ms, ms->str[i]);
-	tmp2 = trim_dol(ms->str[i]);
-	free(ms->str[i]);
-	ms->str[i] = ft_strjoin2(tmp2, tmp);
-	return (tmp);
-}
-
-void	check_dol(t_ms *ms, int	i, int j)
-{
-	char	*tmp;
-
-	while (ms && ms->str && ms->str[i])
-	{
-		j = 0;
-		while (ms->str && ms->str[i] && ms->str[i][j])
-		{
-			if (ms->str[i][j] == 39 && ms->str[i][j + 1]
-				&& ms->str[i][j + 1] == '$')
-			{
-				check_dol2(ms, i, j);
-				break ;
-			}
-			else if (ms->str[i][j] == '$')
-			{
-				tmp = dol_helper(ms, i);
-				if (tmp[0] == '$')
-					break ;
-				j--;
-			}
-			j++;
-		}
-		i++;
-	}
-}

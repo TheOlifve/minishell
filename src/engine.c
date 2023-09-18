@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/08 12:58:12 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/19 00:44:22 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,30 +72,6 @@ int	cmd_find(t_ms *ms, int i)
 {
 	char	*cmd;
 
-	// while (ms->lcmd[0])
-    // {
-    //     printf("%s\n", ms->lcmd[0]->cmd);
-    //     printf("%s\n", ms->lcmd[0]->flag);
-    //     printf("%s\n", ms->lcmd[0]->file);
-    //     printf("%s\n", ms->lcmd[0]->f_id);
-    //     printf("%s\n", ms->lcmd[0]->word);
-    //     printf("%s\n", ms->lcmd[0]->lpp);
-    //     printf("%s\n", ms->lcmd[0]->lb);
-    //     printf("%s\n", ms->lcmd[0]->tree);
-    //     ms->lcmd[0] = ms->lcmd[0]->next;
-    // }
-    // while (ms->lcmd[1])
-    // {
-    //     printf("%s\n", ms->lcmd[1]->cmd);
-    //     printf("%s\n", ms->lcmd[1]->flag);
-    //     printf("%s\n", ms->lcmd[1]->file);
-    //     printf("%s\n", ms->lcmd[1]->f_id);
-    //     printf("%s\n", ms->lcmd[1]->word);
-    //     printf("%s\n", ms->lcmd[1]->lpp);
-    //     printf("%s\n", ms->lcmd[1]->lb);
-    //     printf("%s\n", ms->lcmd[1]->tree);
-    //     //ms->lcmd[1] = ms->lcmd[1]->next;
-    // }
 	if (ms->lcmd[i]->cmd == NULL)
 		cmd = ft_strdup(ms->lcmd[i]->word);
 	else
