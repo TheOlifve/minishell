@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <hrahovha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/31 11:57:39 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/07 22:30:43 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,27 +70,26 @@ int	append(t_ms *ms, int len, char *str, char **tmp)
 	int		i;
 
 	i = 0;
-	while (ms->cache && ms->cache[i])
+	while (ms->envp && ms->envp[i])
 	{
 		if (ft_strncmp(tmp[i], str, len + 1) == 0)
 		{
-			free(ms->cache[i]);
-			ms->cache[i] = malloc(sizeof(char *));
-			ms->cache[i] = ft_strdup(str);
+			ms->envp[i] = malloc(sizeof(char *));
+			ms->envp[i] = ft_strdup(str);
 			return (0);
 		}
 		i++;
 	}
-	free(ms->cache);
-	ms->cache = malloc(sizeof(char *) * (i + 2));
+	free(ms->envp);
+	ms->envp = malloc(sizeof(char *) * (i + 2));
 	i = 0;
 	while (tmp && tmp[i])
 	{
-		ms->cache[i] = tmp[i];
+		ms->envp[i] = ft_strdup(tmp[i]);
 		i++;
 	}
-	ms->cache[i] = ft_strdup(str);
-	ms->cache[i + 1] = NULL;
+	ms->envp[i] = ft_strdup(str);
+	ms->envp[i + 1] = NULL;
 	return (0);
 }
 
@@ -119,35 +118,31 @@ char	**caching(char **str)
 	return (tmp);
 }
 
-int	ft_export(t_ms *ms, char *str)
+int	ft_export(t_ms *ms, char **str, int i)
 {
-	int		i;
+	int		j;
 	char	**tmp;
 
 	tmp = NULL;
-	i = 0;
-	if (check_var(str) == 0)
-		;
-	else
+	j = 0;
+	if (!str[i])
 		return (1);
-	if (!ms->cache)
+	if (ft_export2(ms, str, i) == 1)
 	{
-		ms->cache = malloc(sizeof(char *) * 2);
-		ms->cache[0] = ft_strdup(str);
-		ms->cache[1] = NULL;
-		printf("%s\n", ms->cache[0]);
+		i++;
+		ft_export(ms, str, i);
+	}
+	if (!ms->envp)
+	{
+		ms->envp = malloc(sizeof(char *) * 2);
+		ms->envp[0] = ft_strdup(str[i]);
+		ms->envp[1] = NULL;
 		return (0);
 	}
-	tmp = caching(ms->cache);
-	while (str && str[i] != '=')
-		i++;
-	append(ms, i, str, tmp);
-	i = 0;
-	while (ms->cache && ms->cache[i])
-	{
-		printf("%s\n", ms->cache[i]);
-		i++;
-	}
+	tmp = caching(ms->envp);
+	while (str[i] && str[i][j] != '=')
+		j++;
+	append(ms, j, str[i], tmp);
 	free(tmp);
 	return (0);
 }

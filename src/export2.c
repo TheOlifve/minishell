@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <hrahovha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/16 14:46:57 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/06 14:50:42 by rugrigor         ###   ########.fr       */
+/*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
+/*   Updated: 2023/09/07 22:30:43 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
-int	ft_isalpha(int c)
+int	ft_export2(t_ms *ms, char **str, int i)
 {
-	if (c <= 122 && c >= 97)
-		return (1);
-	else
+	if (!str[i])
 		return (0);
+	(void)ms;
+	if (check_var(str[i]) == 0)
+	{
+		i++;
+		ft_export(ms, str, i);
+	}
+	else
+		return (1);
+	return (0);
 }

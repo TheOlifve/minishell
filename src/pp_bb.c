@@ -47,14 +47,14 @@ void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int j)
 	if (j == 1)
 	{
 		pipe_close(pipex);
-		exit(0);
+		exit_mode(1, ms);
 	}
 	else if (j == 2)
 	{
 		pipe_close(pipex);
 		if (ms->error == 1)
-			exit (127);
-		execve(cmd_args[0], cmd_args, ms->envp1);
+			exit_mode(7, ms);
+		execve(cmd_args[0], cmd_args, ms->envp);
 		if (pipex->index == 0)
 			dup2(0, STDOUT);
 		printf("minishell: %s: command not found\n", cmd_args[0]);

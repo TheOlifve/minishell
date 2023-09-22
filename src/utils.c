@@ -6,85 +6,11 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/31 11:39:05 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/07 16:41:54 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*dol2(char *ptr, char *str, int i, int n)
-{
-	i++;
-	ptr = malloc(sizeof(char) * (dol_count(str, i)));
-	if (!ptr)
-		return (NULL);
-	while (str && str[i])
-	{
-		if (str[i] == 36)
-			break ;
-		ptr[n++] = str[i++];
-	}
-	ptr[n] = '\0';
-	return (ptr);
-}
-
-char	*trim_dol(char *str)
-{
-	int		i;
-	int		j;
-	char	*tmp;
-
-	i = 0;
-	j = -1;
-	while (str && str[i++] != '$')
-		;
-	tmp = malloc(i * sizeof(char));
-	while (++j < i)
-		tmp[j] = str[j];
-	tmp[j - 1] = '\0';
-	return (tmp);
-}
-
-void	check_dol2(t_ms *ms, int i, int j)
-{
-	char	*tmp;
-
-	ms->str[i][j] = 32;
-	while (ms->str[i][++j] != 39)
-		;
-	ms->str[i][j] = 32;
-	tmp = ft_strdup(ms->str[i]);
-	free(ms->str[i]);
-	ms->str[i] = ft_strtrim(tmp, " ");
-	free(tmp);
-}
-
-void	check_dol(t_ms *ms, int	i, int j)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	while (ms->str && ms->str[i])
-	{
-		j = -1;
-		while (ms->str && ms->str[i] && ms->str[i][++j])
-		{
-			if (ms->str[i][j] == 39 && ms->str[i][j + 1] == '$')
-			{
-				check_dol2(ms, i, j);
-				break ;
-			}
-			else if (ms->str[i][j] == '$')
-			{
-				tmp = dol_check(ms, ms->str[i]);
-				tmp2 = trim_dol(ms->str[i]);
-				free(ms->str[i]);
-				ms->str[i] = ft_strjoin(tmp2, tmp);
-			}
-		}
-		i++;
-	}
-}
 
 int	get_cmd(char *path, char *cmd)
 {
@@ -105,4 +31,49 @@ int	get_cmd(char *path, char *cmd)
 		i--;
 	}
 	return (1);
+}
+
+void	ft_dup2(int read, int write, t_ms *ms)
+{
+	if (dup2(read, 0) < 0)
+		perr("Error", ms);
+	if (dup2(write, 1) < 0)
+		perr("Error", ms);
+}
+
+int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)
+{
+	free(join);
+	ms->ptr = ptr;
+	if (ft_strncmp(lex, "./", 2) == 0)
+		ms->ptr = lex;
+	return (1);
+}
+
+char	*check_ft(t_ms *ms, char *ft, int i)
+{
+	char	*ft2;
+	
+	while (ft && ft[i++])
+		if (ft[i] == '=')
+		{
+			ft2 = ft_strdup(ft + i + 1);
+			ft = ft_strdup(ft2);
+			free(ft2);
+		}
+	i = 0;
+	if (ft[i] == 39 || ft[i] == 34)
+	{	
+		ft2 = ft_strdup(ft);
+		while (ft2[i])
+		{
+			if (ft2[i] == 39 || ft2[i] == 34)
+				ft2[i] = 32;
+			i++;
+		}
+		ft = ft_strtrim(ft2, " ");
+	}
+	if (ms->ft2)
+		ft = ft_strjoin(ft, ms->ft2);
+	return (ft);
 }

@@ -12,6 +12,12 @@
 
 #include "../includes/minishell.h"
 
+int	pars_err(char *error)
+{
+	printf("minishell: pars error near `%s'\n", error);
+	return (2);
+}
+
 int	ERR(char *error, char *str)
 {
 	printf("minishell: %s: '%s': not a valid identifier\n", error, str);
@@ -30,10 +36,12 @@ int	exit_mode(int n, t_ms *ms)
 {
 	if (n == 0)
 	{
-		ft_free2(ms);
+		// ft_free2(ms);
 		printf("exit\n");
 		exit (0);
 	}
+	else if (n == 1)
+		exit (0);
 	else if (n == 2)
 	{
 		perror("minishell_ERROR");
@@ -41,7 +49,7 @@ int	exit_mode(int n, t_ms *ms)
 	}
 	else if (n == 4)
 	{
-		ft_free2(ms);
+		// ft_free2(ms);
 		exit (0);
 	}
 	else if (n == 7)
@@ -54,17 +62,13 @@ int	exit_mode(int n, t_ms *ms)
 
 void	ft_free2(t_ms *ms)
 {
-	int	i;
-
-	i = 0;
-	if (ms->lcmd[i])
+	ms->ord = 0;
+	while (ms->tree[ms->ord])
 	{
-		while (ms->lcmd[i])
-		{
-			free(ms->lcmd[i]);
-			i++;
-		}
+		free(ms->tree[ms->ord]);
+		ms->ord += 1;
 	}
+	ms->ord = 0;
 }
 
 void	pipe_close(t_pipex *pipex)

@@ -15,9 +15,9 @@
 int	cmd_find_p(t_ms *ms, char **cmd, int i)
 {
 	if (get_cmd(cmd[0], "export") == 1)
-		return (ft_export(ms, cmd[1]));
+		return (ft_export(ms, cmd, 1));
 	else if (get_cmd(cmd[0], "unset") == 1)
-		return (ft_unset(ms, cmd[1]));
+		return (ft_unset(ms, cmd, 1));
 	else if (get_cmd(cmd[0], "echo") == 1)
 		return (echo(ms, i, 0));
 	else if (get_cmd(cmd[0], "cd") == 1)
@@ -50,13 +50,11 @@ void	pipe_open(t_pipex *pipex, t_ms *ms)
 		pipe(pipex->fd[i]);
 }
 
-void	exec_cmd(t_ms *ms, int i)
+int	exec_cmd(t_ms *ms, char	**cmd)
 {
 	int		pid;
-	char	**cmd;
 	int		ptr[1];
 
-	cmd = ft_split(cmd_builder(ms, i, ft_strdup(""), NULL), ' ');
 	pid = fork();
 	if (pid == 0)
 	{
@@ -67,7 +65,12 @@ void	exec_cmd(t_ms *ms, int i)
 	while (wait(ptr) != -1)
 		;
 	if (ptr[0] > 0)
+	{
 		ft_search(ms);
+		return (1);
+	}
+	ms->exit_num = 0;
+	return (0);
 }
 
 void	child(t_ms *ms, t_pipex *pipex, char **argv, int i)
@@ -92,7 +95,7 @@ void	child(t_ms *ms, t_pipex *pipex, char **argv, int i)
 		}
 		j = cmd_find_p(ms, cmd_args, i);
 		child_help(pipex, ms, cmd_args, j);
-		exit(0);
+		exit_mode(1, ms);
 	}
 }
 

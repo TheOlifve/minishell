@@ -19,7 +19,7 @@ void	ft_ex(t_ms *ms, int file)
 	dup2(file, 1);
 	tmp[0] = "ls";
 	tmp[1] = NULL;
-	execve ("/bin/ls", tmp, ms->envp1);
+	execve ("/bin/ls", tmp, ms->envp);
 }
 
 void	from_file(t_ms *ms, char *str)

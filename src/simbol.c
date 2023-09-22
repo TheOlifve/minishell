@@ -6,115 +6,109 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 3223/07/10 14:44:13 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/31 11:01:42 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/19 00:16:13 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	probel3(t_ms *ms, int i)
+int	str_join2(t_ms *ms, int i, char c, int n)
 {
-	while (i-- != ms->x)
-	{
-		if (ms->args_old[i] == 5 || ms->args_old[i] == 32
-			|| ms->args_old[i] == '\t' || ms->args_old[i] == 4)
-			;
-		else
-			return (1);
-	}
-	return (0);
+	char	*str1;
+	char	*str2;
+	int		x;
+
+	x = i;
+	if (n == 0)
+		while (ms->args_old[x++] == c)
+				n++;
+	str1 = ft_substr(ms->args_old, 0, i);
+	str2 = ft_substr(ms->args_old,
+			i + n, ft_strlen(ms->args_old) - (i + n));
+	free(ms->args_old);
+	ms->args_old = ft_strjoin(str1, str2);
+	ms->num--;
+	if (c == 34)
+		ms->c1 = ms->c1 + (n - 1);
+	else if (c == 39)
+		ms->c2 = ms->c2 + (n - 1);
+	return (n);
 }
 
-int	probel2(t_ms *ms, int i)
+int	str_join(t_ms *ms, int i, char c) 
 {
-	while (ms->args_old[++i] != 39)
-	{
-		if (ms->args_old[i] == 32 || ms->args_old[i] == '\t')
-			;
-		else
+	if (c == 39 && ms->c1 % 2 == 0)
+		while (ms->args_old && ms->args_old[++i])
 		{
-			path(ms, i, 39);
-			return (1);
-		}
-	}
-	if (probel3(ms, i) != 0)
-		return (1);
-	return (0);
-}
-
-int	probel(t_ms *ms, int i)
-{
-	if (ms->c1 != 0 && ms->c1 % 2 == 0)
-	{
-		while (ms->args_old[++i] != 34)
-		{
-			if (ms->args_old[i] == 32 || ms->args_old[i] == '\t')
-				;
-			else
+			if (ms->args_old[i] == 32)
+				ms->args_old[i] = 5;
+			else if (ms->args_old[i] == '\t')
+				ms->args_old[i] = 4;
+			if (ms->args_old[i] == 39)
 			{
-				path(ms, i, 34);
-				return (1);
+				ms->num = ms->num - str_join2(ms, ms->x, 39, 1);
+				i--;
+				ms->num = ms->num - str_join2(ms, i, 39, 1);
+				ms->c2++;
+				return (ms->x - i + 1);
 			}
 		}
-		if (probel3(ms, i) != 0)
-			return (1);
-	}
-	else if (ms->c2 != 0 && ms->c2 % 2 == 0)
-	{
-		if (probel2(ms, i) != 0)
-			return (1);
-	}
-	return (0);
+	i = ms->x;
+	if (c == 34 && ms->c2 % 2 != 0)
+		return (0);
+	else if (c == 39 && ms->c1 % 2 != 0)
+		return (0);
+	else
+		ms->num = ms->num - str_join2(ms, i, c, 0);
+	return (1);
 }
 
-void	simbol2(t_ms *ms, int i, char c)
+int	simbol2(t_ms *ms, int i)
 {
-	if (c == 32)
+	if (ms->args_old[i] && ms->args_old[i] == 34 && ms->c2 %2 != 0)
 	{
-		if (probel(ms, i) != 0)
+		while (ms && ms->args_old && ms->args_old[++i])
 		{
-			ms->args_old[i] = 5;
+			if (ms->args_old[i] == 34)
+				return (i);
+			else if (ms->args_old[i] == 39)
+				return (i);
 		}
-		else if (ms->n > 0)
-		{
-			ms->n--;
-			ms->args_old[i] = 5;
-		}
+			
 	}
-	else if (c == '\t')
+	else if (ms->args_old[i] && ms->args_old[i] == 39 && ms->c1 %2 != 0)
 	{
-		if (probel(ms, i) != 0)
-			ms->args_old[i] = 4;
-		else if (ms->n > 0)
+		while (ms && ms->args_old && ms->args_old[++i])
 		{
-			ms->n--;
-			ms->args_old[i] = 4;
+			if (ms->args_old[i] == 39)
+				return (1);
+			else if (ms->args_old[i] == 34)
+				return (2);
 		}
+			
 	}
+	return (0);
 }
 
 int	simbol(t_ms *ms, int i)
 {
 	while (++i < ms->num)
 	{
-		if (ms->args_old[i] == 34)
+		if (ms->args_old[i] == 34 && (ms->c1 %2 != 0 || simbol2(ms, i) != 2))
 			ms->c1++;
-		if (ms->args_old[i] == 39)
+		if (ms->args_old[i] == 39 && (ms->c2 %2 != 0 || simbol2(ms, i) != 2))
 			ms->c2++;
 		if (ms->args_old[i] == 32 && (ms->c2 % 2 != 0 || ms->c1 % 2 != 0))
 			ms->args_old[i] = 5;
 		if (ms->args_old[i] == '\t' && (ms->c2 % 2 != 0 || ms->c1 % 2 != 0))
 			ms->args_old[i] = 4;
-		if (ms->args_old[i] == 32 && (ms->c2 % 2 == 0 || ms->c1 % 2 == 0)
-			&& chak(ms, i) != 0)
-			simbol2(ms, i, 32);
-		if (ms->args_old[i] == '\t' && (ms->c2 % 2 == 0 || ms->c1 % 2 == 0)
-			&& chak(ms, i) != 0)
-			simbol2(ms, i, '\t');
-		if (ms->args_old[i] == 39)
+		ms->x = i;
+		if (ms->args_old[i] == 39 && (ms->c2 %2 != 0 || simbol2(ms, i) != 2))
 			i -= str_join(ms, i, 39);
-		else if (ms->args_old[i] == 34)
+		else if (ms->args_old[i] == 34 && (ms->c1 %2 != 0 || simbol2(ms, i) != 2))
 			i -= str_join(ms, i, 34);
+		if (ms->args_old[i] == 36)
+			i = dol_prep(ms, i, -1, 0);
 	}
 	if (ms->c1 % 2 != 0 || ms->c2 % 2 != 0)
 		return (1);

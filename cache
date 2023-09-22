@@ -1,3 +1,7 @@
 export
 IFS=_
 a=5
+PWD=Users/rugrigor/Desktop/minishell
+b=/Users/rugrigor/Desktop/minishell
+USER=Ruzik
+

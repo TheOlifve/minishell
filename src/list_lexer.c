@@ -24,13 +24,13 @@ void	new1(t_lcmd *new)
 void	infos3(t_lcmd *new, char **info)
 {
 	if (info[0])
-			new->word = info[0];
+			new->file = info[0];
 	else
-		new->word = NULL;
+		new->file = NULL;
 	new->f_id = info[1];
 	new->cmd = NULL;
 	new->flag = NULL;
-	new->file = NULL;
+	new->word = NULL;
 }
 
 t_lexer	*lstnew(void)

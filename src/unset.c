@@ -45,17 +45,17 @@ int	ft_remove(t_ms *ms, int pos, char **tmp)
 
 	i = 0;
 	j = 0;
-	while (ms->cache && ms->cache[i])
+	while (ms->envp && ms->envp[i])
 		i++;
-	free(ms->cache);
-	ms->cache = malloc(sizeof(char *) * i);
-	ms->cache[i - 1] = NULL;
+	free(ms->envp);
+	ms->envp = malloc(sizeof(char *) * i);
+	ms->envp[i - 1] = NULL;
 	i = 0;
-	while (tmp && tmp[j] && ms->cache[i])
+	while (tmp && tmp[j] && ms->envp[i])
 	{
 		if (j != pos)
 		{
-			ms->cache[i] = tmp[j];
+			ms->envp[i] = tmp[j];
 			i++;
 			j++;
 		}
@@ -65,29 +65,46 @@ int	ft_remove(t_ms *ms, int pos, char **tmp)
 	return (0);
 }
 
-int	ft_unset(t_ms *ms, char *str)
+int	ft_unset2(t_ms *ms, char **str, int i)
 {
-	int		i;
+	if (!str[i])
+			return (0);
+	(void)ms;
+	if (check_var1(str[i]) == 0)
+	{
+		i++;
+		ft_unset(ms, str, i);
+	}
+	else
+		return (1);
+	return (0);
+}
+
+int	ft_unset(t_ms *ms, char **str, int i)
+{
+	int		j;
 	char	*str2;
 	char	**tmp;
 
-	if (check_var1(str) == 0)
-		;
-	else
+	if (!str[i])
 		return (1);
-	i = 0;
-	if (!ms->cache)
-		return (1);
-	str2 = ft_strdup(str);
-	str = ft_strjoin(str2, "=");
-	free(str2);
-	tmp = caching(ms->cache);
-	while (tmp && tmp[i])
+	if (ft_unset2(ms, str, i) == 1)
 	{
-		if (ft_strncmp(tmp[i], str, ft_strlen(str)) == 0)
-			ft_remove(ms, i, tmp);
 		i++;
+		ft_unset(ms, str, i);
 	}
-	free(str);
+	if (!ms->envp)
+		return (1);
+	str2 = ft_strdup(str[i]);
+	free(str[i]);
+	str[i] = ft_strjoin(str2, "=");
+	free(str2);
+	tmp = caching(ms->envp);
+	j = -1;
+	while (tmp && tmp[++j])
+	{
+		if (ft_strncmp(tmp[j], str[i], ft_strlen(str[i])) == 0)
+			ft_remove(ms, j, tmp);
+	}
 	return (0);
 }

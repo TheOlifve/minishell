@@ -6,43 +6,64 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 12:11:50 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/02 02:45:40 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/07 12:41:08 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_dup2(int read, int write, t_ms *ms)
-{
-	if (dup2(read, 0) < 0)
-		perr("Error", ms);
-	if (dup2(write, 1) < 0)
-		perr("Error", ms);
-}
+// char	**ft_masjoin(char **tmp, char *str)
+// {
+// 	int		i;
+// 	char	**mas;
 
-int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)
-{
-	free(join);
-	ms->ptr = ptr;
-	if (ft_strncmp(lex, "./", 2) == 0)
-		ms->ptr = lex;
-	return (1);
-}
+// 	i = 0;
+// 	if (!str)
+// 		return (tmp);
+// 	while (tmp && tmp[i])
+// 		i++;
+// 	mas = malloc(sizeof(char *) * (i + 2));
+// 	i = 0;
+// 	while (tmp && tmp[i])
+// 	{
+// 		// printf("int i - %d\n",i);
+// 		mas[i] = ft_strdup(tmp[i]);
+// 		i++;
+// 	}
+// 	mas[i] = ft_strdup(str);
+// 	mas[i + 1] = NULL;
+// 	return (mas);
+// }
 
-char	*check_ft(char *ft, int n)
+char	*ft_concat(char *cmd, char *opt)
 {
-	char	*ft2;
-	
-	if (ft[n] == 39 || ft[n] == 34)
-	{	
-		ft2 = ft_strdup(ft);
-		while (ft2[n])
-		{
-			if (ft2[n] == 39 || ft2[n] == 34)
-				ft2[n] = 32;
-			n++;
-		}
-		ft = ft_strtrim(ft2, " ");
+	int		i;
+	char	*tmp;
+	char	*tmp2;
+	char	**option;
+
+	i = 0;
+	if (!cmd)
+		cmd = ft_strdup("");
+	tmp2 = ft_strdup(cmd);
+	free(cmd);
+	option = ft_split(opt, ' ');
+	while (option && option[i])
+	{
+		tmp = ft_strdup(tmp2);
+		free(tmp2);
+		tmp2 = ft_strjoin(tmp, option[i]);
+		free(tmp);
+		i++;
 	}
-	return (ft);
+	cmd = ft_strjoin(tmp2, " ");
+	free(tmp2);
+	free(option);
+	return (cmd);
+}
+
+void	goto_start(t_ms *ms)
+{
+	while (ms->tree[ms->ord]->prev)
+		ms->tree[ms->ord] = ms->tree[ms->ord]->prev;
 }

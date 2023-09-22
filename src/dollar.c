@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 14:38:53 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/08/31 12:12:54 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/19 00:56:42 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,21 @@ char	*dol(char *str, char *ft, int n)
 
 char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
 {
-	char	*str2;
 	char	*str;
-	int		fd;
+	int		i;
 
-	if (n < 2)
+	if (!ptr)
 		return (NULL);
-	ms->dol = ms->dol - 1;
-	fd = open("cache", O_RDONLY);
-	str = get_next_line(fd);
-	while (str)
-	{
+	if (ptr[0] == '?')
+		return (ft_itoa(ms->exit_num));
+	i = -1;
+	while (ms->envp[++i])
 		if (ptr != 0 && ft_strncmp(ft_strjoin(ptr, "="),
-				str, ft_strlen(ptr) + 1) == 0)
+				ms->envp[i], ft_strlen(ptr) + 1) == 0)
 		{
-			str2 = ft_strtrim(str, "\n");
-			ft = check_ft(str2 + n, 0);
+			str = ft_strtrim(ms->envp[i], "\n");
+			ft = (str + n);
 		}
-		free(str);
-		str = get_next_line(fd);
-	}
-	close (fd);
-	if (str)
-		free(str);
 	return (ft);
 }
 
@@ -86,6 +78,7 @@ char	*dollar(t_ms *ms, char *str, int i, int n)
 			while (ptr[n])
 				n++;
 			ft = dollar2(ms, ptr, n + 1, NULL);
+			ms->dol--;
 			if (ft2)
 				ft = ft_strjoin(ft2, ft);
 			if (ms->dol != 0)
