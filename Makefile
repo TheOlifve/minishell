@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/09/08 13:59:00 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/09/19 01:01:28 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,8 @@ SRC = 	src/main.c				\
 		src/dollar2.c			\
 		src/list_tree.c			\
 		src/export2.c			\
+		src/pars.c				\
+		src/list_lcmd.c			\
 		src/list_lexer.c		\
 		src/wildcard.c			\
 		src/engine.c			\

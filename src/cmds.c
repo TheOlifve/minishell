@@ -6,29 +6,14 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 20:28:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/08 16:56:44 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/19 00:32:17 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	echo(t_ms *ms, int i, int flag)
+void	echo2(t_ms *ms, int i)
 {
-	int	n;
-
-	n = -1;
-	while (ms && ms->lcmd[i] && ms->lcmd[i]->flag && ms->lcmd[i]->flag[++n])
-		if (ms->lcmd[i]->flag[n] != '-' && ms->lcmd[i]->flag[n] != 'n')
-			flag = 1;
-	if (!ms->lcmd[i]->flag)
-		flag = 1;
-	if (flag == 1 && ms->lcmd[i]->flag)
-	{
-		printf("%s", ms->lcmd[i]->flag);
-		if (ms->lcmd[i]->next)
-			printf(" ");
-	}
-	ms->lcmd[i] = ms->lcmd[i]->next;
 	while (ms->lcmd[i])
 	{
 		if (ms->lcmd[i]->word)
@@ -45,6 +30,26 @@ int	echo(t_ms *ms, int i, int flag)
 		}
 		ms->lcmd[i] = ms->lcmd[i]->next;
 	}
+}
+
+int	echo(t_ms *ms, int i, int flag)
+{
+	int	n;
+
+	n = 0;
+	while (ms && ms->lcmd[i] && ms->lcmd[i]->flag && ms->lcmd[i]->flag[++n])
+		if (ms->lcmd[i]->flag[n] != 'n')
+			flag = 1;
+	if (!ms->lcmd[i]->flag)
+		flag = 1;
+	if (flag == 1 && ms->lcmd[i]->flag)
+	{
+		printf("%s", ms->lcmd[i]->flag);
+		if (ms->lcmd[i]->next)
+			printf(" ");
+	}
+	ms->lcmd[i] = ms->lcmd[i]->next;
+	echo2(ms, i);
 	if (flag == 1)
 		printf("\n");
 	return (0);

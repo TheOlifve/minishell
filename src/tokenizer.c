@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/08 12:40:38 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/18 22:04:26 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,12 @@ void	tabs(t_ms *m)
 
 	i = -1;
 	j = -1;
-	while (m->str[++i])
+	while (m && m->str && m->str[++i])
 	{
 		j = -1;
 		while (m->str[i][++j])
 		{
-			if (m->str[i][j] == 5 || m->str[i][j] == '\\'
-				|| m->str[i][j] == ';')
+			if (m->str[i][j] == 5 || m->str[i][j] == ';')
 				m->str[i][j] = 32;
 			if (m->str[i][j] == 4)
 				m->str[i][j] = '\t';
@@ -130,11 +129,15 @@ void	tabs(t_ms *m)
 
 void	tokenizer(t_ms *m, t_lexer **lexer)
 {	
+	//printf("args : %s\n", m->args);
 	cnt_for_alloc(m, 0, -1);
 	split_by(m, 0, -1);
 	m->str = ft_split(m->args_tmp, ' ');
-	//check_dol(m, 0, -1);
+	// int i = -1;
+	// while (m->str[++i])
+	//printf("str : %s\n", m->str[i]);
 	tabs(m);
+	//check_dol(m, 0, -1);
 	cnt_for_alloc(m, 1, -1);
 	(*lexer) = lstnew();
 	while (--m->tok_cnt > 1)
@@ -184,4 +187,5 @@ void	tokenizer(t_ms *m, t_lexer **lexer)
     //     printf("%s\n", m->lcmd[2]->tree);
     //     m->lcmd[2] = m->lcmd[2]->next;
     // }
+	//engine(m, 0, -1);
 }
