@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/09/22 16:17:05 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/09/22 23:31:31 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,9 +57,7 @@ MINI = $(patsubst %.o, $(BUILD)/%.o, $(OBJ))
 
 CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
 
-INC = -Ireadline_update/include -Ilibft
-
-PREFIX		= $(shell pwd)/readline_update
+INC = -Ireadline/include -Ilibft
 
 $(BUILD)/%.o: %.c $(HEADER) Makefile
 	@mkdir -p $(BUILD)/src
@@ -69,10 +67,11 @@ all: $(NAME)
 
 $(NAME) : $(MINI)
 	$(MAKE) -C $(LIBFT)
-	$(CC) $(CFLAGS) $(MINI) $(INC) -o $(NAME) -L./libft -lft -Lreadline_update/lib -lreadline 
+	$(CC) $(CFLAGS) $(MINI) $(INC) -o $(NAME) -L./libft -lft -Lreadline/lib -lreadline 
 
 config:
-	cd readline-master && make clean && ./configure --prefix=$(PREFIX) && make && make install
+	mkdir -p readline
+	./readline.sh readline
 
 fclean: clean
 	rm -rf $(NAME) $(BUILD)
