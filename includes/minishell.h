@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/19 00:47:41 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/22 17:14:47 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int		redir_append(char *str);
 int		simbol(t_ms *ms, int i);
 int		redir_loop(t_ms *ms);
 int		perr(char *str, t_ms *ms);
-int		cd(t_ms *ms, int i, int j);
+int		cd(t_ms *ms, int j);
 int		exit_mode(int n, t_ms *ms);
 int		cmd(t_ms *ms, char **envp);
 int		ERR(char *error, char *str);
@@ -150,13 +150,13 @@ int		engine(t_ms *ms);
 int		check_var(char *str);
 int		get_cmd(char *path, char *cmd);
 int		ft_export(t_ms *ms, char **str, int i);
-int		echo(t_ms *ms, int i, int flag);
+int		echo(t_ms *ms, int flag);
 int		parser(t_lexer *lexer, t_ms *ms);
 int		str_join(t_ms *ms, int i, char c);
 int		redir(char *str, char **file);
 int		dol_prep(t_ms *ms, int i, int x, int y);
 int		help(char *lex, t_ms *ms, int i, char *ptr);
-int		pipex(t_ms *ms, int i, char **argv, int	num);
+int		pipex(t_ms *ms, char **argv, int	num);
 int		help_helper(char *join, char *ptr, char *lex, t_ms *ms);
 char	**caching(char **str);
 char	**path_x(char **envp);

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 12:11:50 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/07 12:41:08 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:27:11 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,8 @@ char	*ft_concat(char *cmd, char *opt)
 void	goto_start(t_ms *ms)
 {
 	while (ms->tree[ms->ord]->prev)
-		ms->tree[ms->ord] = ms->tree[ms->ord]->prev;
+	{
+		if (ms->tree[ms->ord]->prev)
+			ms->tree[ms->ord] = ms->tree[ms->ord]->prev;
+	}
 }

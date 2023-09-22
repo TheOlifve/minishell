@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/01 18:01:24 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/22 18:14:27 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	perr(char *str, t_ms *ms)
 {
 	perror(str);
 	ft_search(ms);
-	// (void)ms;
 	return (1);
 }
 
@@ -36,7 +35,7 @@ int	exit_mode(int n, t_ms *ms)
 {
 	if (n == 0)
 	{
-		// ft_free2(ms);
+		ft_free2(ms);
 		printf("exit\n");
 		exit (0);
 	}
@@ -49,7 +48,7 @@ int	exit_mode(int n, t_ms *ms)
 	}
 	else if (n == 4)
 	{
-		// ft_free2(ms);
+		//ft_free2(ms);
 		exit (0);
 	}
 	else if (n == 7)
@@ -68,7 +67,7 @@ void	ft_free2(t_ms *ms)
 		free(ms->tree[ms->ord]);
 		ms->ord += 1;
 	}
-	ms->ord = 0;
+	//ms->ord = 0;
 }
 
 void	pipe_close(t_pipex *pipex)

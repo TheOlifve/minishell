@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/19 00:38:26 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/22 19:02:11 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,18 @@ char	*cd2(char *ptr, char *buff, t_ms *ms, int i)
 	return (vp);
 }
 
-int	ft_chdir(t_ms *ms, char *ptr, int i, int j)
+int	ft_chdir(t_ms *ms, char *ptr, int j)
 {
 	char	*vp;
 	char	buff[256];
 	
 	if (ptr == NULL)
-		ptr = ft_strdup(ms->lcmd[i]->next->word);
+		ptr = ft_strdup(ms->tree[ms->ord]->next->_word);
+		//printf("aaa\n");
 	if (getcwd(buff, 256) == NULL)
 		return (perr("minishell: cd", ms));
 	vp = cd2(ptr, buff, ms, -1);
+	printf("%s\n", ptr);
 	if (chdir(vp) != 0)
 		return (perr("minishell: cd", ms));
 	env2(ms, ms->envp[j], 0, 0);
@@ -93,11 +95,12 @@ int	ft_chdir(t_ms *ms, char *ptr, int i, int j)
 		return (pwd(ms, 0));
 }
 
-int	cd(t_ms *ms, int i, int j)
+int	cd(t_ms *ms, int j)
 {
 	char	*home;
 	char	*ptr;
 
+	goto_start(ms);
 	while (ms->envp[++j])
 	{
 		if (ft_strncmp(ms->envp[j], "HOME=", 5) == 0)
@@ -105,15 +108,17 @@ int	cd(t_ms *ms, int i, int j)
 		if (ft_strncmp(ms->envp[j], "PWD=", 4) == 0)
 			break ;
 	}
-	if (!ms->lcmd[i]->next)
+	if (ms->tree[ms->ord]->next == NULL)
 	{
 		if (chdir(home) != 0)
 			return (perr("minishell: cd", ms));
 		env2(ms, ms->envp[j], 0, 0);
 		return (pwd(ms, 0));
 	}
-	ptr = ft_strdup(ms->lcmd[i]->next->file);
-	ft_chdir(ms, ptr, i, j);
+	ptr = ft_strdup(ms->tree[ms->ord]->next->_file);
+	//printf("aaah\n");
+	ft_chdir(ms, ptr, j);
+	//printf("aaai\n");
 	free (ptr);
 	return (0);
 }
