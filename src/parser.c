@@ -20,7 +20,6 @@ int	parser(t_lexer *lexer, t_ms *ms)
 		{
 			if (lexer && lexer->kw && ms)
 			word_distribute(&lexer, ms, lexer->kw);
-			
 			if (ms->tree[ms->ord]->next)
 				ms->tree[ms->ord] = ms->tree[ms->ord]->next;
 		}
@@ -31,21 +30,21 @@ int	parser(t_lexer *lexer, t_ms *ms)
 		else
 			break ;
 	}
-	ms->ord = 0;
-	while (ms->tree[ms->ord])
-	{
-		goto_start(ms);
-		while (ms->tree[ms->ord])
-		{
-			printf("cmd - %s\noption - %s\nfile - %s\nword - %s\nredir - %s\npipe - %s\nand - %s\nor - %s\n",ms->tree[ms->ord]->_cmd,ms->tree[ms->ord]->_option,
-			ms->tree[ms->ord]->_file,ms->tree[ms->ord]->_word,
-			ms->tree[ms->ord]->_redir,ms->tree[ms->ord]->_pipe,
-			ms->tree[ms->ord]->_and,ms->tree[ms->ord]->_or);
-			printf("_____________________________________________________\n");
-			ms->tree[ms->ord] = ms->tree[ms->ord]->next;
-		}
-		ms->ord++;
-	} 
+	// ms->ord = 0;
+	// while (ms->tree[ms->ord])
+	// {
+	// 	goto_start(ms);
+	// 	while (ms->tree[ms->ord])
+	// 	{
+	// 		printf("cmd - %s\noption - %s\nfile - %s\nword - %s\nredir - %s\npipe - %s\nand - %s\nor - %s\n",ms->tree[ms->ord]->_cmd,ms->tree[ms->ord]->_option,
+	// 		ms->tree[ms->ord]->_file,ms->tree[ms->ord]->_word,
+	// 		ms->tree[ms->ord]->_redir,ms->tree[ms->ord]->_pipe,
+	// 		ms->tree[ms->ord]->_and,ms->tree[ms->ord]->_or);
+	// 		printf("_____________________________________________________\n");
+	// 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
+	// 	}
+	// 	ms->ord++;
+	// } 
 	ms ->ord = 0;
 	return (0);
 }

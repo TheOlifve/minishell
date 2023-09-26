@@ -63,22 +63,6 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid)
 	return (ptr[0]);
 }
 
-// int	exec_with_redir2(t_ms *ms, char **cmd, char *file)
-// {
-// 	int		pid;
-// 	int		ptr;
-
-// 	pid = 0;
-// 	ptr = exec_with_redir3(ms, cmd, pid);
-// 	if (ptr > 0)
-// 	{
-// 		open_files(ft_split(file, ' '));
-// 		return (1);
-// 	}
-// 	redir(read_file(), ft_split(file, ' '));
-// 	return (0);
-// }
-
 int	exec_with_redir(t_ms *ms)
 {
 	int		pid;
@@ -104,5 +88,62 @@ int	exec_with_redir(t_ms *ms)
 	}
 	redir(read_file(), ft_split(file, ' '));
 	unlink("src/tmp");
+	return (0);
+}
+
+int	redir(char *str, char **file)
+{
+	int		fd;
+
+	fd = 0;
+	while (*file)
+	{
+		if (ft_strncmp(*file, ">>", 2) == 0 && *file != NULL)
+		{
+			*file += 2;
+			fd = open(*file, O_RDWR | O_APPEND | O_CREAT, 0644);
+		}
+		else if (ft_strncmp(*file, ">", 1) == 0 && *file != NULL)
+		{
+			*file += 1;
+			fd = open(*file, O_RDWR | O_TRUNC | O_CREAT, 0644);
+		}
+		if (fd < 0)
+			break ;
+		write(fd, str, ft_strlen(str));
+		close(fd);
+		file++;
+	}
+	if (fd < 0)
+		return (1);
+	return (0);
+}
+
+int	redir_loop(t_ms *ms)
+{
+	char	*_read;
+	char	*tmp;
+	char	*tmp2;
+	char	**file;
+	
+	tmp2 = ft_strdup("");
+	while (1)
+	{
+		_read = get_next_line(0);
+		if (!_read)
+			break;
+		tmp = ft_strjoin(tmp2, _read);
+		free(tmp2);
+		tmp2 = ft_strdup(tmp);
+		free(tmp);
+	}
+	file = ft_split(ms->tree[ms->ord]->_redir, ' ');
+	if (redir(tmp2, file) == 1)
+	{
+		free(file);
+		free(tmp2);
+		return (1);
+	}
+	free(tmp2);
 	return (0);
 }

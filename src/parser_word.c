@@ -81,6 +81,8 @@ int	word_cmp(t_ms *ms, char *word)
 		ft_strcmp(word, "export") == 0 ||
 		ft_strncmp(word, "./", 2) == 0)
 		return (0);
+	else if (ft_strcmp(word, "..") == 0)
+		return (5);
 	else if (word[0] == '-')
 		return (2);
 	return (word_cmp2(ms, word));
@@ -96,7 +98,7 @@ int	word_distribute2(t_lexer **lexer, t_ms *ms, char *word, int type)
 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
 		if (type == 2 || type == 3)
 			ms->tree[ms->ord]->_file = ft_strdup(word);
-		else if (type == 4)
+		else if (type == 4 || type == 5)
 			ms->tree[ms->ord]->_word = ft_strdup(word);
 	}
 	return (0);
@@ -120,3 +122,4 @@ int	word_distribute(t_lexer **lexer, t_ms *ms, char *word) //cmd - 0 | cmd_w_p -
 	ms->bool_word++;
 	return (0);
 }
+\
