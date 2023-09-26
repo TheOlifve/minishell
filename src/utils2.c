@@ -65,5 +65,8 @@ char	*ft_concat(char *cmd, char *opt)
 void	goto_start(t_ms *ms)
 {
 	while (ms->tree[ms->ord]->prev)
-		ms->tree[ms->ord] = ms->tree[ms->ord]->prev;
+	{
+		if(ms->tree[ms->ord]->prev)
+			ms->tree[ms->ord] = ms->tree[ms->ord]->prev;
+	}
 }

@@ -32,7 +32,7 @@ int	perr(char *str, t_ms *ms)
 	return (1);
 }
 
-int	exit_mode(int n, t_ms *ms)
+void	exit_mode(int n, t_ms *ms)
 {
 	if (n == 0)
 	{
@@ -49,7 +49,6 @@ int	exit_mode(int n, t_ms *ms)
 	}
 	else if (n == 4)
 	{
-		// ft_free2(ms);
 		exit (0);
 	}
 	else if (n == 7)
@@ -57,7 +56,6 @@ int	exit_mode(int n, t_ms *ms)
 		ft_search(ms);
 		exit(127);
 	}
-	return (0);
 }
 
 void	ft_free2(t_ms *ms)
@@ -68,7 +66,6 @@ void	ft_free2(t_ms *ms)
 		free(ms->tree[ms->ord]);
 		ms->ord += 1;
 	}
-	ms->ord = 0;
 }
 
 void	pipe_close(t_pipex *pipex)

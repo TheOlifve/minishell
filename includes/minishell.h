@@ -140,7 +140,7 @@ int		simbol(t_ms *ms, int i);
 int		redir_loop(t_ms *ms);
 int		perr(char *str, t_ms *ms);
 int		cd(t_ms *ms, int i, int j);
-int		exit_mode(int n, t_ms *ms);
+void	exit_mode(int n, t_ms *ms);
 int		cmd(t_ms *ms, char **envp);
 int		ERR(char *error, char *str);
 int		dol_count(char *str, int i);

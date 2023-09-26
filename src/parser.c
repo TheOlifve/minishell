@@ -26,11 +26,10 @@ int	parser(t_lexer *lexer, t_ms *ms)
 			operator_distribute(ms, lexer->kw);
 		lexer = lexer->next;
 	}
-	ms->ord = 0;
+	// ms->ord = 0;
 	// while (ms->tree[ms->ord])
 	// {
-	// 	while (ms->tree[ms->ord]->prev)
-	// 		ms->tree[ms->ord] = ms->tree[ms->ord]->prev;
+	// 	goto_start(ms);
 	// 	while (ms->tree[ms->ord])
 	// 	{
 	// 		printf("cmd - %s\noption - %s\nfile - %s\nword - %s\nredir - %s\npipe - %s\nand - %s\nor - %s\n",ms->tree[ms->ord]->_cmd,ms->tree[ms->ord]->_option,
@@ -41,7 +40,7 @@ int	parser(t_lexer *lexer, t_ms *ms)
 	// 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
 	// 	}
 	// 	ms->ord++;
-	// }
-	// ms->ord = 0;
+	// } 
+	ms ->ord = 0;
 	return (0);
 }

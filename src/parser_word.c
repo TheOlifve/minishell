@@ -50,7 +50,8 @@ int	word_cmp2(t_ms *ms, char *word)
 
 	i = -1;
 	path = ft_split(ms->path, ':');
-	tmp = ft_strjoin("/", word);
+	// if (strcmp(word, "..") == 1)
+		tmp = ft_strjoin("/", word);
 	while (path && path[++i])
 	{
 		tmp2 = ft_strjoin(path[i], tmp);
@@ -95,13 +96,9 @@ int	word_distribute2(t_lexer **lexer, t_ms *ms, char *word, int type)
 		tree_add_back(&ms->tree[ms->ord], tree_new());
 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
 		if (type == 2 || type == 3)
-		{
 			ms->tree[ms->ord]->_file = ft_strdup(word);
-		}
 		else if (type == 4)
-		{
 			ms->tree[ms->ord]->_word = ft_strdup(word);
-		}
 	}
 	return (0);
 }
@@ -113,8 +110,7 @@ int	word_distribute(t_lexer **lexer, t_ms *ms, char *word) //cmd - 0 | cmd_w_p -
 	type = word_cmp(ms, word);
 	if (ms->bool_word == 0)
 	{
-		if (!ms->tree[ms->ord])
-			tree_add_back(&ms->tree[ms->ord], tree_new());
+		ms->tree[ms->ord] = tree_new();
 		if (type == 1 && !ms->tree[ms->ord]->_cmd)
 			ms->tree[ms->ord]->_cmd = cmd_build(ms, word);
 		else if (!ms->tree[ms->ord]->_cmd)

@@ -49,17 +49,20 @@ int	operator_distribute2(t_ms *ms, int type, char *opr)
 	{
 		ms->tree[ms->ord]->_pipe = ft_strdup("|");
 		ms->ord++;
+		ms->bool_word = 0;
 		tree_add_back(&ms->tree[ms->ord], tree_new());
 	}
 	else if (type == 2)
 	{
 		ms->tree[ms->ord]->_and = ft_strdup("&&");
 		ms->ord++;
+		ms->bool_word = 0;
 		tree_add_back(&ms->tree[ms->ord], tree_new());
 	}
 	else if (type == 3)
 	{
 		ms->tree[ms->ord]->_or = ft_strdup("||");
+		ms->bool_word = 0;
 		ms->ord++;
 		tree_add_back(&ms->tree[ms->ord], tree_new());
 	}
@@ -69,16 +72,12 @@ int	operator_distribute2(t_ms *ms, int type, char *opr)
 int	operator_distribute(t_ms *ms, char *opr) // > or < = 0 | pipe = 1 | and = 2 | or = 3
 {
 	int		type;
-	t_tree	*tmp;
 
 	if (ms->bool_word == 0 && (opr[0] == '|' || opr[0] == '&'))
 		return (pars_err(opr));
 	if (!ms->tree[ms->ord])
 		tree_add_back(&ms->tree[ms->ord], tree_new());
 	type = opr_cmp(opr);
-	tmp = ms->tree[ms->ord];
-	goto_start(ms);
 	operator_distribute2(ms, type, opr);
-	ms->tree[ms->ord] = tmp;
 	return (0);
 }
