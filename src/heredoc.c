@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/08 18:34:35 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/22 16:01:23 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int	redir_loop(t_ms *ms)
 		tmp2 = ft_strdup(tmp);
 		free(tmp);
 	}
+	printf("%s\n",ms->tree[ms->ord]->_redir);
 	file = ft_split(ms->tree[ms->ord]->_redir, ' ');
 	if (redir(tmp2, file) == 1)
 	{

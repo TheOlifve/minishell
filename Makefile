@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/09/19 01:01:28 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/09/22 23:31:31 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,33 +17,33 @@ BUILD = build
 CC = cc
 
 SRC = 	src/main.c				\
-		src/cmds.c				\
 		src/cd.c				\
+		src/cmds.c				\
 		src/mems.c				\
 		src/tokenizer.c			\
 		src/simbol.c			\
+		src/dollar2.c			\
 		src/export.c			\
+		src/export2.c			\
 		src/get_next_line.c		\
 		src/unset.c				\
 		src/dollar.c			\
-		src/parser_word.c		\
-		src/parser_word2.c		\
-		src/dollar2.c			\
-		src/list_tree.c			\
-		src/export2.c			\
 		src/pars.c				\
 		src/list_lcmd.c			\
+		src/list_tree.c			\
+		src/redir.c				\
 		src/list_lexer.c		\
 		src/wildcard.c			\
 		src/engine.c			\
 		src/pipex_b.c			\
 		src/free.c				\
 		src/utils.c				\
-		src/redir.c				\
 		src/utils2.c			\
 		src/signal.c			\
+		src/parser_word.c		\
+		src/parser_word2.c		\
 		src/parser.c			\
-		src/parser_operator.c		\
+		src/parser_operator.c	\
 		src/pp_bb.c				\
 		src/heredoc.c
 

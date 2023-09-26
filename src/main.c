@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/18 14:21:00 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:53:38 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,18 @@ void	main_sig(void)
 		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR
 		|| signal(SIGTSTP, SIG_IGN) == SIG_ERR)
 		perror("minishell_ERROR");
+	//	printf("aaa\n");
 }
 
 void	main2(t_ms *ms, int	i)
 {
 	main_sig();
 	
+	//printf("aaab\n");
 	while (ms->envp[++i])
 		if (ft_strncmp(ms->envp[i], "PATH=", 5) == 0)
 			ms->path = ms->envp[i] + 5;
+		//	printf("aaac\n");
 	ms->i = 0;
 	ms->save_stdout = dup(1);
 	ms->f = 0;
@@ -47,9 +50,11 @@ void	main2(t_ms *ms, int	i)
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);
+//	printf("aaad\n");
 	if (ms->args_old)
 		add_history (ms->args_old);
 	ms->num = ft_strlen(ms->args_old);
+//	printf("aaae\n");
 }
 
 void	loop(t_ms *m_s, t_lexer *lexer)
@@ -58,14 +63,19 @@ void	loop(t_ms *m_s, t_lexer *lexer)
 		main2(m_s, -1);
 		if (simbol(m_s, -1) != 0)
 		{
+			//printf("aaaf\n");
 			free(m_s->args_old);
 			perror("minishell_ERROR");
 		}
 		else
 		{
+			//printf("aaaj\n");
 			tokenizer(m_s, &lexer);
+		//	printf("aaah\n");
 			free(m_s->args_old);
+			//printf("aaai\n");
 			ft_free2(m_s);
+			//printf("aaaj\n");
 		}
 		//system ("leaks minishell");
 		

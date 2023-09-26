@@ -6,22 +6,22 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/02 02:45:48 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/22 17:14:27 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	cmd_find_p(t_ms *ms, char **cmd, int i)
+int	cmd_find_p(t_ms *ms, char **cmd)
 {
 	if (get_cmd(cmd[0], "export") == 1)
 		return (ft_export(ms, cmd, 1));
 	else if (get_cmd(cmd[0], "unset") == 1)
 		return (ft_unset(ms, cmd, 1));
 	else if (get_cmd(cmd[0], "echo") == 1)
-		return (echo(ms, i, 0));
+		return (echo(ms, 0));
 	else if (get_cmd(cmd[0], "cd") == 1)
-		return (cd(ms, i, -1));
+		return (cd(ms, -1));
 	else if (get_cmd(cmd[0], "pwd") == 1)
 		return (pwd(ms, 1));
 	else if (get_cmd(cmd[0], "env") == 1)
@@ -73,7 +73,7 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 	return (0);
 }
 
-void	child(t_ms *ms, t_pipex *pipex, char **argv, int i)
+void	child(t_ms *ms, t_pipex *pipex, char **argv)
 {
 	int		j;
 	char	**cmd_args;
@@ -93,13 +93,13 @@ void	child(t_ms *ms, t_pipex *pipex, char **argv, int i)
 			perr("Error", ms);
 			exit_mode(7, ms);
 		}
-		j = cmd_find_p(ms, cmd_args, i);
+		j = cmd_find_p(ms, cmd_args);
 		child_help(pipex, ms, cmd_args, j);
 		exit_mode(1, ms);
 	}
 }
 
-int	pipex(t_ms *ms, int i, char **argv, int	num)
+int	pipex(t_ms *ms, char **argv, int	num)
 {
 	t_pipex	pipex;
 	int		ptr[1];
@@ -114,7 +114,7 @@ int	pipex(t_ms *ms, int i, char **argv, int	num)
 	pipe_open(&pipex, ms);
 	while (++num <= pipex.pipes_cnt)
 	{
-		child(ms, &pipex, argv, i);
+		child(ms, &pipex, argv);
 		pipex.cmd_crnt++;
 		pipex.index += 1;
 	}

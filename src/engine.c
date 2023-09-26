@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/19 00:44:22 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/22 18:32:55 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,26 +54,15 @@
 // {
 // 	char	*cmd;
 
-// 	if (ms->lcmd[i]->cmd == NULL)
-// 		cmd = ft_strdup(ms->lcmd[i]->word);
-// 	else
-// 		cmd = ft_strdup(ms->lcmd[i]->cmd);
-// 	if (get_cmd(cmd, "echo") == 1)
-// 		return (echo(ms, i, 0));
 // 	else if (get_cmd(cmd, "cd") == 1)
 // 		return (cd(ms, i, -1));
 // 	else if (get_cmd(cmd, "pwd") == 1)
 // 		return (pwd(ms, 1));
-// 	else if (get_cmd(cmd, "env") == 1)
-// 		return (env(ms));
 // 	else if (get_cmd(cmd, "exit") == 1)
 // 		exit_mode(0, ms);
 // 	else if (eufind(cmd) == 0 && !ms->lcmd[i]->next)
 // 		return (1);
-// 	else if (get_cmd(cmd, "export") == 1)
-// 		return (ft_export(ms, ms->lcmd[i]->next->word));
-// 	else if (get_cmd(cmd, "unset") == 1 && ms->lcmd[i]->next)
-// 		return (ft_unset(ms, ms->lcmd[i]->next->word));
+
 // 	return (2);
 // }
 int	cmd_find(t_ms *ms, char **cmd)
@@ -82,7 +71,15 @@ int	cmd_find(t_ms *ms, char **cmd)
 		return (ft_export(ms, cmd, 1));
 	else if (ft_strcmp(cmd[0], "unset") == 0)
 		return (ft_unset(ms, cmd, 1));
-	else if (ft_strcmp(cmd[0], "env") == 0)
+	else if (ft_strcmp(cmd[0], "echo") == 0 || ft_strcmp(cmd[0], "ECHO") == 0)
+		return (echo(ms, 0));
+	else if (ft_strcmp(cmd[0], "cd") == 0)
+		return (cd(ms, -1));
+	else if (ft_strcmp(cmd[0], "exit") == 0)
+		return (exit_mode(0, ms));
+	else if (ft_strcmp(cmd[0], "pwd") == 0 || ft_strcmp(cmd[0], "PWD") == 0)
+		return (pwd(ms, 1));
+	else if (ft_strcmp(cmd[0], "env") == 0 || ft_strcmp(cmd[0], "ENV") == 0)
 		return (env(ms));
 	return (2);
 }
@@ -103,7 +100,10 @@ char	**cmd_builder(t_ms *ms)
 			cmd = ft_concat(cmd, ms->tree[ms->ord]->_file);
 		if (ms->tree[ms->ord]->_word != NULL)
 			cmd = ft_concat(cmd, ms->tree[ms->ord]->_word);
-		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
+		if (ms->tree[ms->ord]->next)
+			ms->tree[ms->ord] = ms->tree[ms->ord]->next;
+		else
+			break ;
 	}
 	r_cmd = ft_split(cmd, ' ');
 	free(cmd);
