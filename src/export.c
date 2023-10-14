@@ -27,7 +27,6 @@ int check_var2(char *str)
 	len = ft_strlen(str);
 	while (str[i] && str[i] != '=')
 		i++;
-	printf("i -|%d|\n", str[1]);
 	if (str[i] == '=' && str[i + 1] == '\0')
 		return (-3);
 	if (str[i] != '=')
@@ -65,7 +64,6 @@ int	check_var(char *str)
 	if (!str)
 		return (1);
 	j = check_var2(str);
-	printf("%d\n",j);
 	if (j == -1)
 	{
 		ERR("export", str);
@@ -177,6 +175,8 @@ int	ft_export(t_ms *ms, char **str, int i)
 	}
 	else if (test == 2)
 		return (0);
+	else if (test == 3)
+		return (1);
 	if (!ms->envp)
 	{
 		ms->envp = malloc(sizeof(char *) * 2);

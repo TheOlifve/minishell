@@ -106,7 +106,6 @@ char	*cmd_builder(t_ms *ms)
 			break ;
 	}
 	goto_start(ms);
-	printf("cmd - %s\n", cmd);
 	return (cmd);
 }
 
@@ -118,7 +117,6 @@ int	exec_one_cmd(t_ms *ms)
 	if (ms->tree[ms->ord]->_redir != NULL)
 		return (exec_with_redir(ms));
 	cmd = ft_split(cmd_builder(ms), ' ');
-	printf("|%c|\n",cmd[1][2]);
 	i = cmd_find(ms, cmd);
 	if (i == 2)
 		i = exec_cmd(ms, cmd);

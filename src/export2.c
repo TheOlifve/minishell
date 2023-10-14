@@ -12,11 +12,35 @@
 
 #include "../includes/minishell.h"
 
+int	check_var4(char **str, int i)
+{
+	int	j;
+
+	j = 0;
+	while(str[i] && str[i][j])
+	{
+		if (str[i][j] == '=')
+			return (0);
+		j++;
+	}
+	if (str[i + 1][0] == '=')
+		return (2);
+	return (0);
+}
+
 int	ft_export2(t_ms *ms, char **str, int i)
 {
 	int	j;
 	if (!str[i])
 		return (0);
+	if (str[i] && str[i + 1])
+	{
+		if (check_var4(str, i) == 2)
+		{
+			ERR("export", str[i + 1]);
+			return (3);
+		}
+	}
 	j = check_var(str[i]);
 	if (j == 0)
 	{
