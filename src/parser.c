@@ -14,11 +14,11 @@
 
 int	parser(t_lexer *lexer, t_ms *ms)
 {
+	ms->tree[ms->ord] = tree_new();
 	while (lexer)
 	{	
 		if (ft_strcmp(lexer->id, "word\0") == 0)
 		{
-			if (lexer && lexer->kw && ms)
 			word_distribute(&lexer, ms, lexer->kw);
 			if (ms->tree[ms->ord]->next)
 				ms->tree[ms->ord] = ms->tree[ms->ord]->next;
@@ -30,7 +30,7 @@ int	parser(t_lexer *lexer, t_ms *ms)
 		else
 			break ;
 	}
-	// ms->ord = 0;
+	ms->ord = 0;
 	// while (ms->tree[ms->ord])
 	// {
 	// 	goto_start(ms);
@@ -45,6 +45,6 @@ int	parser(t_lexer *lexer, t_ms *ms)
 	// 	}
 	// 	ms->ord++;
 	// } 
-	ms ->ord = 0;
+	// ms->ord = 0;
 	return (0);
 }

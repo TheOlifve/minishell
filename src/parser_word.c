@@ -98,7 +98,7 @@ int	word_distribute2(t_lexer **lexer, t_ms *ms, char *word, int type)
 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
 		if (type == 2 || type == 3)
 			ms->tree[ms->ord]->_file = ft_strdup(word);
-		else if (type == 4 || type == 5)
+		else if (type == 4 || type == 5 || type == 0)
 			ms->tree[ms->ord]->_word = ft_strdup(word);
 	}
 	return (0);
@@ -122,4 +122,3 @@ int	word_distribute(t_lexer **lexer, t_ms *ms, char *word) //cmd - 0 | cmd_w_p -
 	ms->bool_word++;
 	return (0);
 }
-\

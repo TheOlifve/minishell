@@ -25,6 +25,7 @@ char	*redir_build(t_ms *ms, char *opr)
 		free(tmp);
 		return (tmp2);
 	}
+	ms->bool_word += 1;
 	tmp2 = ft_strdup(opr);
 	return (tmp2);
 }
@@ -44,7 +45,12 @@ int	opr_cmp(char *opr)
 int	operator_distribute2(t_ms *ms, int type, char *opr)
 {
 	if (type == 0)
+	{
+		if (ms->bool_word == 0)
+			ms->tree[ms->ord] = tree_new();
+		goto_start(ms);
 		ms->tree[ms->ord]->_redir = redir_build(ms, opr);
+	}
 	if (type == 1)
 	{
 		ms->tree[ms->ord]->_pipe = ft_strdup("|");
@@ -76,8 +82,9 @@ int	operator_distribute(t_ms *ms, char *opr) // > or < = 0 | pipe = 1 | and = 2 
 	if (ms->bool_word == 0 && (opr[0] == '|' || opr[0] == '&'))
 		return (pars_err(opr));
 	if (!ms->tree[ms->ord])
-		tree_add_back(&ms->tree[ms->ord], tree_new());
+		ms->tree[ms->ord] =  tree_new();
 	type = opr_cmp(opr);
 	operator_distribute2(ms, type, opr);
+	goto_start(ms);
 	return (0);
 }

@@ -54,8 +54,6 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid)
 			exit(1);
 		}
 		execve (cmd[0], cmd, ms->envp);
-		dup2(1, STDOUT);
-		printf("minishell: %s: command not found\n", cmd[0]);
 		exit_mode(7, ms);
 	}
 	while (wait(ptr) != -1)
@@ -63,57 +61,37 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid)
 	return (ptr[0]);
 }
 
-int	exec_with_redir(t_ms *ms)
+int	ft_last(char **str)
 {
-	int		pid;
-	int		ptr;
-	char	*file;
-	char	**cmd;
-	
-	(void)cmd;
-	if (!ms->tree[ms->ord]->_cmd && ms->tree[ms->ord]->_redir)
-	{
-		redir_loop(ms);
-		return (0);
-	}
-	file = ft_strdup(ms->tree[ms->ord]->_redir);
-	cmd = cmd_builder(ms);
-	pid = 0;
-	ptr = exec_with_redir2(ms, cmd, pid);
-	if (ptr > 0)
-	{
-		open_files(ft_split(file, ' '));
-		unlink("src/tmp");
-		return (1);
-	}
-	redir(read_file(), ft_split(file, ' '));
-	unlink("src/tmp");
-	return (0);
+	int	i;
+
+	i = 0;
+	while(str[i])
+		i++;
+	i -= 1;
+	return (i);
 }
 
-int	redir(char *str, char **file)
+
+int	redir(char *str, char **str2)
 {
 	int		fd;
+	char	*file;
 
 	fd = 0;
-	while (*file)
+	file = str2[ft_last(str2)];
+	if (ft_strncmp(file, ">>", 2) == 0 && file != NULL)
 	{
-		if (ft_strncmp(*file, ">>", 2) == 0 && *file != NULL)
-		{
-			*file += 2;
-			fd = open(*file, O_RDWR | O_APPEND | O_CREAT, 0644);
-		}
-		else if (ft_strncmp(*file, ">", 1) == 0 && *file != NULL)
-		{
-			*file += 1;
-			fd = open(*file, O_RDWR | O_TRUNC | O_CREAT, 0644);
-		}
-		if (fd < 0)
-			break ;
-		write(fd, str, ft_strlen(str));
-		close(fd);
-		file++;
+		file += 2;
+		fd = open(file, O_RDWR | O_APPEND | O_CREAT, 0644);
 	}
+	else if (ft_strncmp(file, ">", 1) == 0 && file != NULL)
+	{
+		file += 1;
+		fd = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
+	}
+	write(fd, str, ft_strlen(str));
+	close(fd);
 	if (fd < 0)
 		return (1);
 	return (0);
@@ -145,5 +123,34 @@ int	redir_loop(t_ms *ms)
 		return (1);
 	}
 	free(tmp2);
+	return (0);
+}
+
+int	exec_with_redir(t_ms *ms)
+{
+	int		pid;
+	int		ptr;
+	char	*file;
+	char	**cmd;
+	
+	(void)cmd;
+	if (!ms->tree[ms->ord]->_cmd && ms->tree[ms->ord]->_redir)
+	{
+		if (ms->tree[ms->ord]->_redir[0] == '>')
+			open_files(ft_split(ms->tree[ms->ord]->_redir, ' '));
+		return (0);
+	}
+	file = ft_strdup(ms->tree[ms->ord]->_redir);
+	cmd = ft_split(cmd_builder(ms), ' ');
+	pid = 0;
+	ptr = exec_with_redir2(ms, cmd, pid);
+	open_files(ft_split(file, ' '));
+	if (ptr > 0)
+	{
+		unlink("src/tmp");
+		return (1);
+	}
+	redir(read_file(), ft_split(file, ' '));
+	unlink("src/tmp");
 	return (0);
 }

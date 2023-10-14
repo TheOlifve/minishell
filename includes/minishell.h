@@ -14,12 +14,12 @@
 # define MINISHELL_H
 
 # include <limits.h>
-# include <unistd.h>
-# include <stdlib.h>
 # include <stdarg.h>
+# include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
 # include <fcntl.h>
+# include <unistd.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -103,6 +103,7 @@ typedef struct s_ms
 	int		cmd;
 	int		ord;
 	int		dol2;
+	int		free;
 	int		fd[2];
 	int		index;
 	int		error;
@@ -153,7 +154,7 @@ int		ft_export(t_ms *ms, char **str, int i);
 int		echo(t_ms *ms, int flag);
 int		parser(t_lexer *lexer, t_ms *ms);
 int		str_join(t_ms *ms, int i, char c);
-int		redir(char *str, char **file);
+int		redir(char *str, char **str2);
 int		dol_prep(t_ms *ms, int i, int x, int y);
 int		help(char *lex, t_ms *ms, int i, char *ptr);
 int		pipex(t_ms *ms, char **argv, int	num);
@@ -164,6 +165,7 @@ char	**ft_masjoin(char **tmp, char *str);
 char	*get_next_line(int fd);
 char	*dol_check(t_ms *ms, char *ptr);
 char	*check_ft(t_ms *ms, char *ft, int i);
+char	*read_file(void);
 char	*ft_join(char *str, char *str2, int i);
 void	open_files(char **file);
 int		redir_after_exec(char **file);
@@ -171,7 +173,7 @@ char	*dol2(char *ptr, char *str, int i, int n);
 char	*slash(t_ms *ms, char *ptr, int i);
 int		word_distribute(t_lexer **lexer, t_ms *ms, char *word);
 char	*cmd_build(t_ms *ms, char *word);
-char	**cmd_builder(t_ms *ms);
+char	*cmd_builder(t_ms *ms);
 int		exec_with_redir(t_ms *ms);
 void	home(void);
 int		exec_cmd(t_ms *ms, char	**cmd);
@@ -190,10 +192,11 @@ void	pipe_close(t_pipex *pipex);
 void	ctrld(char *line, t_ms *ms);
 void	pars(t_lexer *lex, t_ms *ms);
 void	path(t_ms *ms, int i, int n);
-void	loop(t_ms *m_s, t_lexer *lexer);
+int		loop(t_ms *m_s, t_lexer *lexer);
+int		redir_input(t_ms *ms);
 void	infos3(t_lcmd *new, char **info);
 void	check_dol(t_ms *ms, int	i, int j);
-void	tokenizer(t_ms *m, t_lexer **lexer);
+int		tokenizer(t_ms *m, t_lexer **lexer);
 void	ft_dup2(int read, int write, t_ms *ms);
 void	lstadd_back(t_lexer **lst, t_lexer *new);
 void	tree_add_back(t_tree **tree, t_tree *new);

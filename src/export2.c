@@ -14,15 +14,19 @@
 
 int	ft_export2(t_ms *ms, char **str, int i)
 {
+	int	j;
 	if (!str[i])
 		return (0);
-	(void)ms;
-	if (check_var(str[i]) == 0)
+	j = check_var(str[i]);
+	if (j == 0)
 	{
 		i++;
 		ft_export(ms, str, i);
 	}
+	else if (j == 2 || j == 3)
+		return (2);
 	else
 		return (1);
+	(void)ms;
 	return (0);
 }

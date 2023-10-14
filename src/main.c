@@ -28,11 +28,9 @@ void	main2(t_ms *ms, int	i)
 {
 	main_sig();
 	
-	//printf("aaab\n");
 	while (ms->envp[++i])
 		if (ft_strncmp(ms->envp[i], "PATH=", 5) == 0)
 			ms->path = ms->envp[i] + 5;
-		//	printf("aaac\n");
 	ms->i = 0;
 	ms->save_stdout = dup(1);
 	ms->f = 0;
@@ -50,35 +48,31 @@ void	main2(t_ms *ms, int	i)
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);
-//	printf("aaad\n");
 	if (ms->args_old)
 		add_history (ms->args_old);
 	ms->num = ft_strlen(ms->args_old);
-//	printf("aaae\n");
 }
 
-void	loop(t_ms *m_s, t_lexer *lexer)
+int	loop(t_ms *m_s, t_lexer *lexer)
 {
 		rl_catch_signals = 0;
 		main2(m_s, -1);
+		if (ft_strcmp(m_s->args_old, "\0") == 0)
+			return (0);
 		if (simbol(m_s, -1) != 0)
 		{
-			//printf("aaaf\n");
 			free(m_s->args_old);
+			m_s->exit_num = 1;
 			perror("minishell_ERROR");
 		}
 		else
 		{
-			//printf("aaaj\n");
 			tokenizer(m_s, &lexer);
-		//	printf("aaah\n");
 			free(m_s->args_old);
-			//printf("aaai\n");
 			ft_free2(m_s);
-			//printf("aaaj\n");
 		}
-		//system ("leaks minishell");
-		
+	// system ("leaks minishell");
+	return (0);
 }
 
 void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
@@ -120,8 +114,8 @@ int	main(int argc, char **argv, char **envp)
 	if (argc > 1)
 	{
 		perror("minishell_ERROR");
-		system ("leaks minishell");
-		exit (0);
+		// system ("leaks minishell");
+		exit (1);
 	}
 	(void) argv;
 	ft_shlvl(envp, &m_s, -1, 0);

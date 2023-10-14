@@ -20,7 +20,7 @@ int	pars_err(char *error)
 
 int	ERR(char *error, char *str)
 {
-	printf("minishell: %s: '%s': not a valid identifier\n", error, str);
+	printf("minishell: %s: `%s': not a valid identifier\n", error, str);
 	return (1);
 }
 
@@ -47,10 +47,7 @@ int	exit_mode(int n, t_ms *ms)
 		exit(0);
 	}
 	else if (n == 4)
-	{
-		// ft_free2(ms);
 		exit (0);
-	}
 	else if (n == 7)
 	{
 		ft_search(ms);
@@ -64,7 +61,9 @@ void	ft_free2(t_ms *ms)
 	ms->ord = 0;
 	while (ms->tree[ms->ord])
 	{
-		free(ms->tree[ms->ord]);
+		if (ms->tree[ms->ord] != NULL)
+			free(ms->tree[ms->ord]);
+		ms->tree[ms->ord] = NULL;
 		ms->ord += 1;
 	}
 	ms->ord = 0;

@@ -127,15 +127,28 @@ void	tabs(t_ms *m)
 	}
 }
 
-void	tokenizer(t_ms *m, t_lexer **lexer)
+int	check_tabs(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == 9 || str[i] == 32)
+			i++;
+		else
+			return (0);
+	}
+	return (1);
+}
+
+int	tokenizer(t_ms *m, t_lexer **lexer)
 {	
-	//printf("args : %s\n", m->args);
 	cnt_for_alloc(m, 0, -1);
 	split_by(m, 0, -1);
 	m->str = ft_split(m->args_tmp, ' ');
-	// int i = -1;
-	// while (m->str[++i])
-	//printf("str : %s\n", m->str[i]);
+	if (check_tabs(m->args_tmp) == 1)
+		return(0);
 	tabs(m);
 	//check_dol(m, 0, -1);
 	cnt_for_alloc(m, 1, -1);
@@ -145,47 +158,5 @@ void	tokenizer(t_ms *m, t_lexer **lexer)
 	l_analys(m, lexer);
 	parser(*lexer, m);
 	engine(m);
-	// pars(*lexer, m);
-
-	// int	j;
-
-	// j = -1;
-	// while (m->lcmd[0])
-	// {
-	// 	printf("cmd -  %s\n", m->lcmd[0]->cmd);
-	// 	printf("flag - %s\n", m->lcmd[0]->flag);
-	// 	printf("file - %s\n", m->lcmd[0]->file);
-	// 	printf("f_id - %s\n", m->lcmd[0]->f_id);
-	// 	printf("word - %s\n", m->lcmd[0]->word);
-	// 	printf("lpp -  %s\n", m->lcmd[0]->lpp);
-	// 	printf("lb -   %s\n", m->lcmd[0]->lb);
-	// 	printf("tree - %s\n", m->lcmd[0]->tree);
-	// 	printf("_______________________________\n");
-	// 	m->lcmd[0] = m->lcmd[0]->next;
-	// }
-    // while (m->lcmd[1])
-    // {
-    //     printf("%s\n", m->lcmd[1]->cmd);
-    //     printf("%s\n", m->lcmd[1]->flag);
-    //     printf("%s\n", m->lcmd[1]->file);
-    //     printf("%s\n", m->lcmd[1]->f_id);
-    //     printf("%s\n", m->lcmd[1]->word);
-    //     printf("%s\n", m->lcmd[1]->lpp);
-    //     printf("%s\n", m->lcmd[1]->lb);
-    //     printf("%s\n", m->lcmd[1]->tree);
-    //     m->lcmd[1] = m->lcmd[1]->next;
-    // }
-    // while (m->lcmd[2])
-    // {
-    //     printf("%s\n", m->lcmd[2]->cmd);
-    //     printf("%s\n", m->lcmd[2]->flag);
-    //     printf("%s\n", m->lcmd[2]->file);
-    //     printf("%s\n", m->lcmd[2]->f_id);
-    //     printf("%s\n", m->lcmd[2]->word);
-    //     printf("%s\n", m->lcmd[2]->lpp);
-    //     printf("%s\n", m->lcmd[2]->lb);
-    //     printf("%s\n", m->lcmd[2]->tree);
-    //     m->lcmd[2] = m->lcmd[2]->next;
-    // }
-	//engine(m, 0, -1);
+	return (0);
 }

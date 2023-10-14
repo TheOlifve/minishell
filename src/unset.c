@@ -65,17 +65,11 @@ int	ft_remove(t_ms *ms, int pos, char **tmp)
 	return (0);
 }
 
-int	ft_unset2(t_ms *ms, char **str, int i)
+int	ft_unset2(char **str, int i)
 {
 	if (!str[i])
-			return (0);
-	(void)ms;
-	if (check_var1(str[i]) == 0)
-	{
-		i++;
-		ft_unset(ms, str, i);
-	}
-	else
+		return (0);
+	if (check_var1(str[i]) != 0)
 		return (1);
 	return (0);
 }
@@ -83,17 +77,22 @@ int	ft_unset2(t_ms *ms, char **str, int i)
 int	ft_unset(t_ms *ms, char **str, int i)
 {
 	int		j;
+	int		test;
 	char	*str2;
 	char	**tmp;
 
 	if (!str[i])
 		return (1);
-	if (ft_unset2(ms, str, i) == 1)
+	test = ft_unset2(str, i);
+	if (test == 0)
 	{
 		i++;
 		ft_unset(ms, str, i);
+		i--;
 	}
-	if (!ms->envp)
+	else if (test == 1)
+		return (1);
+	else if (!ms->envp)
 		return (1);
 	str2 = ft_strdup(str[i]);
 	free(str[i]);

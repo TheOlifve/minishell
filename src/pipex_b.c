@@ -73,7 +73,110 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 	return (0);
 }
 
-void	child(t_ms *ms, t_pipex *pipex, char **argv)
+char	*redir_find(char **argv)
+{
+	int		i;
+	char	*tmp;
+	char	*tmp2;
+
+	i = 0;
+	tmp = NULL;
+	while(argv && argv[i])
+	{
+		// dprintf(2,"argv - %s\n", argv[i]);
+		if (argv[i][0] == '<' || argv[i][0] == '>')
+		{
+			if (tmp == NULL)
+				tmp = ft_strdup("");
+			tmp2 = ft_join(tmp, argv[i], 1);
+			free(tmp);
+			tmp = ft_strdup(tmp2);
+			free(tmp2);
+		}
+		i++;
+	}
+	return (tmp);
+}
+
+int	exec_with_redir_pipe2(t_ms *ms, char **cmd, int pid)
+{
+	int	i;
+	int	fd;
+	int	ptr[1];
+
+	fd = open("src/tmp", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	pid = fork();
+	if (pid == 0)
+	{
+		dup2(fd, 1);
+		i = cmd_find(ms, cmd);
+		if (i == 0)
+			exit(0);
+		else if (i == 1)
+		{
+			printf("minishell: error\n");
+			exit(1);
+		}
+		execve (cmd[0], cmd, ms->envp);
+		dup2(1, STDOUT);
+		printf("minishell: %s: command not found\n", cmd[0]);
+		exit_mode(7, ms);
+	}
+	while (wait(ptr) != -1)
+		;
+	return (ptr[0]);
+}
+
+char	**redir_cut(char **cmd)
+{
+	int		i;
+	char	*tmp;
+	char	*tmp1;
+	char	**tmp3;
+
+	i = 0;
+	tmp1 = ft_strdup("");
+	while (cmd[i])
+	{
+		if (cmd[i][0] == '<' || cmd[i][0] == '>')
+			break;
+		tmp = ft_join(tmp1, cmd[i], 1);
+		free(tmp1);
+		tmp1 = ft_strdup(tmp);
+		free(tmp);
+		i++;
+	}
+	tmp3 = ft_split(tmp1, ' ');
+	return (tmp3);
+}
+
+int	exec_with_redir_pipe(t_ms *ms, char **cmd, char *file)
+{
+	int		pid;
+	int		ptr;
+	char	**tmp;
+	
+	(void)cmd;
+	if (cmd[0][0] == '<' || cmd[0][0] == '>')
+	{
+		open_files(ft_split(file, ' '));
+		return (0);
+	}
+	pid = 0;
+	tmp = redir_cut(cmd);
+	ptr = exec_with_redir_pipe2(ms, tmp, pid);
+	open_files(ft_split(file, ' '));
+	if (ptr > 0)
+	{
+		unlink("src/tmp");
+		return (1);
+	}
+	redir(read_file(), ft_split(file, ' '));
+	unlink("src/tmp");
+	return (0);
+}
+
+int	child(t_ms *ms, t_pipex *pipex, char **argv)
 {
 	int		j;
 	char	**cmd_args;
@@ -93,13 +196,17 @@ void	child(t_ms *ms, t_pipex *pipex, char **argv)
 			perr("Error", ms);
 			exit_mode(7, ms);
 		}
-		j = cmd_find_p(ms, cmd_args);
+		if (redir_find(cmd_args) != NULL)
+			j = exec_with_redir_pipe(ms, cmd_args, redir_find(cmd_args));
+		else
+			j = cmd_find_p(ms, cmd_args);
 		child_help(pipex, ms, cmd_args, j);
 		exit_mode(1, ms);
 	}
+	return (0);
 }
 
-int	pipex(t_ms *ms, char **argv, int	num)
+int	pipex(t_ms *ms, char **argv, int num)
 {
 	t_pipex	pipex;
 	int		ptr[1];

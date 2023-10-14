@@ -12,34 +12,34 @@
 
 #include "../includes/minishell.h"
 
-// char	*ft_join(char *str, char *str2, int i)
-// {
-// 	char	*tmp;
-// 	char	*tmp2;
+char	*ft_join(char *str, char *str2, int i)
+{
+	char	*tmp;
+	char	*tmp2;
 
-// 	tmp = NULL;
-// 	tmp2 = NULL;
-// 	if (i == 0)
-// 		return (ft_strjoin(str, str2));
-// 	else if (i == 2)
-// 	{
-// 		if (!str)
-// 			str = ft_strdup("");
-// 		tmp = ft_strjoin(str, str2);
-// 		tmp2 = ft_strjoin(tmp, "|");
-// 		free(tmp);
-// 		return (tmp2);
-// 	}
-// 	else
-// 	{
-// 		if (!str)
-// 			str = ft_strdup("");
-// 		tmp = ft_strjoin(str, str2);
-// 		tmp2 = ft_strjoin(tmp, " ");
-// 		free(tmp);
-// 		return (tmp2);
-// 	}
-// }
+	tmp = NULL;
+	tmp2 = NULL;
+	if (i == 0)
+		return (ft_strjoin(str, str2));
+	else if (i == 2)
+	{
+		if (!str)
+			str = ft_strdup("");
+		tmp = ft_strjoin(str, str2);
+		tmp2 = ft_strjoin(tmp, "|");
+		free(tmp);
+		return (tmp2);
+	}
+	else
+	{
+		if (!str)
+			str = ft_strdup("");
+		tmp = ft_strjoin(str, str2);
+		tmp2 = ft_strjoin(tmp, " ");
+		free(tmp);
+		return (tmp2);
+	}
+}
 
 
 // int	eufind(char *str)
@@ -84,12 +84,12 @@ int	cmd_find(t_ms *ms, char **cmd)
 	return (2);
 }
 
-char	**cmd_builder(t_ms *ms)
+char	*cmd_builder(t_ms *ms)
 {
 	char	*cmd;
-	char	**r_cmd;
 
 	cmd = ft_strdup("");
+	goto_start(ms);
 	while (ms->tree[ms->ord])
 	{
 		if (ms->tree[ms->ord]->_cmd != NULL)
@@ -105,9 +105,9 @@ char	**cmd_builder(t_ms *ms)
 		else
 			break ;
 	}
-	r_cmd = ft_split(cmd, ' ');
-	free(cmd);
-	return (r_cmd);
+	goto_start(ms);
+	printf("cmd - %s\n", cmd);
+	return (cmd);
 }
 
 int	exec_one_cmd(t_ms *ms)
@@ -117,7 +117,8 @@ int	exec_one_cmd(t_ms *ms)
 
 	if (ms->tree[ms->ord]->_redir != NULL)
 		return (exec_with_redir(ms));
-	cmd = cmd_builder(ms);
+	cmd = ft_split(cmd_builder(ms), ' ');
+	printf("|%c|\n",cmd[1][2]);
 	i = cmd_find(ms, cmd);
 	if (i == 2)
 		i = exec_cmd(ms, cmd);
@@ -125,39 +126,42 @@ int	exec_one_cmd(t_ms *ms)
 	return (i);
 }
 
-int	exec_pipe_cmd(t_ms *ms)
+void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
 {
-	(void)ms;
-	// char	*tmp;
+	char	*tmp3;
+	char	**argv;
 
-	// printf("!\n");
-	// while (ms->tree[ms->ord])
-	// {
-	// 	// tmp = cmd_builder(ms);
-	// 	printf("%s\n",tmp);
-	// 	// tmp2 = ft_join(str, tmp, 2);
-	// 	// free(str);
-	// 	// str = ft_strdup(tmp2);
-	// 	// free(tmp);
-	// 	// free(tmp2);
-	// 	// if (ms->lcmd[i]->lpp == NULL)
-	// 	// 	break;
-	// 	// i++;
-	// }
-	// // ms->p_argv = ft_split(str, '|');
-	// // ms->index = i;
-	// // pipex(ms, i, ms->p_argv, -1);
-	// // return (i);
-	return (0);
+	while (ms->tree[ms->ord])
+	{
+		tmp = cmd_builder(ms);
+		if (ms->tree[ms->ord]->_redir != NULL)
+		{
+			tmp3 = ft_strdup(tmp);
+			free(tmp);
+			tmp = ft_strjoin(tmp3, ms->tree[ms->ord]->_redir);
+		}
+		tmp2 = ft_join(str, tmp, 2);
+		if (str)
+			free(str);
+		str = ft_strdup(tmp2);
+		free(tmp);
+		free(tmp2);
+		if (ms->tree[ms->ord]->_pipe == NULL)
+			break;
+		ms->ord += 1;
+	}
+	argv = ft_split(str, '|');
+	pipex(ms, argv, -1);
 }
 
 int	engine(t_ms *ms)
 {
 	while (ms->tree[ms->ord])
 	{
-		goto_start(ms);
+		if (ms->tree[ms->ord])
+			goto_start(ms);
 		if (ms->tree[ms->ord]->_pipe != NULL)
-			exec_pipe_cmd(ms);
+			exec_pipe_cmd(ms, NULL, NULL, NULL);
 		else if (ms->tree[ms->ord]->_pipe == NULL)
 			exec_one_cmd(ms);
 		ms->ord += 1;

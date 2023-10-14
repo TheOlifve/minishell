@@ -27,8 +27,10 @@ int check_var2(char *str)
 	len = ft_strlen(str);
 	while (str[i] && str[i] != '=')
 		i++;
-	if ((str[i] == '=' && str[i + 1] == '\0') ||
-			(str[i] != '='))
+	printf("i -|%d|\n", str[1]);
+	if (str[i] == '=' && str[i + 1] == '\0')
+		return (-3);
+	if (str[i] != '=')
 		return (-2);
 	if (len < 3)
 		return (-1);
@@ -38,19 +40,8 @@ int check_var2(char *str)
 	return (i);
 }
 
-int	check_var(char *str)
+int	check_var3(char *str, int i, int j)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	if (!str)
-		return (1);
-	j = check_var2(str);
-	if (j == -1)
-		return (ERR("export", str));
-	else if (j == -2)
-		return (1);
 	while (str && str[i] && i <= j)
 	{
 		if (((str[i] > 64 && str[i] < 91)
@@ -65,11 +56,61 @@ int	check_var(char *str)
 	return (0);
 }
 
+int	check_var(char *str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	if (!str)
+		return (1);
+	j = check_var2(str);
+	printf("%d\n",j);
+	if (j == -1)
+	{
+		ERR("export", str);
+		return (3);
+	}
+	else if (j == -2)
+		return (2);
+	else if (j == -3)
+		return (0);
+	else if (check_var3(str, i , j) != 0)
+		return (3);
+	return (0);
+}
+
+char	*str_replace(char *str)
+{
+	int		i;
+	int		j;
+	char	*str2;
+
+	i = 0;
+	j = 0;
+	while(str[i] && str[i] != '+')
+		i++;
+	if (str[i] == '+' && str[i + 1] == '=')
+	{
+		str2 = ft_strdup(str);
+		j = i + 1;
+		while (str[j])
+		{
+			str[i] = str2[j];
+			i++;
+			j++;
+		}
+		str[i] = '\0';
+	}
+	return (str);
+}
+
 int	append(t_ms *ms, int len, char *str, char **tmp)
 {
 	int		i;
 
 	i = 0;
+	str = str_replace(str);
 	while (ms->envp && ms->envp[i])
 	{
 		if (ft_strncmp(tmp[i], str, len + 1) == 0)
@@ -121,17 +162,21 @@ char	**caching(char **str)
 int	ft_export(t_ms *ms, char **str, int i)
 {
 	int		j;
+	int		test;
 	char	**tmp;
 
 	tmp = NULL;
 	j = 0;
 	if (!str[i])
 		return (1);
-	if (ft_export2(ms, str, i) == 1)
+	test = ft_export2(ms, str, i);
+	if (test == 1)
 	{
 		i++;
 		ft_export(ms, str, i);
 	}
+	else if (test == 2)
+		return (0);
 	if (!ms->envp)
 	{
 		ms->envp = malloc(sizeof(char *) * 2);
