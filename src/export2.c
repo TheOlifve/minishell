@@ -1,16 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <hrahovha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/07 22:30:43 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:18:44 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	ft_export3(t_ms *ms, int i, int j)
+{
+	while (ms->envp && ms->envp[i])
+	{
+		j = 0;
+		printf("declare -x ");
+		while (ms->envp[i][j])
+		{
+			if (ms->envp[i][j] == '=')
+			{
+				printf("%c", ms->envp[i][j]);
+				printf("%c", 34);
+			}
+			else if (ms->envp[i][j + 1] == '\0' || ms->envp[i][j + 1] == '\n')
+			{
+				printf("%c", ms->envp[i][j]);
+				printf("%c", 34);
+			}
+			else
+				printf("%c", ms->envp[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+	return (0);
+}
 
 int	check_var4(char **str, int i)
 {
@@ -37,11 +65,11 @@ int	ft_export2(t_ms *ms, char **str, int i)
 	{
 		if (check_var4(str, i) == 2)
 		{
-			ERR("export", str[i + 1]);
+			ERR("export", str[i + 1], ms);
 			return (3);
 		}
 	}
-	j = check_var(str[i]);
+	j = check_var(str[i], ms);
 	if (j == 0)
 	{
 		i++;

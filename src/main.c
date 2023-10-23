@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/22 15:53:38 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:12:51 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	main_sig(void)
 		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR
 		|| signal(SIGTSTP, SIG_IGN) == SIG_ERR)
 		perror("minishell_ERROR");
-	//	printf("aaa\n");
 }
 
 void	main2(t_ms *ms, int	i)
@@ -31,20 +30,21 @@ void	main2(t_ms *ms, int	i)
 	while (ms->envp[++i])
 		if (ft_strncmp(ms->envp[i], "PATH=", 5) == 0)
 			ms->path = ms->envp[i] + 5;
-	ms->i = 0;
 	ms->save_stdout = dup(1);
-	ms->f = 0;
 	ms->c1 = 0;
 	ms->c2 = 0;
 	ms->ord = 0;
 	ms->bool_word = 0;
 	ms->dol2 = 0;
-	ms->pos = 0;
-	ms->cmd = 0;
-	ms->pp = -1;
-	ms->bb = 0;
-	ms->error = 0;
-	ms->index = -1;
+	ms->err = 0;
+	ms->p_err = 0;
+	// ms->i = 0;
+	// ms->f = 0;
+	// ms->pos = 0;
+	// ms->cmd = 0;
+	// ms->pp = -1;
+	// ms->bb = 0;
+	// ms->index = -1;
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);
@@ -67,7 +67,8 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 		}
 		else
 		{
-			tokenizer(m_s, &lexer);
+			m_s->args = m_s->args_old;
+			tokenizer(m_s, &lexer, -1, -1);
 			free(m_s->args_old);
 			ft_free2(m_s);
 		}

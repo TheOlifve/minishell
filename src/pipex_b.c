@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/22 17:14:27 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:34:59 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 		;
 	if (ptr[0] > 0)
 	{
-		ft_search(ms);
+		ms->err = 1;
 		return (1);
 	}
 	ms->exit_num = 0;
@@ -229,6 +229,9 @@ int	pipex(t_ms *ms, char **argv, int num)
 	while (wait(ptr) != -1)
 		;
 	if (ptr[0] > 0)
-		ft_search(ms);
+	{
+		ms->err = 1;
+		return (1);
+	}
 	return (0);
 }

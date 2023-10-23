@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   parser_operator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <hrahovha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/07 22:30:43 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:10:48 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	operator_distribute(t_ms *ms, char *opr) // > or < = 0 | pipe = 1 | and = 2 
 	int		type;
 
 	if (ms->bool_word == 0 && (opr[0] == '|' || opr[0] == '&'))
-		return (pars_err(opr));
+		return (pars_err(opr, ms));
 	if (!ms->tree[ms->ord])
 		ms->tree[ms->ord] =  tree_new();
 	type = opr_cmp(opr);

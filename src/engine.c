@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/22 18:32:55 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/19 20:06:10 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,33 +41,11 @@ char	*ft_join(char *str, char *str2, int i)
 	}
 }
 
-
-// int	eufind(char *str)
-// {
-// 	if (ft_strcmp(str, "export") == 0 ||
-// 		ft_strcmp(str, "unset") == 0)
-// 			return (0);
-// 	return (1);
-// }
-
-// int	cmd_find(t_ms *ms, int i)
-// {
-// 	char	*cmd;
-
-// 	else if (get_cmd(cmd, "cd") == 1)
-// 		return (cd(ms, i, -1));
-// 	else if (get_cmd(cmd, "pwd") == 1)
-// 		return (pwd(ms, 1));
-// 	else if (get_cmd(cmd, "exit") == 1)
-// 		exit_mode(0, ms);
-// 	else if (eufind(cmd) == 0 && !ms->lcmd[i]->next)
-// 		return (1);
-
-// 	return (2);
-// }
 int	cmd_find(t_ms *ms, char **cmd)
 {
-	if (ft_strcmp(cmd[0], "export") == 0)
+	if (ft_strcmp(cmd[0], "export") == 0 && cmd[1] == NULL)
+		return (ft_export3(ms, 0, 0));
+	else if (ft_strcmp(cmd[0], "export") == 0)
 		return (ft_export(ms, cmd, 1));
 	else if (ft_strcmp(cmd[0], "unset") == 0)
 		return (ft_unset(ms, cmd, 1));
@@ -121,6 +99,7 @@ int	exec_one_cmd(t_ms *ms)
 	if (i == 2)
 		i = exec_cmd(ms, cmd);
 	free(cmd);
+	// printf("%d\n", ms->err);
 	return (i);
 }
 
@@ -150,14 +129,30 @@ void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
 	}
 	argv = ft_split(str, '|');
 	pipex(ms, argv, -1);
+	// printf("%d\n", ms->err);
 }
 
 int	engine(t_ms *ms)
 {
 	while (ms->tree[ms->ord])
 	{
+		// printf("%s\n", ms->tree[ms->ord]->_or);
+		// printf("%s\n", ms->tree[ms->ord]->_and);
+		// if (ms->tree[ms->ord]->_or && ms->exit_num == 0)
+		//printf("%d\n", ms->err);
+		if (ms->tree[ms->ord]->next && ms->tree[ms->ord]->next->_and
+			&& ms->err == 1)
+			break ;
 		if (ms->tree[ms->ord])
 			goto_start(ms);
+		// if (ms->tree[ms->ord]->_or && ms->exit_num > 0)
+		// {
+		// 	if (ms->tree[ms->ord]->next)
+		// 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
+		// 	else
+		// 		break ;
+		// }
+		// printf("%d\n", ms->exit_num);
 		if (ms->tree[ms->ord]->_pipe != NULL)
 			exec_pipe_cmd(ms, NULL, NULL, NULL);
 		else if (ms->tree[ms->ord]->_pipe == NULL)
@@ -166,3 +161,27 @@ int	engine(t_ms *ms)
 	}
 	return (0);
 }
+
+// int	eufind(char *str)
+// {
+// 	if (ft_strcmp(str, "export") == 0 ||
+// 		ft_strcmp(str, "unset") == 0)
+// 			return (0);
+// 	return (1);
+// }
+
+// int	cmd_find(t_ms *ms, int i)
+// {
+// 	char	*cmd;
+
+// 	else if (get_cmd(cmd, "cd") == 1)
+// 		return (cd(ms, i, -1));
+// 	else if (get_cmd(cmd, "pwd") == 1)
+// 		return (pwd(ms, 1));
+// 	else if (get_cmd(cmd, "exit") == 1)
+// 		exit_mode(0, ms);
+// 	else if (eufind(cmd) == 0 && !ms->lcmd[i]->next)
+// 		return (1);
+
+// 	return (2);
+// }

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 3223/07/10 14:44:13 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/19 00:16:13 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/19 13:52:14 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	str_join2(t_ms *ms, int i, char c, int n)
 	x = i;
 	if (n == 0)
 		while (ms->args_old[x++] == c)
-				n++;
+			n++;
 	str1 = ft_substr(ms->args_old, 0, i);
 	str2 = ft_substr(ms->args_old,
 			i + n, ft_strlen(ms->args_old) - (i + n));
@@ -37,30 +37,31 @@ int	str_join2(t_ms *ms, int i, char c, int n)
 
 int	str_join(t_ms *ms, int i, char c) 
 {
-	if (c == 39 && ms->c1 % 2 == 0)
+	ms->x = i;
+	if ((c == 39 && ms->args_old[i + 1] != 39 && ms->c1 % 2 == 0)
+		|| (c == 34 && ms->args_old[i + 1] != 34 && ms->c2 % 2 == 0))
 		while (ms->args_old && ms->args_old[++i])
 		{
-			if (ms->args_old[i] == 32)
-				ms->args_old[i] = 5;
-			else if (ms->args_old[i] == '\t')
-				ms->args_old[i] = 4;
-			if (ms->args_old[i] == 39)
+			tabzz(ms, i);
+			if (ms->args_old[i] == 36 && c == 34)
+				i = dol_prep(ms, i, -1, 0);
+			if (ms->args_old[i] == c)
 			{
-				ms->num = ms->num - str_join2(ms, ms->x, 39, 1);
+				ms->num = ms->num - str_join2(ms, ms->x, c, 1);
 				i--;
-				ms->num = ms->num - str_join2(ms, i, 39, 1);
-				ms->c2++;
+				ms->num = ms->num - str_join2(ms, i, c, 1);
+				if (c == 39)
+					ms->c2++;
+				else
+					ms->c1++;
 				return (ms->x - i + 1);
 			}
 		}
-	i = ms->x;
-	if (c == 34 && ms->c2 % 2 != 0)
-		return (0);
-	else if (c == 39 && ms->c1 % 2 != 0)
+	if ((c == 34 && ms->c2 % 2 != 0) || (c == 39 && ms->c1 % 2 != 0))
 		return (0);
 	else
-		ms->num = ms->num - str_join2(ms, i, c, 0);
-	return (1);
+		ms->num = ms->num - str_join2(ms, ms->x, c, 0);
+	return (0);
 }
 
 int	simbol2(t_ms *ms, int i)
@@ -73,8 +74,7 @@ int	simbol2(t_ms *ms, int i)
 				return (i);
 			else if (ms->args_old[i] == 39)
 				return (i);
-		}
-			
+		}	
 	}
 	else if (ms->args_old[i] && ms->args_old[i] == 39 && ms->c1 %2 != 0)
 	{
@@ -84,9 +84,36 @@ int	simbol2(t_ms *ms, int i)
 				return (1);
 			else if (ms->args_old[i] == 34)
 				return (2);
-		}
-			
+		}		
 	}
+	return (0);
+}
+
+int	o_space(t_ms *ms, int i)
+{
+	if ((ms->args_old[i] == '>' && ms->args_old[i + 1] == '>')
+		|| (ms->args_old[i] == '<' && ms->args_old[i + 1] == '<')
+		|| (ms->args_old[i] == '|' && ms->args_old[i + 1] == '|')
+		|| (ms->args_old[i] == '&' && ms->args_old[i + 1] == '&')
+		|| (i != 0 && ms->args_old[i] == '>' && ms->args_old[i - 1] != '>')
+		|| (i != 0 && ms->args_old[i] == '<' && ms->args_old[i - 1] != '<')
+		|| ms->args_old[i] == '|')
+		if (i != 0 && ms->args_old[i - 1] != 32)
+			return (o_space2(ms, i, 0) - 1);
+	if ((ms->args_old[i] == '|' && ms->args_old[i + 1] == '|')
+		|| (ms->args_old[i] == '&' && ms->args_old[i + 1] == '&'))
+			if (ms->args_old[i + 2] != 32)
+				return (o_space2(ms, i, 2));
+	if (ms->args_old[i] == '|')
+		if (ms->args_old[i + 1] != 32)
+			return (o_space2(ms , i, 1));
+	if ((ms->args_old[i] == '>' && ms->args_old[i + 1] == '>')
+		|| (ms->args_old[i] == '<' && ms->args_old[i + 1] == '<'))
+		if (ms->args_old[i + 2] == 32)
+			return (o_space3(ms, i, 2));
+	if (ms->args_old[i] == '>' || ms->args_old[i] == '<')
+		if (ms->args_old[i + 1] == 32)
+			return (o_space3(ms, i, 1));
 	return (0);
 }
 
@@ -102,16 +129,18 @@ int	simbol(t_ms *ms, int i)
 			ms->args_old[i] = 5;
 		if (ms->args_old[i] == '\t' && (ms->c2 % 2 != 0 || ms->c1 % 2 != 0))
 			ms->args_old[i] = 4;
-		ms->x = i;
 		if (ms->args_old[i] == 39 && (ms->c2 %2 != 0 || simbol2(ms, i) != 2))
 			i -= str_join(ms, i, 39);
 		else if (ms->args_old[i] == 34 && (ms->c1 %2 != 0 || simbol2(ms, i) != 2))
 			i -= str_join(ms, i, 34);
-		if (ms->args_old[i] == 36)
+		if (ms->args_old[i] == 36 && (!(i > 1 && ms->args_old[i - 1] == '<'
+			&& ms->args_old[i - 2] == '<')))
 			i = dol_prep(ms, i, -1, 0);
+		i += o_space(ms, i);
+		if (ms->args_old[i] == ';')
+			ms->args_old[i] = 32;
 	}
 	if (ms->c1 % 2 != 0 || ms->c2 % 2 != 0)
 		return (1);
-	ms->args = ms->args_old;
 	return (0);
 }

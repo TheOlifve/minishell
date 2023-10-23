@@ -6,28 +6,30 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/22 18:14:27 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:32:25 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	pars_err(char *error)
+int	pars_err(char *error, t_ms *ms)
 {
 	printf("minishell: pars error near `%s'\n", error);
+	ms->p_err = 1;
 	return (2);
 }
 
-int	ERR(char *error, char *str)
+int	ERR(char *error, char *str, t_ms *ms)
 {
 	printf("minishell: %s: `%s': not a valid identifier\n", error, str);
+	ms->err = 1;
 	return (1);
 }
 
 int	perr(char *str, t_ms *ms)
 {
 	perror(str);
-	ft_search(ms);
+	ms->err = 1;
 	return (1);
 }
 
@@ -50,7 +52,7 @@ int	exit_mode(int n, t_ms *ms)
 		exit (0);
 	else if (n == 7)
 	{
-		ft_search(ms);
+		ms->err = 1;
 		exit(127);
 	}
 	return (0);

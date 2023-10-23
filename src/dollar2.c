@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:39:01 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/19 00:54:17 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/26 15:37:20 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	dol_prep(t_ms *ms, int i, int x, int y)
 		ptr[x] = ms->args_old[y++];
 	ptr[x] = '\0';
 	y = dol_prep2(ms, ptr, x, i);
+	//ms->x += ms->dol2 + y - 1;
 	return (ms->dol2 + y - 1);
 }
 
@@ -83,3 +84,10 @@ char	*dol2(char *ptr, char *str, int i, int n)
 	return (ptr);
 }
 
+void	tabzz(t_ms *ms, int i)
+{
+	if (ms->args_old[i] == 32)
+		ms->args_old[i] = 5;
+	else if (ms->args_old[i] == '\t')
+		ms->args_old[i] = 4;
+}

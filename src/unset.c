@@ -6,13 +6,13 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/07/27 13:30:59 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:20:17 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	check_var1(char *str)
+int	check_var1(char *str, t_ms *ms)
 {
 	int	i;
 
@@ -24,7 +24,7 @@ int	check_var1(char *str)
 				|| (str[0] == '_'))
 		;
 	else
-		return (ERR("unset", str));
+		return (ERR("unset", str, ms));
 	while (str && str[i])
 	{
 		if (((str[i] > 64 && str[i] < 91)
@@ -33,7 +33,7 @@ int	check_var1(char *str)
 				|| str[i] == '_')
 				i++;
 		else
-			return (ERR("unset", str));
+			return (ERR("unset", str, ms));
 	}
 	return (0);
 }
@@ -65,11 +65,11 @@ int	ft_remove(t_ms *ms, int pos, char **tmp)
 	return (0);
 }
 
-int	ft_unset2(char **str, int i)
+int	ft_unset2(char **str, int i, t_ms *ms)
 {
 	if (!str[i])
 		return (0);
-	if (check_var1(str[i]) != 0)
+	if (check_var1(str[i], ms) != 0)
 		return (1);
 	return (0);
 }
@@ -83,7 +83,7 @@ int	ft_unset(t_ms *ms, char **str, int i)
 
 	if (!str[i])
 		return (1);
-	test = ft_unset2(str, i);
+	test = ft_unset2(str, i, ms);
 	if (test == 0)
 	{
 		i++;

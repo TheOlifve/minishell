@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/09/22 23:31:31 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/10/19 20:08:48 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,8 +28,6 @@ SRC = 	src/main.c				\
 		src/get_next_line.c		\
 		src/unset.c				\
 		src/dollar.c			\
-		src/pars.c				\
-		src/list_lcmd.c			\
 		src/list_tree.c			\
 		src/redir.c				\
 		src/list_lexer.c		\
@@ -55,7 +53,7 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 
 MINI = $(patsubst %.o, $(BUILD)/%.o, $(OBJ))
 
-CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror #-fsanitize=address
 
 INC = -Ireadline/include -Ilibft
 

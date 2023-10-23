@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <hrahovha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/07 22:30:43 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:16:44 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int check_var2(char *str)
 	return (i);
 }
 
-int	check_var3(char *str, int i, int j)
+int	check_var3(char *str, int i, int j, t_ms *ms)
 {
 	while (str && str[i] && i <= j)
 	{
@@ -50,12 +50,12 @@ int	check_var3(char *str, int i, int j)
 				str[i + 1] == '=' )|| str[i] == '_')
 				i++;
 		else
-			return (ERR("export", str));
+			return (ERR("export", str, ms));
 	}
 	return (0);
 }
 
-int	check_var(char *str)
+int	check_var(char *str, t_ms *ms)
 {
 	int	i;
 	int	j;
@@ -66,14 +66,14 @@ int	check_var(char *str)
 	j = check_var2(str);
 	if (j == -1)
 	{
-		ERR("export", str);
+		ERR("export", str, ms);
 		return (3);
 	}
 	else if (j == -2)
 		return (2);
 	else if (j == -3)
 		return (0);
-	else if (check_var3(str, i , j) != 0)
+	else if (check_var3(str, i , j, ms) != 0)
 		return (3);
 	return (0);
 }
