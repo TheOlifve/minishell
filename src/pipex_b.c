@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/19 15:34:59 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:30:55 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	cmd_find_p(t_ms *ms, char **cmd)
 {
 	if (get_cmd(cmd[0], "export") == 1)
 		return (ft_export(ms, cmd, 1));
+	else if (get_cmd(cmd[0], "unset") == 1 && !cmd[1])
+		return (ft_export3(ms, 0, 0));
 	else if (get_cmd(cmd[0], "unset") == 1)
 		return (ft_unset(ms, cmd, 1));
 	else if (get_cmd(cmd[0], "echo") == 1)
@@ -66,10 +68,11 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 		;
 	if (ptr[0] > 0)
 	{
-		ms->err = 1;
+		ms->exit_num = ptr[0];
+		ft_search(ms);
 		return (1);
 	}
-	ms->exit_num = 0;
+	ms->exit_num = ptr[0];
 	return (0);
 }
 
@@ -206,7 +209,7 @@ int	child(t_ms *ms, t_pipex *pipex, char **argv)
 	return (0);
 }
 
-int	pipex(t_ms *ms, char **argv, int num)
+void	pipex(t_ms *ms, char **argv, int num)
 {
 	t_pipex	pipex;
 	int		ptr[1];
@@ -214,6 +217,7 @@ int	pipex(t_ms *ms, char **argv, int num)
 	pipex.cmd_cnt = 0;
 	pipex.cmd_crnt = 0;
 	pipex.index = 0;
+	ptr[0] = 0;
 	while (argv[++num])
 		pipex.cmd_cnt++;
 	num = -1;
@@ -229,9 +233,6 @@ int	pipex(t_ms *ms, char **argv, int num)
 	while (wait(ptr) != -1)
 		;
 	if (ptr[0] > 0)
-	{
-		ms->err = 1;
-		return (1);
-	}
-	return (0);
+		ft_search(ms);
+	ms->exit_num = ptr[0];
 }

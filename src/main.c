@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/19 15:12:51 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:27:49 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,14 @@ void	main2(t_ms *ms, int	i)
 	ms->dol2 = 0;
 	ms->err = 0;
 	ms->p_err = 0;
+	ms->index = -1;
+	ms->bb = 0;
+	ms->scope = NULL;
 	// ms->i = 0;
 	// ms->f = 0;
 	// ms->pos = 0;
 	// ms->cmd = 0;
 	// ms->pp = -1;
-	// ms->bb = 0;
-	// ms->index = -1;
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);

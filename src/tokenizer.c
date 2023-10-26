@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/19 15:12:43 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:41:41 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,30 @@ int	o_space2(t_ms *ms, int i, int n)
 	return (1);
 }
 
+int	ft_scope(t_ms *m)
+{
+	int	i;
+	int	x;
+	int	y;
+
+	i = -1;
+	x = 0;
+	y = 0;
+	while (m && m->args && m->args[++i])
+	{
+		if (m->args[i] == '(')
+			x++;
+		else if (m->args[i] == ')')
+			y++;
+	}
+	if (x != y)
+	{
+		perror("minishell_ERROR");
+		return (1);
+	}
+	return (0);
+}
+
 void	l_analys(t_ms *m, t_lexer **lexer)
 {
 	int		i;
@@ -81,6 +105,8 @@ void	l_analys(t_ms *m, t_lexer **lexer)
 
 void	tokenizer(t_ms *m, t_lexer **lexer, int i , int j)
 {
+	if (ft_scope(m) == 1)
+		return ;
 	m->str = ft_split(m->args, ' ');
 	while (m && m->str && m->str[++i])
 	{
@@ -101,5 +127,5 @@ void	tokenizer(t_ms *m, t_lexer **lexer, int i , int j)
 		*lexer = (*lexer)->prev;
 	parser(*lexer, m);
 	if (m->p_err == 0)
-		engine(m);
+		engine(m, -1);
 }
