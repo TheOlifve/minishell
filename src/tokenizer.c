@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/25 14:41:41 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/26 18:57:10 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ void	tokenizer(t_ms *m, t_lexer **lexer, int i , int j)
 			if (m->str[i][j] == 4)
 				m->str[i][j] = '\t';
 		}
+		// printf("%s\n", m->str[i]);
 	}
 	(*lexer) = lstnew();
 	while (i-- > 1)

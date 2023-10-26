@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/25 12:47:57 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/26 19:09:18 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	exec_one_cmd(t_ms *ms)
 
 	if (ms->tree[ms->ord]->_redir != NULL)
 		return (exec_with_redir(ms));
+	printf("%s\n", ms->tree[ms->ord]->_cmd);
 	cmd = ft_split(cmd_builder(ms), ' ');
 	i = cmd_find(ms, cmd);
 	if (i == 2)

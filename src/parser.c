@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/26 15:53:14 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/26 19:04:33 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,9 @@ void	prior(t_lexer **lexer, int i, int x)
 void	scope(t_ms *ms, t_lexer **lexer)
 {
 	int		i;
-	int		n;
 	int		x;
 	
 	i = -1;
-	n = -1;
 	x = 1;
 	// printf("%s\n", (*lexer)->kw);
 	while ((*lexer)->kw[++i])
@@ -107,6 +105,7 @@ int	parser(t_lexer *lexer, t_ms *ms)
 		}
 		else if (ft_strcmp(lexer->id, "operator\0") == 0)
 			operator_distribute(ms, lexer->kw);
+		// printf("%s\n", lexer->kw);
 		if (lexer->next)
 			lexer = lexer->next;
 		else

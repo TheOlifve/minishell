@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 20:28:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/25 13:12:01 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/26 19:19:36 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	pwd(t_ms *ms, int mod)
 	i = -1;
 	if (getcwd(buff, 254) == NULL)
 		return (1);
+	printf("aaa");
 	oldpwd = NULL;
 	while (ms->envp[++i])
 	{

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/25 14:27:49 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/26 18:54:47 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,15 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 		}
 		else
 		{
+			// printf("aaaddd\n");
 			m_s->args = m_s->args_old;
+			printf("%s\n", m_s->args);
 			tokenizer(m_s, &lexer, -1, -1);
+			// printf("aaa\n");
 			free(m_s->args_old);
+			// printf("aaabb\n");
 			ft_free2(m_s);
+			// printf("aaacc\n");
 		}
 	// system ("leaks minishell");
 	return (0);
