@@ -6,51 +6,53 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 20:28:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/19 00:32:17 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/09/22 19:01:47 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	echo2(t_ms *ms, int i)
+void	echo2(t_ms *ms)
 {
-	while (ms->lcmd[i])
+	while (ms->tree[ms->ord])
 	{
-		if (ms->lcmd[i]->word)
+		if (ms->tree[ms->ord]->_word)
 		{
-			printf("%s", ms->lcmd[i]->word);
-			if (ms->lcmd[i]->next)
+			printf("%s", ms->tree[ms->ord]->_word);
+			if (ms->tree[ms->ord]->next)
 				printf(" ");
 		}
-		else if (ms->lcmd[i]->file)
+		else if (ms->tree[ms->ord]->_file)
 		{
-			printf("%s", ms->lcmd[i]->file);
-			if (ms->lcmd[i]->next)
+			printf("%s", ms->tree[ms->ord]->_file);
+			if (ms->tree[ms->ord]->next)
 				printf(" ");
 		}
-		ms->lcmd[i] = ms->lcmd[i]->next;
+		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
 	}
 }
 
-int	echo(t_ms *ms, int i, int flag)
+int	echo(t_ms *ms, int i)
 {
 	int	n;
 
 	n = 0;
-	while (ms && ms->lcmd[i] && ms->lcmd[i]->flag && ms->lcmd[i]->flag[++n])
-		if (ms->lcmd[i]->flag[n] != 'n')
-			flag = 1;
-	if (!ms->lcmd[i]->flag)
-		flag = 1;
-	if (flag == 1 && ms->lcmd[i]->flag)
+	goto_start(ms);
+	while (ms && ms->tree[ms->ord] && ms->tree[ms->ord]->_option
+		&& ms->tree[ms->ord]->_option[++n])
+		if (ms->tree[ms->ord]->_option[n] != 'n')
+			i = 1;
+	if (!ms->tree[ms->ord]->_option)
+		i = 1;
+	if (i == 1 && ms->tree[ms->ord]->_option)
 	{
-		printf("%s", ms->lcmd[i]->flag);
-		if (ms->lcmd[i]->next)
+		printf("%s", ms->tree[ms->ord]->_option);
+		if (ms->tree[ms->ord]->next)
 			printf(" ");
 	}
-	ms->lcmd[i] = ms->lcmd[i]->next;
-	echo2(ms, i);
-	if (flag == 1)
+	ms->tree[ms->ord] = ms->tree[ms->ord]->next;
+	echo2(ms);
+	if (i == 1)
 		printf("\n");
 	return (0);
 }
@@ -87,11 +89,11 @@ int	env(t_ms *ms)
 {
 	int	i;
 
-	i = -1;
-	if (ft_strcmp(ms->args, "env") == 0)
+	i = 0;
+	while (ms->envp && ms->envp[i])
 	{
-		while (ms->envp[++i])
-			printf("%s\n", ms->envp[i]);
+		printf("%s\n", ms->envp[i]);
+		i++;
 	}
 	return (0);
 }

@@ -37,7 +37,7 @@ char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
 	if (!ptr)
 		return (NULL);
 	if (ptr[0] == '?')
-		return (ft_itoa(ms->exit_error));
+		return (ft_itoa(ms->exit_num));
 	i = -1;
 	while (ms->envp[++i])
 		if (ptr != 0 && ft_strncmp(ft_strjoin(ptr, "="),

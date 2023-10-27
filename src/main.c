@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/18 14:21:00 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/27 12:55:48 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,21 @@ void	main2(t_ms *ms, int	i)
 	while (ms->envp[++i])
 		if (ft_strncmp(ms->envp[i], "PATH=", 5) == 0)
 			ms->path = ms->envp[i] + 5;
-	ms->i = 0;
-	ms->f = 0;
+	ms->save_stdout = dup(1);
 	ms->c1 = 0;
 	ms->c2 = 0;
-	ms->pos = 0;
-	ms->cmd = 0;
-	ms->pp = -1;
-	ms->bb = 0;
-	ms->error = 0;
-	ms->index = -1;
+	ms->ord = 0;
+	ms->bool_word = 0;
+	ms->dol2 = 0;
+	ms->err = 0;
+	ms->p_err = 0;
+	// ms->i = 0;
+	// ms->f = 0;
+	// ms->pos = 0;
+	// ms->cmd = 0;
+	// ms->pp = -1;
+	// ms->bb = 0;
+	// ms->index = -1;
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);
@@ -48,22 +53,27 @@ void	main2(t_ms *ms, int	i)
 	ms->num = ft_strlen(ms->args_old);
 }
 
-void	loop(t_ms *m_s, t_lexer *lexer)
+int	loop(t_ms *m_s, t_lexer *lexer)
 {
 		rl_catch_signals = 0;
 		main2(m_s, -1);
+		if (ft_strcmp(m_s->args_old, "\0") == 0)
+			return (0);
 		if (simbol(m_s, -1) != 0)
 		{
 			free(m_s->args_old);
+			m_s->exit_num = 1;
 			perror("minishell_ERROR");
 		}
 		else
 		{
-			tokenizer(m_s, &lexer);
+			m_s->args = m_s->args_old;
+			tokenizer(m_s, &lexer, -1, -1);
 			free(m_s->args_old);
+			ft_free2(m_s);
 		}
-		//system ("leaks minishell");
-		
+	// system ("leaks minishell");
+	return (0);
 }
 
 void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
@@ -105,11 +115,12 @@ int	main(int argc, char **argv, char **envp)
 	if (argc > 1)
 	{
 		perror("minishell_ERROR");
-		system ("leaks minishell");
-		exit (0);
+		// system ("leaks minishell");
+		exit (1);
 	}
 	(void) argv;
 	ft_shlvl(envp, &m_s, -1, 0);
+	m_s.exit_num = 0;
 	while (1)
 		loop(&m_s, &lexer);
 }

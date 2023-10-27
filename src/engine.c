@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   engine.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/19 00:44:22 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:09:40 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,110 +41,147 @@ char	*ft_join(char *str, char *str2, int i)
 	}
 }
 
-char	*cmd_builder(t_ms *ms, int i, char *tmp, char *cmd)
+int	cmd_find(t_ms *ms, char **cmd)
 {
-	while (ms->lcmd[i])
-	{
-		if (ms->lcmd[i]->cmd)
-			cmd = ft_join(tmp, ms->lcmd[i]->cmd, 1);
-		free(tmp);
-		tmp = ft_strdup(cmd);
-		if (ms->lcmd[i]->flag)
-			cmd = ft_join(tmp, ms->lcmd[i]->flag, 1);
-		free(tmp);
-		tmp = ft_strdup(cmd);
-		if (ms->lcmd[i]->file)
-			cmd = ft_join(tmp, ms->lcmd[i]->file, 1);
-		free(tmp);
-		tmp = ft_strdup(cmd);
-		if (ms->lcmd[i]->word)
-			cmd = ft_join(tmp, ms->lcmd[i]->word, 1);
-		tmp = ft_strdup(cmd);
-		if (ms->lcmd[i]->next)
-			ms->lcmd[i] = ms->lcmd[i]->next;
-		else
-			break ;
-	}
-	return (cmd);
-}
-
-int	cmd_find(t_ms *ms, int i)
-{
-	char	*cmd;
-
-	if (ms->lcmd[i]->cmd == NULL)
-		cmd = ft_strdup(ms->lcmd[i]->word);
-	else
-		cmd = ft_strdup(ms->lcmd[i]->cmd);
-	if (get_cmd(cmd, "export") == 1)
-		return (ft_export(ms, ms->lcmd[i]->next->word));
-	else if (get_cmd(cmd, "unset") == 1)
-		return (ft_unset(ms, ms->lcmd[i]->next->word));
-	else if (get_cmd(cmd, "echo") == 1)
-		return (echo(ms, i, 0));
-	else if (get_cmd(cmd, "cd") == 1)
-		return (cd(ms, i, -1));
-	else if (get_cmd(cmd, "pwd") == 1)
+	if (ft_strcmp(cmd[0], "export") == 0 && cmd[1] == NULL)
+		return (ft_export3(ms, 0, 0));
+	else if (ft_strcmp(cmd[0], "export") == 0)
+		return (ft_export(ms, cmd, 1));
+	else if (ft_strcmp(cmd[0], "unset") == 0)
+		return (ft_unset(ms, cmd, 1));
+	else if (ft_strcmp(cmd[0], "echo") == 0 || ft_strcmp(cmd[0], "ECHO") == 0)
+		return (echo(ms, 0));
+	else if (ft_strcmp(cmd[0], "cd") == 0)
+		return (cd(ms, -1));
+	else if (ft_strcmp(cmd[0], "exit") == 0)
+		return (exit_mode(0, ms));
+	else if (ft_strcmp(cmd[0], "pwd") == 0 || ft_strcmp(cmd[0], "PWD") == 0)
 		return (pwd(ms, 1));
-	else if (get_cmd(cmd, "env") == 1)
+	else if (ft_strcmp(cmd[0], "env") == 0 || ft_strcmp(cmd[0], "ENV") == 0)
 		return (env(ms));
-	else if (get_cmd(cmd, "exit") == 1)
-		exit_mode(0, ms);
 	return (2);
 }
 
-int	ft_pipe_cmd(t_ms *ms, int i)
+char	*cmd_builder(t_ms *ms)
 {
-	char	*str;
-	char	*tmp;
-	char	*tmp2;
-	t_lcmd	*ptr;
+	char	*cmd;
 
-	str = ft_strdup("");
-	while (ms->lcmd[i])
+	cmd = ft_strdup("");
+	goto_start(ms);
+	while (ms->tree[ms->ord])
 	{
-		ptr = ms->lcmd[i];
-		tmp = cmd_builder(ms, i, ft_strdup(""), NULL);
-		ms->lcmd[i] = ptr;
-		tmp2 = ft_join(str, tmp, 2);
-		free(str);
-		str = ft_strdup(tmp2);
-		free(tmp);
-		free(tmp2);
-		if (ms->lcmd[i]->lpp == NULL)
-			break;
-		i++;
+		if (ms->tree[ms->ord]->_cmd != NULL)
+			cmd = ft_strjoin(ms->tree[ms->ord]->_cmd, " ");
+		if (ms->tree[ms->ord]->_option != NULL)
+			cmd = ft_concat(cmd, ms->tree[ms->ord]->_option);
+		if (ms->tree[ms->ord]->_file != NULL)
+			cmd = ft_concat(cmd, ms->tree[ms->ord]->_file);
+		if (ms->tree[ms->ord]->_word != NULL)
+			cmd = ft_concat(cmd, ms->tree[ms->ord]->_word);
+		if (ms->tree[ms->ord]->next)
+			ms->tree[ms->ord] = ms->tree[ms->ord]->next;
+		else
+			break ;
 	}
-	ms->p_argv = ft_split(str, '|');
-	ms->index = i;
-	pipex(ms, i, ms->p_argv, -1);
+	goto_start(ms);
+	return (cmd);
+}
+
+int	exec_one_cmd(t_ms *ms)
+{
+	int		i;
+	char	**cmd;
+
+	if (ms->tree[ms->ord]->_redir != NULL)
+		return (exec_with_redir(ms, 0));
+	cmd = ft_split(cmd_builder(ms), ' ');
+	i = cmd_find(ms, cmd);
+	if (i == 2)
+		i = exec_cmd(ms, cmd);
+	free(cmd);
+	// printf("%d\n", ms->err);
 	return (i);
 }
 
-int	engine(t_ms *ms, int i, int n)
+void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
 {
-	new7(ms);
-	while (*ms->lcmd && ms->lcmd[i])
+	char	*tmp3;
+	char	**argv;
+
+	while (ms->tree[ms->ord])
 	{
-		if (!ms->lcmd[i])
-			break ;
-		n = eng(ms, i);
-		if (ms->lcmd[i]->lpp)
-			i = ft_pipe_cmd(ms, i);
-		else
+		tmp = cmd_builder(ms);
+		if (ms->tree[ms->ord]->_redir != NULL)
 		{
-			if (cmd_find(ms, i) == 2)
-				exec_cmd(ms, i);
+			tmp3 = ft_strdup(tmp);
+			free(tmp);
+			tmp = ft_strjoin(tmp3, ms->tree[ms->ord]->_redir);
 		}
-		if ((ms->bb == 8 && n == -1)
-			|| (i == n && ms->error == 0))
+		tmp2 = ft_join(str, tmp, 2);
+		if (str)
+			free(str);
+		str = ft_strdup(tmp2);
+		free(tmp);
+		free(tmp2);
+		if (ms->tree[ms->ord]->_pipe == NULL)
+			break;
+		ms->ord += 1;
+	}
+	argv = ft_split(str, '|');
+	pipex(ms, argv, -1);
+	// printf("%d\n", ms->err);
+}
+
+int	engine(t_ms *ms)
+{
+	while (ms->tree[ms->ord])
+	{
+		// printf("%s\n", ms->tree[ms->ord]->_or);
+		// printf("%s\n", ms->tree[ms->ord]->_and);
+		// if (ms->tree[ms->ord]->_or && ms->exit_num == 0)
+		//printf("%d\n", ms->err);
+		if (ms->tree[ms->ord]->next && ms->tree[ms->ord]->next->_and
+			&& ms->err == 1)
 			break ;
-		else if (ms->error == 1 && n >= 0)
-		{
-			engine(ms, n + 1, 0);
-			break ;
-		}
-		i++;
+		if (ms->tree[ms->ord])
+			goto_start(ms);
+		// if (ms->tree[ms->ord]->_or && ms->exit_num > 0)
+		// {
+		// 	if (ms->tree[ms->ord]->next)
+		// 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
+		// 	else
+		// 		break ;
+		// }
+		// printf("%d\n", ms->exit_num);
+		if (ms->tree[ms->ord]->_pipe != NULL)
+			exec_pipe_cmd(ms, NULL, NULL, NULL);
+		else if (ms->tree[ms->ord]->_pipe == NULL)
+			exec_one_cmd(ms);
+		ms->ord += 1;
 	}
 	return (0);
 }
+
+// int	eufind(char *str)
+// {
+// 	if (ft_strcmp(str, "export") == 0 ||
+// 		ft_strcmp(str, "unset") == 0)
+// 			return (0);
+// 	return (1);
+// }
+
+// int	cmd_find(t_ms *ms, int i)
+// {
+// 	char	*cmd;
+
+// 	else if (get_cmd(cmd, "cd") == 1)
+// 		return (cd(ms, i, -1));
+// 	else if (get_cmd(cmd, "pwd") == 1)
+// 		return (pwd(ms, 1));
+// 	else if (get_cmd(cmd, "exit") == 1)
+// 		exit_mode(0, ms);
+// 	else if (eufind(cmd) == 0 && !ms->lcmd[i]->next)
+// 		return (1);
+
+// 	return (2);
+// }

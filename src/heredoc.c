@@ -3,38 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/08 18:34:35 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/24 20:38:54 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	her_print(void)
-{
-	int		file;
-	char	*tmp;
-
-	file = open("heredoc", O_RDONLY, 0644);
-	tmp = get_next_line(file);
-	while (tmp)
-	{
-		printf("%s", tmp);
-		free(tmp);
-		tmp = get_next_line(file);
-	}
-	close(file);
-	free(tmp);
-}
 
 int	heredoc(char *str)
 {
 	int		file;
 	char	*tmp;
 
-	file = open("heredoc", O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	file = open("src/heredoc", O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (file < 0)
 		return (1);
 	while (1)
@@ -50,47 +33,61 @@ int	heredoc(char *str)
 	}
 	close(file);
 	free(tmp);
-	her_print();
-	unlink("heredoc");
-	return (0);
+	return (file);
 }
 
-int	redir(char *str)
+int	redir_input(char **file)
 {
-	int		file;
-	char	*tmp;
-
-	file = open(str, O_RDWR | O_TRUNC | O_CREAT, 0644);
-	if (file < 0)
-		return (1);
-	tmp = get_next_line(0);
-	while (tmp)
+	int	fd;
+	while (*file)
 	{
-		write(file, tmp, ft_strlen(tmp));
-		free(tmp);
-		tmp = get_next_line(0);
+		if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
+		{
+			*file += 2;
+			fd = heredoc(*file);
+		}
+		else if (ft_strncmp(*file, "<", 1) == 0 && *file != NULL)
+		{
+			*file += 1;
+			fd = open(*file, O_RDONLY);
+			if (fd == -1)
+				return (1);
+		}
+		file++;
 	}
-	free(tmp);
-	close(file);
-	return (0);
+	return (fd);
 }
 
-int	redir_append(char *str)
+int	open_files(char **file)
 {
-	int		file;
-	char	*tmp;
+	int	fd;
 
-	file = open(str, O_RDWR | O_APPEND | O_CREAT, 0644);
-	if (file < 0)
-		return (1);
-	tmp = get_next_line(0);
-	while (tmp)
+	fd = -1;
+	while (*file)
 	{
-		write(file, tmp, ft_strlen(tmp));
-		free(tmp);
-		tmp = get_next_line(0);
+		if (ft_strncmp(*file, ">>", 2) == 0 && *file != NULL)
+		{
+			*file += 2;
+			open(*file, O_RDWR | O_APPEND | O_CREAT, 0644);
+		}
+		else if (ft_strncmp(*file, ">", 1) == 0 && *file != NULL)
+		{
+			*file += 1;
+			open(*file, O_RDWR | O_TRUNC | O_CREAT, 0644);
+		}
+		else if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
+		{
+			*file += 2;
+			fd = heredoc(*file);
+		}
+		else if (ft_strncmp(*file, "<", 1) == 0 && *file != NULL)
+		{
+			*file += 1;
+			fd = open(*file, O_RDONLY);
+			if (fd < 0)
+				return (ERR2(*file));
+		}
+		file++;
 	}
-	free(tmp);
-	close(file);
-	return (0);
+	return (fd);
 }

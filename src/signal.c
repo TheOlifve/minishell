@@ -18,14 +18,6 @@ void	ctrld(char *line, t_ms *ms)
 	{
 		printf("exit\n");
 		exit_mode (4, ms);
-		// line = "exit\n\0";
-		// rl_replace_line("", 0);
-		// rl_on_new_line();
-		// rl_insert_text("exit");
-		// rl_replace_line("adas", 0);
-		//rl_on_new_line ();
-		// rl_clear_message ();
-		// rl_redisplay();
 	}
 }
 
