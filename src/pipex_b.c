@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_b.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/24 22:13:37 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/10/30 14:51:09 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	cmd_find_p(t_ms *ms, char **cmd)
 {
 	if (get_cmd(cmd[0], "export") == 1)
 		return (ft_export(ms, cmd, 1));
+	else if (get_cmd(cmd[0], "unset") == 1 && !cmd[1])
+		return (ft_export3(ms, 0, 0));
 	else if (get_cmd(cmd[0], "unset") == 1)
 		return (ft_unset(ms, cmd, 1));
 	else if (get_cmd(cmd[0], "echo") == 1)
@@ -66,10 +68,11 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 		;
 	if (ptr[0] > 0)
 	{
-		ms->err = 1;
+		ms->exit_num = ptr[0];
+		ft_search(ms);
 		return (1);
 	}
-	ms->exit_num = 0;
+	ms->exit_num = ptr[0];
 	return (0);
 }
 
@@ -98,10 +101,9 @@ char	*redir_find(char **argv)
 	return (tmp);
 }
 
-int	exec_with_redir_pipe2(t_ms *ms, char **cmd, char *file, int fd2)
+int	exec_with_redir_pipe2(t_ms *ms, char **cmd, int pid)
 {
 	int	i;
-	int	pid;
 	int	fd;
 	int	ptr[1];
 
@@ -109,10 +111,7 @@ int	exec_with_redir_pipe2(t_ms *ms, char **cmd, char *file, int fd2)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (fd2 >= 0)
-			dup2(fd2, 0);
-		if (ft_last(ft_split(file, ' ')) >= 0)
-			dup2(fd, 1);
+		dup2(fd, 1);
 		i = cmd_find(ms, cmd);
 		if (i == 0)
 			exit(0);
@@ -156,17 +155,20 @@ char	**redir_cut(char **cmd)
 
 int	exec_with_redir_pipe(t_ms *ms, char **cmd, char *file)
 {
-	int		fd;
+	int		pid;
 	int		ptr;
 	char	**tmp;
 	
+	(void)cmd;
 	if (cmd[0][0] == '<' || cmd[0][0] == '>')
-		return(open_files(ft_split(file, ' ')));
+	{
+		open_files(ft_split(file, ' '));
+		return (0);
+	}
+	pid = 0;
 	tmp = redir_cut(cmd);
-	fd = open_files(ft_split(file, ' '));
-	if (fd == -2)
-		return (1);
-	ptr = exec_with_redir_pipe2(ms, tmp, file, fd);
+	ptr = exec_with_redir_pipe2(ms, tmp, pid);
+	open_files(ft_split(file, ' '));
 	if (ptr > 0)
 	{
 		unlink("src/tmp");
@@ -207,7 +209,7 @@ int	child(t_ms *ms, t_pipex *pipex, char **argv)
 	return (0);
 }
 
-int	pipex(t_ms *ms, char **argv, int num)
+void	pipex(t_ms *ms, char **argv, int num)
 {
 	t_pipex	pipex;
 	int		ptr[1];
@@ -215,6 +217,7 @@ int	pipex(t_ms *ms, char **argv, int num)
 	pipex.cmd_cnt = 0;
 	pipex.cmd_crnt = 0;
 	pipex.index = 0;
+	ptr[0] = 0;
 	while (argv[++num])
 		pipex.cmd_cnt++;
 	num = -1;
@@ -230,9 +233,6 @@ int	pipex(t_ms *ms, char **argv, int num)
 	while (wait(ptr) != -1)
 		;
 	if (ptr[0] > 0)
-	{
-		ms->err = 1;
-		return (1);
-	}
-	return (0);
+		ft_search(ms);
+	ms->exit_num = ptr[0];
 }

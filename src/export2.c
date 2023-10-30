@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/19 15:18:44 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 14:57:31 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,49 @@ int	ft_export3(t_ms *ms, int i, int j)
 		}
 		printf("\n");
 		i++;
+	}
+	return (0);
+}
+
+int check_var2(char *str)
+{
+	int		i;
+	int		len;
+
+	i = 0;
+	if ((str[i] > 64 && str[i] < 91)
+			|| (str[i] > 96 && str[i] < 123)
+				|| (str[i] == '_'))
+		;
+	else
+		return (-1);
+	len = ft_strlen(str);
+	while (str[i] && str[i] != '=')
+		i++;
+	if (str[i] == '=' && str[i + 1] == '\0')
+		return (-3);
+	if (str[i] != '=')
+		return (-2);
+	if (len < 3)
+		return (-1);
+	if (str[i] && ((str[i - 1] && str[i - 1] == 32) ||
+			(str[i + 1] && str[i + 1] == 32)))
+		return (-1);
+	return (i);
+}
+
+int	check_var3(char *str, int i, int j, t_ms *ms)
+{
+	while (str && str[i] && i <= j)
+	{
+		if (((str[i] > 64 && str[i] < 91)
+				|| (str[i] > 96 && str[i] < 123)
+				|| (str[i] > 47 && str[i] < 58))
+				|| (str[i] == '=') || (str[i] == '+' &&
+				str[i + 1] == '=' )|| str[i] == '_')
+				i++;
+		else
+			return (ERR("export", str, ms));
 	}
 	return (0);
 }

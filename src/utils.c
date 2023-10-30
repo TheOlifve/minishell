@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/19 15:23:11 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 14:55:45 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,31 @@ int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)
 	if (ft_strncmp(lex, "./", 2) == 0)
 		ms->ptr = lex;
 	return (1);
+}
+
+int	ft_last(char **str)
+{
+	int	i;
+
+	i = 0;
+	while(str[i])
+		i++;
+	i -= 1;
+	return (i);
+}
+
+void	pipe_close(t_pipex *pipex)
+{
+	int	i;
+
+	i = 0;
+	while (i < pipex->pipes_cnt)
+	{
+		close(pipex->fd[i][0]);
+		close(pipex->fd[i][1]);
+		if (pipex->fd[i])
+			free(pipex->fd[i]);
+		i++;
+	}
+	free(pipex->fd);
 }

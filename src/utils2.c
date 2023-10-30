@@ -6,34 +6,11 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 12:11:50 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/22 15:27:11 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 14:43:10 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// char	**ft_masjoin(char **tmp, char *str)
-// {
-// 	int		i;
-// 	char	**mas;
-
-// 	i = 0;
-// 	if (!str)
-// 		return (tmp);
-// 	while (tmp && tmp[i])
-// 		i++;
-// 	mas = malloc(sizeof(char *) * (i + 2));
-// 	i = 0;
-// 	while (tmp && tmp[i])
-// 	{
-// 		// printf("int i - %d\n",i);
-// 		mas[i] = ft_strdup(tmp[i]);
-// 		i++;
-// 	}
-// 	mas[i] = ft_strdup(str);
-// 	mas[i + 1] = NULL;
-// 	return (mas);
-// }
 
 char	*ft_concat(char *cmd, char *opt)
 {

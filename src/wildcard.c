@@ -3,79 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 13:05:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/27 12:55:11 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/08/21 12:26:07 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	from_file(t_ms *ms, char *str, char **file)
+void	ft_ex(t_ms *ms, int file)
 {
-	int		i;
-	char	*tmp;
+	char	*tmp[2];
 
-	i = 0;
-	ms->wd_tmp = ft_strdup("");
-	while (file[i])
-	{
-		if (ft_strrcmp(file[i], str) == 0)
-		{
-			tmp = ft_strjoin(ms->wd_tmp, file[i]);
-			if (ms->wd_tmp)
-				free(ms->wd_tmp);
-			ms->wd_tmp = ft_strdup(tmp);
-		}
-		else
-			tmp = ft_strdup("");
-		free(tmp);
-		i++;
-	}
+	dup2(file, 1);
+	tmp[0] = "ls";
+	tmp[1] = NULL;
+	execve ("/bin/ls", tmp, ms->envp);
 }
 
-char	**get_files(void)
+void	from_file(t_ms *ms, char *str)
 {
-	char			*tmp;
-	char			*tmp2;
-	DIR				*dir;
-	struct dirent	*dent;
+	char	*tmp;
+	char	*tmp2;
+	int		file;
 
-	dir = opendir(".");
-	if (dir == NULL)
-		return (NULL);
-	dent = readdir(dir);
-	while (dent != NULL)
+	file = open("src/wild", O_RDONLY, 0644);
+	ms->wd_tmp = ft_strdup("");
+	tmp = get_next_line(file);
+	while (tmp)
 	{
-		if (ft_strncmp(dent->d_name, ".", 1) != 0)
+		if (ft_strrcmp(tmp, str) == 0)
 		{
-			tmp = ft_strjoin2(tmp2, dent->d_name);
-			if (tmp2)
-				free (tmp2);
-			tmp2 = ft_strjoin2(tmp, " ");
-			if (tmp)
-				free (tmp);
+			tmp2 = ft_strjoin(ms->wd_tmp, tmp);
+			if (ms->wd_tmp)
+				free(ms->wd_tmp);
+			ms->wd_tmp = ft_strdup(tmp2);
 		}
-		dent = readdir(dir);
+		else
+			tmp2 = ft_strdup("");
+		free(tmp2);
+		free(tmp);
+		tmp = get_next_line(file);
 	}
-	closedir(dir);
-	return (ft_split(tmp2, ' '));
+	free(tmp);
+}
+
+char	*get_files(t_ms *ms, char *str)
+{
+	int		file;
+	int		pid;
+
+	file = open("src/wild", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	pid = fork();
+	if (pid == 0)
+		ft_ex(ms, file);
+	while (wait(NULL) != -1)
+		;
+	from_file(ms, str);
+	unlink ("src/wild");
+	return (str);
 }
 
 int	wildcard(t_ms *ms, char *str)
-{	
-	(void)str;
-	char	**file;
-
-	file = get_files();
-	if (file == NULL)
-		return (1);
-	from_file(ms, str, file);
-	if (ft_strcmp(ms->wd_tmp, "\0") == 0)
-	{
-		printf("minishell: no matches found: %s\n", str);
-		return (1);
-	}
+{
+	get_files(ms, str);
 	return (0);
 }
