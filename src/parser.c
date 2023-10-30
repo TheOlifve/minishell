@@ -6,90 +6,11 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/26 19:04:33 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:47:13 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	scope2(t_ms *ms, char *ptr)
-{
-	int		i;
-	char	**str;
-
-	i = -1;
-	while (ms->scope[++i])
-		;
-	str = (char **)malloc(sizeof(char *) * (i + 2));
-	i = -1;
-	while (ms->scope[++i])
-		str[i] = ft_strdup(ms->scope[i]);
-	str[i] = ptr;
-	str[i + 1] = NULL;
-	free(ms->scope);
-	ms->scope = str;
-	free(str);
-}
-
-void	prior(t_lexer **lexer, int i, int x)
-{
-	char	*ptr;
-	int		n;
-
-	while (*lexer && (*lexer)->kw && (*lexer)->kw[++i])
-		if ((*lexer)->kw[i] == '(' || (*lexer)->kw[i] == ')')
-		{
-			(*lexer)->kw[i] = 4;
-			x++;
-		}
-	ptr = ft_strdup((*lexer)->kw);
-	// printf("%s\n", ptr);
-	free((*lexer)->kw);
-	(*lexer)->kw = (char *)malloc(sizeof(char) * (ft_strlen(ptr) - x + 1));
-	n = 0;
-	i = 0;
-	while (ptr[n])
-	{
-		if (ptr[n] == 4)
-			n++;
-		(*lexer)->kw[i] = ptr[n];
-		i++;
-		n++;
-	}
-	(*lexer)->kw[i] = '\0';
-	free(ptr);
-}
-
-void	scope(t_ms *ms, t_lexer **lexer)
-{
-	int		i;
-	int		x;
-	
-	i = -1;
-	x = 1;
-	// printf("%s\n", (*lexer)->kw);
-	while ((*lexer)->kw[++i])
-	{
-		// printf("aaa\n");
-		if ((*lexer)->kw[i] == '(' || (*lexer)->kw[i] == ')')
-		{
-			// printf("%c\n", (*lexer)->kw[i]);
-			if (!ms->scope)
-			{
-				ms->scope = (char **)malloc(sizeof(char *) * 2);
-				ms->scope[0] = ft_itoa(ms->ord);
-				// printf("ms-> %s\n", ms->scope[0]);
-				ms->scope[x] = NULL;
-			}
-			else
-				scope2(ms, ft_itoa(ms->ord));
-		}
-	}
-	prior(lexer, -1, 0);
-	// i = -1;
-	// while (ms->scope[++i])
-	// 	printf("%s\n", ms->scope[i]);
-}
 
 int	parser(t_lexer *lexer, t_ms *ms)
 {
@@ -98,14 +19,13 @@ int	parser(t_lexer *lexer, t_ms *ms)
 	{
 		if (ft_strcmp(lexer->id, "word\0") == 0)
 		{
-			scope(ms, &lexer);
 			word_distribute(&lexer, ms, lexer->kw);
 			if (ms->tree[ms->ord]->next)
 				ms->tree[ms->ord] = ms->tree[ms->ord]->next;
 		}
 		else if (ft_strcmp(lexer->id, "operator\0") == 0)
 			operator_distribute(ms, lexer->kw);
-		// printf("%s\n", lexer->kw);
+		//printf("%d\n", ms->exit_num);
 		if (lexer->next)
 			lexer = lexer->next;
 		else

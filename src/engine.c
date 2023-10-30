@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   engine.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/26 19:09:18 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:09:40 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,7 @@ int	exec_one_cmd(t_ms *ms)
 	char	**cmd;
 
 	if (ms->tree[ms->ord]->_redir != NULL)
-		return (exec_with_redir(ms));
-	printf("%s\n", ms->tree[ms->ord]->_cmd);
+		return (exec_with_redir(ms, 0));
 	cmd = ft_split(cmd_builder(ms), ' ');
 	i = cmd_find(ms, cmd);
 	if (i == 2)
@@ -133,29 +132,31 @@ void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
 	// printf("%d\n", ms->err);
 }
 
-int	engine(t_ms *ms, int n)
+int	engine(t_ms *ms)
 {
 	while (ms->tree[ms->ord])
 	{
-		if (!ms->tree[ms->ord])
+		// printf("%s\n", ms->tree[ms->ord]->_or);
+		// printf("%s\n", ms->tree[ms->ord]->_and);
+		// if (ms->tree[ms->ord]->_or && ms->exit_num == 0)
+		//printf("%d\n", ms->err);
+		if (ms->tree[ms->ord]->next && ms->tree[ms->ord]->next->_and
+			&& ms->err == 1)
 			break ;
 		if (ms->tree[ms->ord])
 			goto_start(ms);
-		n = eng(ms);
-		(void)n;
+		// if (ms->tree[ms->ord]->_or && ms->exit_num > 0)
+		// {
+		// 	if (ms->tree[ms->ord]->next)
+		// 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
+		// 	else
+		// 		break ;
+		// }
+		// printf("%d\n", ms->exit_num);
 		if (ms->tree[ms->ord]->_pipe != NULL)
 			exec_pipe_cmd(ms, NULL, NULL, NULL);
 		else if (ms->tree[ms->ord]->_pipe == NULL)
 			exec_one_cmd(ms);
-		if ((ms->bb == 8 && n == -1)
-			|| (ms->ord == n && ms->err == 0))
-			break ;
-		else if (ms->err == 1 && n >= 0)
-		{
-			ms->ord = n + 1;
-			engine(ms, 0);
-			break ;
-		}
 		ms->ord += 1;
 	}
 	return (0);

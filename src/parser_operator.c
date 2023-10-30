@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/25 13:52:46 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:10:48 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	opr_cmp(char *opr)
 
 int	operator_distribute2(t_ms *ms, int type, char *opr)
 {
-	
 	if (type == 0)
 	{
 		if (ms->bool_word == 0)

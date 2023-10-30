@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/26 18:54:47 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/27 12:55:48 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,13 @@ void	main2(t_ms *ms, int	i)
 	ms->dol2 = 0;
 	ms->err = 0;
 	ms->p_err = 0;
-	ms->index = -1;
-	ms->bb = 0;
-	ms->scope = NULL;
 	// ms->i = 0;
 	// ms->f = 0;
 	// ms->pos = 0;
 	// ms->cmd = 0;
 	// ms->pp = -1;
+	// ms->bb = 0;
+	// ms->index = -1;
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);
@@ -68,15 +67,10 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 		}
 		else
 		{
-			// printf("aaaddd\n");
 			m_s->args = m_s->args_old;
-			printf("%s\n", m_s->args);
 			tokenizer(m_s, &lexer, -1, -1);
-			// printf("aaa\n");
 			free(m_s->args_old);
-			// printf("aaabb\n");
 			ft_free2(m_s);
-			// printf("aaacc\n");
 		}
 	// system ("leaks minishell");
 	return (0);
