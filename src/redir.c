@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/30 14:44:19 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:49:29 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*read_file(void)
 	return (tmp2);
 }
 
-int	exec_with_redir2(t_ms *ms, char **cmd, int pid)
+int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 {
 	int	i;
 	int	fd;
@@ -44,7 +44,10 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid)
 	pid = fork();
 	if (pid == 0)
 	{
-		dup2(fd, 1);
+		if (fd2 >= 0)
+			dup2(fd2, 0);
+		if (ft_last(ft_split(ms->tree[ms->ord]->_redir, ' ')) >= 0)
+			dup2(fd, 1);
 		i = cmd_find(ms, cmd);
 		if (i == 0)
 			exit(0);
@@ -63,11 +66,15 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid)
 
 int	redir(char *str, char **str2)
 {
+	int		i;
 	int		fd;
 	char	*file;
 
 	fd = 0;
-	file = str2[ft_last(str2)];
+	i = ft_last(str2);
+	if (i == -1)
+		return (1);
+	file = str2[i];
 	if (ft_strncmp(file, ">>", 2) == 0 && file != NULL)
 	{
 		file += 2;
@@ -114,25 +121,22 @@ int	redir_loop(t_ms *ms)
 	return (0);
 }
 
-int	exec_with_redir(t_ms *ms)
+int	exec_with_redir(t_ms *ms, int fd)
 {
 	int		pid;
 	int		ptr;
 	char	*file;
 	char	**cmd;
-	
-	(void)cmd;
+
 	if (!ms->tree[ms->ord]->_cmd && ms->tree[ms->ord]->_redir)
-	{
-		if (ms->tree[ms->ord]->_redir[0] == '>')
-			open_files(ft_split(ms->tree[ms->ord]->_redir, ' '));
-		return (0);
-	}
+		return (open_files(ft_split(ms->tree[ms->ord]->_redir, ' ')));
 	file = ft_strdup(ms->tree[ms->ord]->_redir);
+	fd = open_files(ft_split(file, ' '));
+	if (fd == -2)
+		return (1);
 	cmd = ft_split(cmd_builder(ms), ' ');
 	pid = 0;
-	ptr = exec_with_redir2(ms, cmd, pid);
-	open_files(ft_split(file, ' '));
+	ptr = exec_with_redir2(ms, cmd, pid, fd);
 	if (ptr > 0)
 	{
 		unlink("src/tmp");

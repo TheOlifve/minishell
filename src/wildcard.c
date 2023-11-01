@@ -6,67 +6,76 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 13:05:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/08/21 12:26:07 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:50:57 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_ex(t_ms *ms, int file)
+void	from_file(t_ms *ms, char *str, char **file)
 {
-	char	*tmp[2];
-
-	dup2(file, 1);
-	tmp[0] = "ls";
-	tmp[1] = NULL;
-	execve ("/bin/ls", tmp, ms->envp);
-}
-
-void	from_file(t_ms *ms, char *str)
-{
+	int		i;
 	char	*tmp;
-	char	*tmp2;
-	int		file;
 
-	file = open("src/wild", O_RDONLY, 0644);
+	i = 0;
 	ms->wd_tmp = ft_strdup("");
-	tmp = get_next_line(file);
-	while (tmp)
+	while (file[i])
 	{
-		if (ft_strrcmp(tmp, str) == 0)
+		if (ft_strrcmp(file[i], str) == 0)
 		{
-			tmp2 = ft_strjoin(ms->wd_tmp, tmp);
+			tmp = ft_strjoin(ms->wd_tmp, file[i]);
 			if (ms->wd_tmp)
 				free(ms->wd_tmp);
-			ms->wd_tmp = ft_strdup(tmp2);
+			ms->wd_tmp = ft_strdup(tmp);
 		}
 		else
-			tmp2 = ft_strdup("");
-		free(tmp2);
+			tmp = ft_strdup("");
 		free(tmp);
-		tmp = get_next_line(file);
+		i++;
 	}
-	free(tmp);
 }
 
-char	*get_files(t_ms *ms, char *str)
+char	**get_files(void)
 {
-	int		file;
-	int		pid;
+	char			*tmp;
+	char			*tmp2;
+	DIR				*dir;
+	struct dirent	*dent;
 
-	file = open("src/wild", O_RDWR | O_TRUNC | O_CREAT, 0644);
-	pid = fork();
-	if (pid == 0)
-		ft_ex(ms, file);
-	while (wait(NULL) != -1)
-		;
-	from_file(ms, str);
-	unlink ("src/wild");
-	return (str);
+	dir = opendir(".");
+	if (dir == NULL)
+		return (NULL);
+	dent = readdir(dir);
+	while (dent != NULL)
+	{
+		if (ft_strncmp(dent->d_name, ".", 1) != 0)
+		{
+			tmp = ft_strjoin2(tmp2, dent->d_name);
+			if (tmp2)
+				free (tmp2);
+			tmp2 = ft_strjoin2(tmp, " ");
+			if (tmp)
+				free (tmp);
+		}
+		dent = readdir(dir);
+	}
+	closedir(dir);
+	return (ft_split(tmp2, ' '));
 }
 
 int	wildcard(t_ms *ms, char *str)
-{
-	get_files(ms, str);
+{	
+	(void)str;
+	char	**file;
+
+	file = get_files();
+	if (file == NULL)
+		return (1);
+	from_file(ms, str, file);
+	if (ft_strcmp(ms->wd_tmp, "\0") == 0)
+	{
+		printf("minishell: no matches found: %s\n", str);
+		return (1);
+	}
 	return (0);
 }

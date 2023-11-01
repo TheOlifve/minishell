@@ -6,35 +6,18 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/30 14:54:32 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:04:05 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	her_print(void)
-{
-	int		file;
-	char	*tmp;
-
-	file = open("heredoc", O_RDONLY, 0644);
-	tmp = get_next_line(file);
-	while (tmp)
-	{
-		printf("%s", tmp);
-		free(tmp);
-		tmp = get_next_line(file);
-	}
-	close(file);
-	free(tmp);
-}
 
 int	heredoc(char *str)
 {
 	int		file;
 	char	*tmp;
 
-	file = open("heredoc", O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	file = open("src/heredoc", O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (file < 0)
 		return (1);
 	while (1)
@@ -50,13 +33,36 @@ int	heredoc(char *str)
 	}
 	close(file);
 	free(tmp);
-	her_print();
-	unlink("heredoc");
-	return (0);
+	return (file);
 }
 
-void	open_files(char **file)
+int	redir_input(char **file)
 {
+	int	fd;
+	while (*file)
+	{
+		if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
+		{
+			*file += 2;
+			fd = heredoc(*file);
+		}
+		else if (ft_strncmp(*file, "<", 1) == 0 && *file != NULL)
+		{
+			*file += 1;
+			fd = open(*file, O_RDONLY);
+			if (fd == -1)
+				return (1);
+		}
+		file++;
+	}
+	return (fd);
+}
+
+int	open_files(char **file)
+{
+	int	fd;
+
+	fd = -1;
 	while (*file)
 	{
 		if (ft_strncmp(*file, ">>", 2) == 0 && *file != NULL)
@@ -69,6 +75,19 @@ void	open_files(char **file)
 			*file += 1;
 			open(*file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 		}
+		else if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
+		{
+			*file += 2;
+			fd = heredoc(*file);
+		}
+		else if (ft_strncmp(*file, "<", 1) == 0 && *file != NULL)
+		{
+			*file += 1;
+			fd = open(*file, O_RDONLY);
+			if (fd < 0)
+				return (ERR2(*file));
+		}
 		file++;
 	}
+	return (fd);
 }

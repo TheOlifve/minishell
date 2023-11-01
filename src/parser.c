@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/30 14:52:02 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/01 08:44:12 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	prior(t_lexer **lexer, int i, int x)
 			(*lexer)->kw[i] = 4;
 			x++;
 		}
+	printf("kw : %s\n", (*lexer)->kw);
 	ptr = ft_strdup((*lexer)->kw);
 	free((*lexer)->kw);
 	(*lexer)->kw = (char *)malloc(sizeof(char) * (ft_strlen(ptr) - x + 1));
@@ -88,9 +89,9 @@ int	parser(t_lexer *lexer, t_ms *ms)
 	ms->tree[ms->ord] = tree_new();
 	while (lexer)
 	{
+		scope(ms, &lexer);
 		if (ft_strcmp(lexer->id, "word\0") == 0)
 		{
-			scope(ms, &lexer);
 			word_distribute(&lexer, ms, lexer->kw);
 			if (ms->tree[ms->ord]->next)
 				ms->tree[ms->ord] = ms->tree[ms->ord]->next;

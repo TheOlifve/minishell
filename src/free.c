@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/30 14:56:12 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:44:51 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ int	ERR(char *error, char *str, t_ms *ms)
 	printf("minishell: %s: `%s': not a valid identifier\n", error, str);
 	ms->err = 1;
 	return (1);
+}
+
+int	ERR2(char *str)
+{
+	printf("minishell: %s: No such file or directory\n", str);
+	return (-2);
 }
 
 int	perr(char *str, t_ms *ms)

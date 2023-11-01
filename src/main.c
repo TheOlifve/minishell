@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/30 14:53:33 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:40:36 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 		else
 		{
 			m_s->args = m_s->args_old;
-			printf("%s\n", m_s->args);
 			tokenizer(m_s, &lexer, -1, -1);
 			free(m_s->args_old);
 			ft_free2(m_s);

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/30 14:55:45 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:50:25 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,17 @@ int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)
 int	ft_last(char **str)
 {
 	int	i;
+	int	j;
 
 	i = 0;
+	j = -1;
 	while(str[i])
+	{
+		if (ft_strncmp(str[i], ">>", 2) == 0 || ft_strncmp(str[i], ">", 1) == 0)
+			j = i;
 		i++;
-	i -= 1;
-	return (i);
+	}
+	return (j);
 }
 
 void	pipe_close(t_pipex *pipex)

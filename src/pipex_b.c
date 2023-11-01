@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/30 14:51:09 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:07:30 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,10 @@ char	*redir_find(char **argv)
 	return (tmp);
 }
 
-int	exec_with_redir_pipe2(t_ms *ms, char **cmd, int pid)
+int	exec_with_redir_pipe2(t_ms *ms, char **cmd, char *file, int fd2)
 {
 	int	i;
+	int	pid;
 	int	fd;
 	int	ptr[1];
 
@@ -111,7 +112,10 @@ int	exec_with_redir_pipe2(t_ms *ms, char **cmd, int pid)
 	pid = fork();
 	if (pid == 0)
 	{
-		dup2(fd, 1);
+		if (fd2 >= 0)
+			dup2(fd2, 0);
+		if (ft_last(ft_split(file, ' ')) >= 0)
+			dup2(fd, 1);
 		i = cmd_find(ms, cmd);
 		if (i == 0)
 			exit(0);
@@ -155,20 +159,17 @@ char	**redir_cut(char **cmd)
 
 int	exec_with_redir_pipe(t_ms *ms, char **cmd, char *file)
 {
-	int		pid;
+	int		fd;
 	int		ptr;
 	char	**tmp;
 	
-	(void)cmd;
 	if (cmd[0][0] == '<' || cmd[0][0] == '>')
-	{
-		open_files(ft_split(file, ' '));
-		return (0);
-	}
-	pid = 0;
+		return(open_files(ft_split(file, ' ')));
 	tmp = redir_cut(cmd);
-	ptr = exec_with_redir_pipe2(ms, tmp, pid);
-	open_files(ft_split(file, ' '));
+	fd = open_files(ft_split(file, ' '));
+	if (fd == -2)
+		return (1);
+	ptr = exec_with_redir_pipe2(ms, tmp, file, fd);
 	if (ptr > 0)
 	{
 		unlink("src/tmp");
