@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/30 16:20:40 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/08 20:07:50 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ typedef struct s_lexer
 
 typedef struct s_tree
 {
+	char			*_or;
 	char			*_cmd;
-	char			*_option;
-	char			*_redir;
+	char			*_and;
 	char			*_file;
 	char			*_word;
 	char			*_pipe;
-	char			*_and;
-	char			*_or;
+	char			*_redir;
+	char			*_option;
 	struct s_tree	*next;
 	struct s_tree	*prev;
 }				t_tree;
@@ -63,14 +63,14 @@ typedef struct s_pipex
 	int		**fd;
 	int		file1;
 	int		file2;
-	int		cmd_crnt;
-	int		cmd_cnt;
-	int		pipes_cnt;
-	int		here_doc;
 	int		index;
 	int		p_argc;
-	char	**path;
+	int		cmd_cnt;
+	int		cmd_crnt;
+	int		here_doc;
+	int		pipes_cnt;
 	char	*cmd;
+	char	**path;
 }t_pipex;
 
 typedef struct s_ms
@@ -84,9 +84,11 @@ typedef struct s_ms
 	int		ord;
 	int		err;
 	int		dol2;
+	int		exit;
 	int		fd[2];
 	int		p_err;
 	int		index;
+	int		prior;
 	int		exit_num;
 	int		bool_word;
 	int		save_stdout;
@@ -95,7 +97,8 @@ typedef struct s_ms
 	char	*args;
 	char	**str;
 	char	**envp;
-	char	**scope;
+	char	*scope;
+	char	*scope2;
 	char	*wd_tmp;
 	char	*args_old;
 	t_tree	*tree[OPEN_MAX];
@@ -148,6 +151,7 @@ char	*ft_concat(char *cmd, char *opt);
 char	**ft_masjoin(char **tmp, char *str);
 char	*ft_join(char *str, char *str2, int i);
 char	*dol2(char *ptr, char *str, int i, int n);
+char	*hard_bon_help(t_ms *m, char *str, char *ptr, int n);
 void	navak1(void);
 void	navak2(void);
 void	sig2(int sig);
@@ -161,6 +165,7 @@ void	pipex(t_ms *ms, char **argv, int num);
 void	ft_dup2(int read, int write, t_ms *ms);
 void	lstadd_back(t_lexer **lst, t_lexer *new);
 void	tree_add_back(t_tree **tree, t_tree *new);
+void	ft_bonus(t_ms *m, char *ptr, int i, int n);
 void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j);
 void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int j);
 t_lexer	*lstnew(void);

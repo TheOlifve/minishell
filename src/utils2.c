@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 12:11:50 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/30 15:43:50 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/08 20:16:57 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,16 @@ char	*ft_concat(char *cmd, char *opt)
 	free(option);
 	return (cmd);
 }
+
+// char	*hard_bon_help(t_ms *m, char *str, char *ptr, int n)
+// {
+// 	n++;
+// 	ptr = ft_strjoin(str, m->scope2);
+// 	if (n == 1)
+// 	ptr = ft_strjoin(str, m->scope);
+// 	free(str);
+// 	return (ptr);
+// }
 
 void	goto_start(t_ms *ms)
 {

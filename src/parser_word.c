@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/30 15:45:24 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/07 20:33:47 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,11 @@ int	word_cmp(t_ms *ms, char *word)
 int	word_distribute2(t_lexer **lexer, t_ms *ms, char *word, int type)
 {
 	if (type == 2 && ms->bool_word == 1)
+	{
 		ms->tree[ms->ord]->_option = option_build(lexer, word);
+		// if (ms->prior == 4)
+		// 	ms->tree[ms->ord]->_redir = ft_strdup(ft_strtrim(ms->scope, " "));
+	}
 	else
 	{
 		tree_add_back(&ms->tree[ms->ord], tree_new());
@@ -100,6 +104,8 @@ int	word_distribute2(t_lexer **lexer, t_ms *ms, char *word, int type)
 			ms->tree[ms->ord]->_file = ft_strdup(word);
 		else if (type == 4 || type == 5 || type == 0)
 			ms->tree[ms->ord]->_word = ft_strdup(word);
+		// if (ms->prior == 4)
+		// 	ms->tree[ms->ord]->_redir = ft_strdup(ft_strtrim(ms->scope, " "));
 	}
 	return (0);
 }
@@ -116,6 +122,8 @@ int	word_distribute(t_lexer **lexer, t_ms *ms, char *word) //cmd - 0 | cmd_w_p -
 			ms->tree[ms->ord]->_cmd = cmd_build(ms, word);
 		else if (!ms->tree[ms->ord]->_cmd)
 			ms->tree[ms->ord]->_cmd = ft_strdup(word);
+		// if (ms->prior == 4)
+		// 	ms->tree[ms->ord]->_redir = ft_strdup(ft_strtrim(ms->scope, " "));
 	}
 	else
 		word_distribute2(lexer, ms, word, type);

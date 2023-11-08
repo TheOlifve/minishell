@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/30 15:38:55 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/07 18:56:12 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	cmd_find(t_ms *ms, char **cmd)
 		return (echo(ms, 0));
 	else if (ft_strcmp(cmd[0], "cd") == 0)
 		return (cd(ms, -1));
+	else if (ft_strcmp(cmd[0], "exit") == 0 && ms->exit == 5)
+		return (0);	
 	else if (ft_strcmp(cmd[0], "exit") == 0)
 		return (exit_mode(0, ms));
 	else if (ft_strcmp(cmd[0], "pwd") == 0 || ft_strcmp(cmd[0], "PWD") == 0)

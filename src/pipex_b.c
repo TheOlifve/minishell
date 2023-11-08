@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/30 16:07:30 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/07 19:33:38 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	cmd_find_p(t_ms *ms, char **cmd)
 		return (pwd(ms, 1));
 	else if (get_cmd(cmd[0], "env") == 1)
 		return (env(ms));
+	else if (get_cmd(cmd[0], "exit") == 1 && ms->exit == 5)
+		;
 	else if (get_cmd(cmd[0], "exit") == 1)
 		exit_mode(0, ms);
 	return (2);
@@ -86,7 +88,6 @@ char	*redir_find(char **argv)
 	tmp = NULL;
 	while(argv && argv[i])
 	{
-		// dprintf(2,"argv - %s\n", argv[i]);
 		if (argv[i][0] == '<' || argv[i][0] == '>')
 		{
 			if (tmp == NULL)

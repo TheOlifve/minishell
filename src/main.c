@@ -6,16 +6,22 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/30 15:40:36 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/08 19:03:48 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	main_sig(void)
+void	main_sig(t_ms *ms)
 {
 	struct sigaction sa;
 
+	ms->c1 = 0;
+	ms->c2 = 0;
+	ms->ord = 0;
+	ms->bool_word = 0;
+	ms->dol2 = 0;
+	ms->err = 0;
 	sa.sa_handler = sig2;
 	if (sigaction(SIGINT, &sa, NULL) < 0
 		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR
@@ -25,22 +31,19 @@ void	main_sig(void)
 
 void	main2(t_ms *ms, int	i)
 {
-	main_sig();
+	main_sig(ms);
 	
 	while (ms->envp[++i])
 		if (ft_strncmp(ms->envp[i], "PATH=", 5) == 0)
 			ms->path = ms->envp[i] + 5;
 	ms->save_stdout = dup(1);
-	ms->c1 = 0;
-	ms->c2 = 0;
-	ms->ord = 0;
-	ms->bool_word = 0;
-	ms->dol2 = 0;
-	ms->err = 0;
+	ms->prior = 0;
 	ms->p_err = 0;
 	ms->index = -1;
 	ms->bb = 0;
+	ms->exit = 0;
 	ms->scope = NULL;
+	ms->scope2 = NULL;
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);

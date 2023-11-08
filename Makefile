@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/10/19 20:08:48 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/11/08 16:43:41 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,8 @@ SRC = 	src/main.c				\
 		src/parser.c			\
 		src/parser_operator.c	\
 		src/pp_bb.c				\
-		src/heredoc.c
+		src/heredoc.c			\
+		src/bonus.c
 
 LIBFT = libft
 
