@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/08 16:49:21 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 14:27:29 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,23 @@ int	o_space3(t_ms *ms, int i, int n)
 	return (0);
 }
 
+int	space_help(t_ms *ms, int x, int n)
+{
+	char	*str1;
+	char	*str2;
+	int		i;
+	
+	i = x;
+	while (ms->args_old && ms->args_old[--x] == 32)
+			n++;
+	str1 = ft_substr(ms->args_old, 0, i - n);
+	str2 = ft_substr(ms->args_old,i, ft_strlen(ms->args_old) - (i - n - 1));
+		free(ms->args_old);
+	ms->args_old = ft_strjoin(str1, str2);
+	ms->num = ms->num - n;
+	return (-n - 1);
+}
+
 int	o_space2(t_ms *ms, int i, int n)
 {
 	char	*str1;
@@ -42,13 +59,17 @@ int	o_space2(t_ms *ms, int i, int n)
 	if (i != 0 && ms->args_old[i] == '|' && ms->args_old[i + 1] == '|'
 		&& ms->args_old[i + 2] == 32 && ms->args_old[i - 1] == 32)
 		return (3);
-	i = i + n;
-	str1 = ft_strjoin(ft_substr(ms->args_old, 0, i), " ");
-	str2 = ft_substr(ms->args_old,
-			i , ft_strlen(ms->args_old) - i);
-	free(ms->args_old);
-	ms->args_old = ft_strjoin(str1, str2);
-	ms->num++;
+	if (ms->args_old[i] == ')' && ms->args_old[i - 1] == 32)
+		return (space_help(ms, i, 0));
+	else
+	{
+		i = i + n;
+		str1 = ft_strjoin(ft_substr(ms->args_old, 0, i), " ");
+		str2 = ft_substr(ms->args_old, i , ft_strlen(ms->args_old) - i);
+		free(ms->args_old);
+		ms->args_old = ft_strjoin(str1, str2);
+		ms->num++;
+	}
 	return (1);
 }
 
@@ -63,9 +84,14 @@ int	ft_scope(t_ms *m, int i, int x, int y)
 		else if (m->args[i] == ')')
 			y++;
 	}
-	if (x != y)
+	if (x < y)
 	{
-		perror("minishell_ERROR");
+		pars_err(")", m);
+		return (1);
+	}
+	else if (y > x)
+	{
+		pars_err("(", m);
 		return (1);
 	}
 	ft_bonus(m, ptr, -1, 0);

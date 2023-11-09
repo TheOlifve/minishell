@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 3223/07/10 14:44:13 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/19 13:52:14 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 14:30:48 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,15 @@ int	o_space(t_ms *ms, int i)
 		|| (ms->args_old[i] == '&' && ms->args_old[i + 1] == '&'))
 			if (ms->args_old[i + 2] != 32)
 				return (o_space2(ms, i, 2));
-	if (ms->args_old[i] == '|')
-		if (ms->args_old[i + 1] != 32)
-			return (o_space2(ms , i, 1));
+	if (ms->args_old[i] == '|' || ms->args_old[i] == ')')
+		if ((ms->args_old[i + 1] != 32 && ms->args_old[i] == '|')
+			|| (ms->args_old[i] == ')' && ms->args_old[i - 1] == 32))
+			return (o_space2(ms, i, 1));
 	if ((ms->args_old[i] == '>' && ms->args_old[i + 1] == '>')
 		|| (ms->args_old[i] == '<' && ms->args_old[i + 1] == '<'))
 		if (ms->args_old[i + 2] == 32)
 			return (o_space3(ms, i, 2));
-	if (ms->args_old[i] == '>' || ms->args_old[i] == '<')
+	if (ms->args_old[i] == '>' || ms->args_old[i] == '<' || ms->args_old[i] == '(')
 		if (ms->args_old[i + 1] == 32)
 			return (o_space3(ms, i, 1));
 	return (0);

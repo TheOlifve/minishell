@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/08 19:03:48 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 14:06:18 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 		{
 			free(m_s->args_old);
 			m_s->exit_num = 1;
-			perror("minishell_ERROR");
+			pars_err("quote", m_s);
 		}
 		else
 		{
