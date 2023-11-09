@@ -6,21 +6,21 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/19 15:18:24 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 19:03:53 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*env2(t_ms *ms, char *oldpwd, int i, int j)
+void	env2(t_ms *ms, char *oldpwd, int i, int j)
 {
 	char	**env;
-	
+
 	while (ms->envp[i])
 		i++;
 	env = malloc(sizeof(char *) * (i + 2));
 	if (!env)
-		return (NULL);
+		return ;
 	i = 0;
 	while (ms->envp[i])
 	{
@@ -28,42 +28,40 @@ char	*env2(t_ms *ms, char *oldpwd, int i, int j)
 			&& ft_strncmp(ms->envp[i + 1], "OLDPWD=", 7) == 0)
 		{
 			free(env);
-			return (NULL);
+			return ;
 		}
 		else if (ft_strncmp(ms->envp[i], "PWD=", 4) == 0)
 		{
 			env[j++] = ms->envp[i++];
-			env[j++] = ft_strjoin("OLD",oldpwd);
+			env[j++] = ft_strjoin("OLD", oldpwd);
 		}
 		env[j++] = ms->envp[i++];
 	}
 	env[j] = NULL;
 	ms->envp = env;
-	return (NULL);
 }
 
 char	*cd2(char *ptr, char *buff, t_ms *ms, int i)
 {
 	char	*vp;
-    int		j;
+	int		j;
 
 	j = 0;
 	vp = NULL;
 	while (ptr[++i])
 	{
 		if (ptr[i] == '/')
-		{
-			vp = ft_strdup(ptr);
-			return (vp);
-		}
+			return (ft_strdup(ptr));
 		if (ptr[0] == '-')
 		{
 			while (ms->envp[j++])
+			{
 				if (ft_strncmp(ms->envp[j], "OLDPWD=", 7) == 0)
 				{
 					vp = ms->envp[j] + 7;
 					return (vp);
 				}
+			}
 			return (vp);
 		}
 	}
@@ -75,7 +73,7 @@ int	ft_chdir(t_ms *ms, char *ptr, int j)
 {
 	char	*vp;
 	char	buff[256];
-	
+
 	if (ptr == NULL && ms->tree[ms->ord]->next->_file)
 		ptr = ft_strdup(ms->tree[ms->ord]->next->_file);
 	else if (ptr == NULL && ms->tree[ms->ord]->next->_word)

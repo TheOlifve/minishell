@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/11/08 16:43:41 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/11/09 17:37:56 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SRC = 	src/main.c				\
 		src/redir.c				\
 		src/list_lexer.c		\
 		src/wildcard.c			\
+		src/pipex_b2.c			\
 		src/engine.c			\
 		src/pipex_b.c			\
 		src/free.c				\

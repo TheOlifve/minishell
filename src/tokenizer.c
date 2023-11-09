@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/09 14:27:29 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 17:02:04 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	o_space3(t_ms *ms, int i, int n)
 {
 	char	*str1;
 	char	*str2;
-	int x;
-	
+	int		x;
+
 	x = 0;
 	i = i + n;
 	str1 = ft_substr(ms->args_old, 0, i);
@@ -34,28 +34,11 @@ int	o_space3(t_ms *ms, int i, int n)
 	return (0);
 }
 
-int	space_help(t_ms *ms, int x, int n)
-{
-	char	*str1;
-	char	*str2;
-	int		i;
-	
-	i = x;
-	while (ms->args_old && ms->args_old[--x] == 32)
-			n++;
-	str1 = ft_substr(ms->args_old, 0, i - n);
-	str2 = ft_substr(ms->args_old,i, ft_strlen(ms->args_old) - (i - n - 1));
-		free(ms->args_old);
-	ms->args_old = ft_strjoin(str1, str2);
-	ms->num = ms->num - n;
-	return (-n - 1);
-}
-
 int	o_space2(t_ms *ms, int i, int n)
 {
 	char	*str1;
 	char	*str2;
-	
+
 	if (i != 0 && ms->args_old[i] == '|' && ms->args_old[i + 1] == '|'
 		&& ms->args_old[i + 2] == 32 && ms->args_old[i - 1] == 32)
 		return (3);
@@ -65,7 +48,7 @@ int	o_space2(t_ms *ms, int i, int n)
 	{
 		i = i + n;
 		str1 = ft_strjoin(ft_substr(ms->args_old, 0, i), " ");
-		str2 = ft_substr(ms->args_old, i , ft_strlen(ms->args_old) - i);
+		str2 = ft_substr(ms->args_old, i, ft_strlen(ms->args_old) - i);
 		free(ms->args_old);
 		ms->args_old = ft_strjoin(str1, str2);
 		ms->num++;
@@ -75,8 +58,6 @@ int	o_space2(t_ms *ms, int i, int n)
 
 int	ft_scope(t_ms *m, int i, int x, int y)
 {
-	char	ptr[5000];
-	
 	while (m && m->args && m->args[++i])
 	{
 		if (m->args[i] == '(')
@@ -94,7 +75,7 @@ int	ft_scope(t_ms *m, int i, int x, int y)
 		pars_err("(", m);
 		return (1);
 	}
-	ft_bonus(m, ptr, -1, 0);
+	ft_bonus(m, 0, -1, 0);
 	return (0);
 }
 
@@ -107,7 +88,7 @@ void	l_analys(t_ms *m, t_lexer **lexer)
 	head = *lexer;
 	while (m->str && m->str[++i] && *lexer)
 	{
-		if ((m->str[i][0] == '&' && m->str[i][1] == '&')|| m->str[i][0] == '|'
+		if ((m->str[i][0] == '&' && m->str[i][1] == '&') || m->str[i][0] == '|'
 			|| m->str[i][0] == '>' || m->str[i][0] == '<'
 			|| (m->str[i][0] == '|' && m->str[i][1] == '|'))
 		{
@@ -125,7 +106,7 @@ void	l_analys(t_ms *m, t_lexer **lexer)
 	(*lexer) = head;
 }
 
-void	tokenizer(t_ms *m, t_lexer **lexer, int i , int j)
+void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 {
 	if (ft_scope(m, -1, 0, 0) == 1)
 		return ;

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/30 16:04:05 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:29:29 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	heredoc(char *str)
 int	redir_input(char **file)
 {
 	int	fd;
+
 	while (*file)
 	{
 		if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
@@ -58,35 +59,28 @@ int	redir_input(char **file)
 	return (fd);
 }
 
-int	open_files(char **file)
+int	open_files(char **file, int fd)
 {
-	int	fd;
-
-	fd = -1;
 	while (*file)
 	{
 		if (ft_strncmp(*file, ">>", 2) == 0 && *file != NULL)
-		{
-			*file += 2;
 			open(*file, O_RDWR | O_APPEND | O_CREAT, 0644);
-		}
 		else if (ft_strncmp(*file, ">", 1) == 0 && *file != NULL)
-		{
-			*file += 1;
 			open(*file, O_RDWR | O_TRUNC | O_CREAT, 0644);
-		}
 		else if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
-		{
-			*file += 2;
 			fd = heredoc(*file);
-		}
 		else if (ft_strncmp(*file, "<", 1) == 0 && *file != NULL)
 		{
-			*file += 1;
 			fd = open(*file, O_RDONLY);
 			if (fd < 0)
-				return (ERR2(*file));
+				return (err(NULL, *file, NULL, 1));
 		}
+		if ((ft_strncmp(*file, ">>", 2) == 0 && *file != NULL)
+			|| (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL))
+			*file += 2;
+		if ((ft_strncmp(*file, ">", 1) == 0 && *file != NULL)
+			|| (ft_strncmp(*file, "<", 1) == 0 && *file != NULL))
+			*file += 1;
 		file++;
 	}
 	return (fd);

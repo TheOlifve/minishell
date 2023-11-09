@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/30 16:09:16 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:39:15 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ int	check_var(char *str, t_ms *ms)
 	j = check_var2(str);
 	if (j == -1)
 	{
-		ERR("export", str, ms);
+		err("export", str, ms, 0);
 		return (3);
 	}
 	else if (j == -2)
 		return (2);
 	else if (j == -3)
 		return (0);
-	else if (check_var3(str, i , j, ms) != 0)
+	else if (check_var3(str, i, j, ms) != 0)
 		return (3);
 	return (0);
 }
@@ -43,7 +43,7 @@ char	*str_replace(char *str)
 
 	i = 0;
 	j = 0;
-	while(str[i] && str[i] != '+')
+	while (str[i] && str[i] != '+')
 		i++;
 	if (str[i] == '+' && str[i + 1] == '=')
 	{
@@ -114,33 +114,26 @@ char	**caching(char **str)
 	return (tmp);
 }
 
-int	ft_export(t_ms *ms, char **str, int i)
+int	ft_export(t_ms *ms, char **str, int i, int j)
 {
-	int		j;
 	int		test;
 	char	**tmp;
 
 	tmp = NULL;
-	j = 0;
 	if (!str[i])
 		return (1);
 	test = ft_export2(ms, str, i);
 	if (test == 1)
 	{
 		i++;
-		ft_export(ms, str, i);
+		ft_export(ms, str, i, 0);
 	}
 	else if (test == 2)
 		return (0);
 	else if (test == 3)
 		return (1);
 	if (!ms->envp)
-	{
-		ms->envp = malloc(sizeof(char *) * 2);
-		ms->envp[0] = ft_strdup(str[i]);
-		ms->envp[1] = NULL;
-		return (0);
-	}
+		return (ft_export_env(ms, str, i));
 	tmp = caching(ms->envp);
 	while (str[i] && str[i][j] != '=')
 		j++;

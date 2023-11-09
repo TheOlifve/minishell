@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/30 15:50:25 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 16:59:44 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	ft_last(char **str)
 
 	i = 0;
 	j = -1;
-	while(str[i])
+	while (str[i])
 	{
 		if (ft_strncmp(str[i], ">>", 2) == 0 || ft_strncmp(str[i], ">", 1) == 0)
 			j = i;

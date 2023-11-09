@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 14:38:53 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/19 00:56:42 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:46:08 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,14 @@ char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
 		return (ft_itoa(ms->exit_num));
 	i = -1;
 	while (ms->envp[++i])
+	{
 		if (ptr != 0 && ft_strncmp(ft_strjoin(ptr, "="),
 				ms->envp[i], ft_strlen(ptr) + 1) == 0)
 		{
 			str = ft_strtrim(ms->envp[i], "\n");
 			ft = (str + n);
 		}
+	}
 	return (ft);
 }
 

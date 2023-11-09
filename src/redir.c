@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/30 15:49:29 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:23:17 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*read_file(void)
 	{
 		tmp = get_next_line(file);
 		if (!tmp)
-			break;
+			break ;
 		tmp3 = ft_strjoin(tmp2, tmp);
 		free(tmp2);
 		tmp2 = ft_strdup(tmp3);
@@ -49,13 +49,7 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 		if (ft_last(ft_split(ms->tree[ms->ord]->_redir, ' ')) >= 0)
 			dup2(fd, 1);
 		i = cmd_find(ms, cmd);
-		if (i == 0)
-			exit(0);
-		else if (i == 1)
-		{
-			printf("minishell: error\n");
-			exit(1);
-		}
+		exec_with_redir_pipe3(i);
 		execve (cmd[0], cmd, ms->envp);
 		exit_mode(7, ms);
 	}
@@ -98,13 +92,13 @@ int	redir_loop(t_ms *ms)
 	char	*tmp;
 	char	*tmp2;
 	char	**file;
-	
+
 	tmp2 = ft_strdup("");
 	while (1)
 	{
 		_read = get_next_line(0);
 		if (!_read)
-			break;
+			break ;
 		tmp = ft_strjoin(tmp2, _read);
 		free(tmp2);
 		tmp2 = ft_strdup(tmp);
@@ -129,9 +123,9 @@ int	exec_with_redir(t_ms *ms, int fd)
 	char	**cmd;
 
 	if (!ms->tree[ms->ord]->_cmd && ms->tree[ms->ord]->_redir)
-		return (open_files(ft_split(ms->tree[ms->ord]->_redir, ' ')));
+		return (open_files(ft_split(ms->tree[ms->ord]->_redir, ' '), -1));
 	file = ft_strdup(ms->tree[ms->ord]->_redir);
-	fd = open_files(ft_split(file, ' '));
+	fd = open_files(ft_split(file, ' '), -1);
 	if (fd == -2)
 		return (1);
 	cmd = ft_split(cmd_builder(ms), ' ');

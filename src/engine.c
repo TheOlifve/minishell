@@ -6,47 +6,18 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/07 18:56:12 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:44:38 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*ft_join(char *str, char *str2, int i)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = NULL;
-	tmp2 = NULL;
-	if (i == 0)
-		return (ft_strjoin(str, str2));
-	else if (i == 2)
-	{
-		if (!str)
-			str = ft_strdup("");
-		tmp = ft_strjoin(str, str2);
-		tmp2 = ft_strjoin(tmp, "|");
-		free(tmp);
-		return (tmp2);
-	}
-	else
-	{
-		if (!str)
-			str = ft_strdup("");
-		tmp = ft_strjoin(str, str2);
-		tmp2 = ft_strjoin(tmp, " ");
-		free(tmp);
-		return (tmp2);
-	}
-}
 
 int	cmd_find(t_ms *ms, char **cmd)
 {
 	if (ft_strcmp(cmd[0], "export") == 0 && cmd[1] == NULL)
 		return (ft_export3(ms, 0, 0));
 	else if (ft_strcmp(cmd[0], "export") == 0)
-		return (ft_export(ms, cmd, 1));
+		return (ft_export(ms, cmd, 1, 0));
 	else if (ft_strcmp(cmd[0], "unset") == 0)
 		return (ft_unset(ms, cmd, 1));
 	else if (ft_strcmp(cmd[0], "echo") == 0 || ft_strcmp(cmd[0], "ECHO") == 0)
@@ -54,7 +25,7 @@ int	cmd_find(t_ms *ms, char **cmd)
 	else if (ft_strcmp(cmd[0], "cd") == 0)
 		return (cd(ms, -1));
 	else if (ft_strcmp(cmd[0], "exit") == 0 && ms->exit == 5)
-		return (0);	
+		return (0);
 	else if (ft_strcmp(cmd[0], "exit") == 0)
 		return (exit_mode(0, ms));
 	else if (ft_strcmp(cmd[0], "pwd") == 0 || ft_strcmp(cmd[0], "PWD") == 0)
@@ -125,7 +96,7 @@ void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
 		free(tmp);
 		free(tmp2);
 		if (ms->tree[ms->ord]->_pipe == NULL)
-			break;
+			break ;
 		ms->ord += 1;
 	}
 	argv = ft_split(str, '|');

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 13:25:27 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/07 23:54:27 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 16:32:49 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 char	*ft_strjoin2(char const *s1, char const *s2)
 {
 	char	*str;
-	
+
 	str = NULL;
 	if (!s1 && s2)
 		str = ft_strdup(s2);

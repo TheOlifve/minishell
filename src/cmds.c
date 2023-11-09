@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 20:28:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/30 16:15:11 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 19:04:09 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,13 @@ int	pwd(t_ms *ms, int mod)
 		{
 			oldpwd = ft_strdup(ms->envp[i]);
 			ms->envp[i] = ft_strjoin("PWD=", buff);
-			break;
+			break ;
 		}
 	}
 	if (mod == 1)
 		printf("%s\n", buff);
 	else
-		ms->envp[i + 1] = ft_strjoin("OLD",oldpwd);
+		ms->envp[i + 1] = ft_strjoin("OLD", oldpwd);
 	if (oldpwd)
 		free(oldpwd);
 	return (0);
