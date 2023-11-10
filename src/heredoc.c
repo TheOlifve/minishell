@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/10 13:10:04 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 13:53:46 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	heredoc(char *str)
 		tmp = get_next_line(0);
 		if (!tmp)
 			break ;
-		if (ft_strcmp(str, tmp) == -10)
+		printf("%d\n",ft_strcmp2(str, tmp));
+		if (ft_strcmp2(str, tmp) == -10)
 			break ;
 		write(file, tmp, ft_strlen(tmp));
 		free(tmp);

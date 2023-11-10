@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/09 18:23:17 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 14:12:59 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 			dup2(fd2, 0);
 		if (ft_last(ft_split(ms->tree[ms->ord]->_redir, ' ')) >= 0)
 			dup2(fd, 1);
+		
 		i = cmd_find(ms, cmd);
 		exec_with_redir_pipe3(i);
 		execve (cmd[0], cmd, ms->envp);
