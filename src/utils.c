@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 14:12:51 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/10 18:55:11 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,14 @@ int	ft_last(char **str)
 
 	i = 0;
 	j = -1;
-	while (str[i])
+	while(str[i])
 	{
 		if (ft_strncmp(str[i], ">>", 2) == 0 || ft_strncmp(str[i], ">", 1) == 0)
 			j = i;
+		else if (ft_strncmp(str[i], "<<", 2) == 0)
+			j = -3;
+		else if (ft_strncmp(str[i], "<", 1) == 0)
+			j = -2;
 		i++;
 	}
 	return (j);

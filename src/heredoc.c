@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/10 17:26:11 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/10 18:57:22 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,23 @@ int	heredoc(char *str)
 	int		file;
 	char	*tmp;
 
-	file = open("src/heredoc", O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	file = open("src/heredoc", O_RDWR| O_TRUNC | O_CREAT, 0644);
 	if (file < 0)
 		return (1);
 	while (1)
 	{
 		write(1, "heredoc> ", 9);
 		tmp = get_next_line(0);
-		if (ft_strcmp(tmp, "\n") == 0)
-			continue ;
+		if (!tmp)
+		{
+			printf("\n");
+			break ;
+		}
 		if (ft_strcmp2(str, tmp) == -10)
 			break ;
 		write(file, tmp, ft_strlen(tmp));
 		free(tmp);
-	
+	}
 	free(tmp);
 	return (file);
 }

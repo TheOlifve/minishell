@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 11:07:44 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 17:19:50 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/10 18:50:53 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	ft_strcmp2(char *s1, char *s2)
 {
 	int	i;
 
+	if (ft_strcmp(s2, "\n") == 0)
+			return(0);
 	i = ft_strlen(s2) - 1;
 	if (!s1 || !s2)
 		return (1);

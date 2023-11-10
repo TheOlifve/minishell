@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/10 14:35:45 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/10 19:01:33 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	exec_with_redir_pipe(t_ms *ms, char **cmd, char *file)
 		unlink("src/tmp");
 		return (1);
 	}
-	redir(read_file(1), ft_split(file, ' '));
+	redir(read_file(), ft_split(file, ' '));
 	unlink("src/tmp");
 	return (0);
 }
