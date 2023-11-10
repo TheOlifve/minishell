@@ -6,11 +6,28 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/09 17:20:05 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 13:14:19 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+char	*hard_bon_help(t_ms *m, int n, char *str, char *str2)
+{
+	char	*ptr;
+
+	if (n == 1)
+		ptr = ft_strjoin(str, m->scope);
+	else
+		ptr = ft_strjoin(str, m->scope2);
+	free(str);
+	str = ft_strjoin(ptr, str2);
+	free(ptr);
+	free(str2);
+	ptr = ft_strdup(str);
+	free(str);
+	return (ptr);
+}
 
 void	prior2(char *ptr, t_lexer **lexer, int x, int n)
 {
@@ -68,6 +85,8 @@ int	parser(t_lexer *lexer, t_ms *ms)
 			break ;
 	}
 	ms->ord = 0;
+	return (0);
+}
 	// while (ms->tree[ms->ord])
 	// {
 	// 	goto_start(ms);
@@ -84,5 +103,3 @@ int	parser(t_lexer *lexer, t_ms *ms)
 	// 	ms->ord++;
 	// } 
 	// ms->ord = 0;
-	return (0);
-}

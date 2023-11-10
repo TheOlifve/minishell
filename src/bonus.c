@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:40:23 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/09 17:43:30 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 13:13:42 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,20 +54,10 @@ char	*hard_bon(t_ms *m, char *ptr, int i, int n)
 					|| (ptr[i] == '|' && ptr[i + 1] == '|'))
 				{
 					n++;
-					// hard_bon_help(m, ptr, n, i);
 					str = ft_substr(ptr, 0, i - 1);
 					str2 = ft_substr(ptr, i - 1, ft_strlen(ptr) - i + 2);
 					free(ptr);
-					if (n == 1)
-						ptr = ft_strjoin(str, m->scope);
-					else
-						ptr = ft_strjoin(str, m->scope2);
-					free(str);
-					str = ft_strjoin(ptr, str2);
-					free(ptr);
-					ptr = ft_strdup(str);
-					free(str);
-					free(str2);
+					ptr = hard_bon_help(m, n, str, str2);
 					i = i + 2 + ft_strlen(m->scope);
 					if (n != 1)
 						i = i + 2 + ft_strlen(m->scope2);

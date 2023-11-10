@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/09 18:53:27 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 13:14:35 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ char	*ft_concat(char *cmd, char *opt);
 char	**ft_masjoin(char **tmp, char *str);
 char	*ft_join(char *str, char *str2, int i);
 char	*dol2(char *ptr, char *str, int i, int n);
+char	*hard_bon_help(t_ms *m, int n, char *str, char *str2);
 void	navak1(void);
 void	navak2(void);
 void	sig2(int sig);
@@ -171,7 +172,6 @@ void	ft_dup2(int read, int write, t_ms *ms);
 void	ft_bonus(t_ms *m, int x, int i, int n);
 void	lstadd_back(t_lexer **lst, t_lexer *new);
 void	tree_add_back(t_tree **tree, t_tree *new);
-void	hard_bon_help(t_ms *m, char *ptr, int n, int i);
 void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j);
 void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int j);
 t_lexer	*lstnew(void);

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/09 18:16:05 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 13:10:46 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 	int		j;
 	char	**env;
 
-	system ("leaks minishell");
 	while (envp[++i])
 	{
 		if (ft_strncmp(envp[i], "SHLVL=", 6) == 0)
@@ -103,9 +102,6 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 	}
 	env[n] = NULL;
 	i = -1;
-	// while (ms->envp[++i])
-	// 	if (ms->envp[i])
-	// 		free(ms->envp);
 	ms->envp = env;
 }
 
@@ -114,15 +110,12 @@ int	main(int argc, char **argv, char **envp)
 	t_ms	m_s;
 	t_lexer	lexer;
 
-	navak1();
-	navak2();
 	if (argc > 1)
 	{
 		perror("minishell_ERROR");
 		exit (1);
 	}
 	(void) argv;
-	// system ("leaks minishell");
 	ft_shlvl(envp, &m_s, -1, 0);
 	m_s.exit_num = 0;
 	while (1)

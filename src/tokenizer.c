@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/09 17:02:04 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 13:11:43 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,6 @@ void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 	if (ft_scope(m, -1, 0, 0) == 1)
 		return ;
 	m->str = ft_split(m->args, ' ');
-	// int n = -1;
-	// while (m->str[++n])
-	// 	printf("%s\n", m->str[n]);
 	while (m && m->str && m->str[++i])
 	{
 		j = -1;
