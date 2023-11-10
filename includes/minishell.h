@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 18:59:43 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/10 20:25:22 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 
 # define STDIN 0
 # define STDOUT 1
+
+extern int g_glob;
 
 typedef struct s_lexer
 {
@@ -102,6 +104,7 @@ typedef struct s_ms
 	char	*args_old;
 	char	ptr2[OPEN_MAX];
 	t_tree	*tree[OPEN_MAX];
+	struct sigaction	sa;
 }				t_ms;
 
 int		eng(t_ms *ms);
