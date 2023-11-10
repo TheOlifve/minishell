@@ -6,20 +6,23 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 14:12:59 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/10 15:05:18 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*read_file(void)
+char	*read_file(int i)
 {
 	int		file;
 	char	*tmp;
 	char	*tmp2;
 	char	*tmp3;
 
-	file = open("src/tmp", O_RDONLY);
+	if (i == 1)
+		file = open("src/tmp", O_RDONLY);
+	if (i == 2)
+		file = open("src/heredock", O_RDONLY);
 	tmp2 = ft_strdup("");
 	while (1)
 	{
@@ -45,10 +48,12 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 	if (pid == 0)
 	{
 		if (fd2 >= 0)
-			dup2(fd2, 0);
+		{
+			dup2(0, fd2);
+			write(0, read_file(2), ft_strlen(read_file(2)));
+		}
 		if (ft_last(ft_split(ms->tree[ms->ord]->_redir, ' ')) >= 0)
 			dup2(fd, 1);
-		
 		i = cmd_find(ms, cmd);
 		exec_with_redir_pipe3(i);
 		execve (cmd[0], cmd, ms->envp);
@@ -137,7 +142,7 @@ int	exec_with_redir(t_ms *ms, int fd)
 		unlink("src/tmp");
 		return (1);
 	}
-	redir(read_file(), ft_split(file, ' '));
+	redir(read_file(1), ft_split(file, ' '));
 	unlink("src/tmp");
 	return (0);
 }

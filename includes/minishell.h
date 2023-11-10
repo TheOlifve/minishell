@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 13:14:35 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 14:35:11 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ int		ft_export(t_ms *ms, char **str, int i, int j);
 int		check_var3(char *str, int i, int j, t_ms *ms);
 int		err(char *error, char *str, t_ms *ms, int type);
 int		word_distribute(t_lexer **lexer, t_ms *ms, char *word);
-char	*read_file(void);
+char	*read_file(int i);
 char	**caching(char **str);
 char	**path_x(char **envp);
 char	*get_next_line(int fd);

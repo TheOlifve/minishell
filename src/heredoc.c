@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/10 13:53:46 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/10 17:26:11 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,13 @@ int	heredoc(char *str)
 	{
 		write(1, "heredoc> ", 9);
 		tmp = get_next_line(0);
-		if (!tmp)
-			break ;
-		printf("%d\n",ft_strcmp2(str, tmp));
+		if (ft_strcmp(tmp, "\n") == 0)
+			continue ;
 		if (ft_strcmp2(str, tmp) == -10)
 			break ;
 		write(file, tmp, ft_strlen(tmp));
 		free(tmp);
-	}
-	close(file);
+	
 	free(tmp);
 	return (file);
 }
