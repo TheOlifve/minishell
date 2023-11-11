@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/10 13:11:43 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 23:24:59 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,4 +131,5 @@ void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 	parser(*lexer, m);
 	if (m->p_err == 0)
 		engine(m, -1);
+		// printf("%d\n", m->exit_num);
 }

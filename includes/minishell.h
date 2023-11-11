@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 11:01:14 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 13:26:01 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 
 # define STDIN 0
 # define STDOUT 1
+
+extern int g_glob;
 
 typedef struct s_lexer
 {
@@ -77,7 +79,8 @@ typedef struct s_ms
 {
 	int		x;
 	int		c1;
-	int		c2;	int		bb;
+	int		c2;
+	int		bb;
 	int		num;
 	int		dol;
 	int		ord;
@@ -102,11 +105,13 @@ typedef struct s_ms
 	char	*args_old;
 	char	ptr2[OPEN_MAX];
 	t_tree	*tree[OPEN_MAX];
+	struct sigaction	sa;
 }				t_ms;
 
 int		eng(t_ms *ms);
 int		env(t_ms *ms);
-int		heredoc(char *str);
+int		handler(void);
+int		handler2(void);
 int		ft_last(char **str);
 int		cd(t_ms *ms, int j);
 int		check_var2(char *str);
@@ -125,7 +130,6 @@ int		check_var(char *str, t_ms *ms);
 int		get_cmd(char *path, char *cmd);
 int		exec_cmd(t_ms *ms, char	**cmd);
 int		cmd_find(t_ms *ms, char **cmd);
-int		open_files(char **file, int fd);
 int		pars_err(char *error, t_ms *ms);
 int		parser(t_lexer *lexer, t_ms *ms);
 int		o_space2(t_ms *ms, int i, int n);
@@ -139,6 +143,7 @@ char	*ft_join(char *str, char *str2, int i);
 int		dol_prep(t_ms *ms, int i, int x, int y);
 int		ft_export2(t_ms *ms, char **str, int i);
 int		operator_distribute(t_ms *ms, char *opr);
+int		open_files(t_ms *ms, char **file, int fd);
 int		ft_export_env(t_ms *ms, char **str, int i);
 int		ft_export(t_ms *ms, char **str, int i, int j);
 int		check_var3(char *str, int i, int j, t_ms *ms);

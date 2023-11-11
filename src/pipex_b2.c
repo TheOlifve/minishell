@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 13:19:23 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 13:35:32 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,21 +62,20 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		dprintf(2, "env[4] - %s | cmd[0] - %s\n",ms->envp[4], cmd[0]);
 		execve (cmd[0], cmd, ms->envp);
 		printf("minishell: %s: command not found\n", cmd[0]);
 		exit_mode(7, ms);
 	}
 	while (wait(ptr) != -1)
 		;
-	if (ft_strcmp(cmd[0], "/bin/cat") == 0 && G_GLOB == SIGINIT)
+	if (ft_strcmp(cmd[0], "/bin/cat") == 0 && g_glob == SIGINT)
+		printf("\n");
+	ms->exit_num = 127;
 	if (ptr[0] > 0)
 	{
-		ms->exit_num = ptr[0];
 		ft_search(ms);
 		return (1);
 	}
-	ms->exit_num = ptr[0];
 	return (0);
 }
 

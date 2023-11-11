@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/11 13:16:48 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 13:33:20 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,15 @@ int	exec_with_redir_pipe2(t_ms *ms, char **cmd, char *file, int fd2)
 		exec_with_redir_pipe3(i);
 		execve (cmd[0], cmd, ms->envp);
 		dup2(1, STDOUT);
-		printf("minishell: %s: command not found\n", cmd[0]);
+		write (2, "minishell: ",11);
+		printf("%s: command not found\n", cmd[0]);
 		exit_mode(7, ms);
 	}
 	while (wait(ptr) != -1)
 		;
+	if (ft_strcmp(cmd[0], "/bin/cat") == 0 && g_glob == SIGINT)
+		printf("\n");
+	ms->exit_num = 127;
 	return (ptr[0]);
 }
 
@@ -64,9 +68,9 @@ int	exec_with_redir_pipe(t_ms *ms, char **cmd, char *file)
 	char	**tmp;
 
 	if (cmd[0][0] == '<' || cmd[0][0] == '>')
-		return (open_files(ft_split(file, ' '), -1));
+		return (open_files(ms, ft_split(file, ' '), -1));
 	tmp = redir_cut(cmd);
-	fd = open_files(ft_split(file, ' '), -1);
+	fd = open_files(ms, ft_split(file, ' '), -1);
 	if (fd == -2)
 		return (1);
 	ptr = exec_with_redir_pipe2(ms, tmp, file, fd);
@@ -84,6 +88,7 @@ int	child(t_ms *ms, t_pipex *pipex, char **argv)
 {
 	int		j;
 	char	**cmd_args;
+	int		ptr[1];
 
 	pipex->pid = fork();
 	if (pipex->pid == 0)
@@ -105,6 +110,11 @@ int	child(t_ms *ms, t_pipex *pipex, char **argv)
 		child_help(pipex, ms, cmd_args, j);
 		exit_mode(1, ms);
 	}
+	while (wait(ptr) != -1)
+		;
+	if (ft_strcmp(cmd_args[0], "/bin/cat") == 0 && g_glob == SIGINT)
+		printf("\n");
+	ms->exit_num = 127;
 	return (0);
 }
 
@@ -116,7 +126,6 @@ void	pipex(t_ms *ms, char **argv, int num)
 	pipex.cmd_cnt = 0;
 	pipex.cmd_crnt = 0;
 	pipex.index = 0;
-	ptr[0] = 0;
 	while (argv[++num])
 		pipex.cmd_cnt++;
 	num = -1;
@@ -131,7 +140,7 @@ void	pipex(t_ms *ms, char **argv, int num)
 	pipe_close(&pipex);
 	while (wait(ptr) != -1)
 		;
+	ms->exit_num = 127;
 	if (ptr[0] > 0)
 		ft_search(ms);
-	ms->exit_num = ptr[0];
 }

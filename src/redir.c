@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 12:18:10 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 13:32:36 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,9 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 	}
 	while (wait(ptr) != -1)
 		;
+	if (ft_strcmp(cmd[0], "/bin/cat") == 0 && g_glob == SIGINT)
+		printf("\n");
+	ms->exit_num = ptr[0];
 	return (ptr[0]);
 }
 
@@ -110,9 +113,9 @@ int	exec_with_redir(t_ms *ms, int fd)
 	char	**cmd;
 
 	if (!ms->tree[ms->ord]->_cmd && ms->tree[ms->ord]->_redir)
-		return (open_files(ft_split(ms->tree[ms->ord]->_redir, ' '), fd));
+		return (open_files(ms, ft_split(ms->tree[ms->ord]->_redir, ' '), fd));
 	file = ft_strdup(ms->tree[ms->ord]->_redir);
-	fd = open_files(ft_split(file, ' '), fd);
+	fd = open_files(ms, ft_split(file, ' '), fd);
 	if (fd == -2)
 		return (1);
 	cmd = ft_split(cmd_builder(ms), ' ');

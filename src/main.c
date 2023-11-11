@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 15:08:53 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 09:47:28 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+int g_glob = 0;
+
 void	main_sig(t_ms *ms)
 {
-	struct sigaction	sa;
-
 	ms->c1 = 0;
 	ms->c2 = 0;
 	ms->ord = 0;
 	ms->bool_word = 0;
 	ms->dol2 = 0;
 	ms->err = 0;
-	sa.sa_handler = sig2;
-	if (sigaction(SIGINT, &sa, NULL) < 0
-		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR
-		|| signal(SIGTSTP, SIG_IGN) == SIG_ERR)
-		perror("minishell_ERROR");
+	rl_catch_signals = 0;
+	ms->sa.sa_handler = sig2;
+	sigaction(SIGQUIT, &ms->sa, NULL);
+	sigaction(SIGINT, &ms->sa, NULL);
+	rl_event_hook = &handler2;
 }
 
 void	main2(t_ms *ms, int i)
@@ -48,12 +48,14 @@ void	main2(t_ms *ms, int i)
 	ctrld(ms->args_old, ms);
 	if (ms->args_old)
 		add_history (ms->args_old);
+	if (g_glob == SIGINT)
+		ms->exit_num = 1;
 	ms->num = ft_strlen(ms->args_old);
 }
 
 int	loop(t_ms *m_s, t_lexer *lexer)
 {
-	rl_catch_signals = 0;
+	g_glob = 0;
 	main2(m_s, -1);
 	if (ft_strcmp(m_s->args_old, "\0") == 0)
 		return (0);
@@ -98,7 +100,7 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 	{
 		if (ft_strncmp(envp[i], "OLDPWD=", 7) == 0)
 			i++;
-		env[n++] = ft_strdup(envp[i]);
+		env[n++] = (envp[i]);
 	}
 	env[n] = NULL;
 	i = -1;

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/09 18:29:00 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/11 10:43:32 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	pars_err(char *error, t_ms *ms)
 {
 	printf("minishell: pars error near `%s'\n", error);
 	ms->p_err = 1;
+	ms->exit_num = 1;
 	return (2);
 }
 
@@ -25,10 +26,12 @@ int	err(char *error, char *str, t_ms *ms, int type)
 	{
 		printf("minishell: %s: `%s': not a valid identifier\n", error, str);
 		ms->err = 1;
+		ms->exit_num = 1;
 	}
 	else if (type == 1)
 	{
 		printf("minishell: %s: No such file or directory\n", str);
+		ms->exit_num = 1;
 		return (-2);
 	}
 	return (1);
@@ -38,6 +41,7 @@ int	perr(char *str, t_ms *ms)
 {
 	perror(str);
 	ms->err = 1;
+	ms->exit_num = 1;
 	return (1);
 }
 
@@ -51,17 +55,12 @@ int	exit_mode(int n, t_ms *ms)
 	}
 	else if (n == 1)
 		exit (0);
-	else if (n == 2)
-	{
-		perror("minishell_ERROR");
-		exit(0);
-	}
-	else if (n == 4)
+	if (n == 4)
 		exit (0);
-	else if (n == 7)
-		ms->err = 1;
-	else if (n == 3)
+	if (n == 3)
 		perr("Error", ms);
+	if (n == 7)
+		ms->err = 1;
 	if (n == 7 || n == 3)
 		exit(127);
 	return (0);

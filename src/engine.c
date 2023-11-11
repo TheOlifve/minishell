@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/09 18:44:38 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/11 10:44:22 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	exec_one_cmd(t_ms *ms)
 	i = cmd_find(ms, cmd);
 	if (i == 2)
 		i = exec_cmd(ms, cmd);
+		// printf("%d\n", ms->exit_num);
 	free(cmd);
 	return (i);
 }
