@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 13:32:36 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 14:12:54 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,22 @@ void	redir_dup(int fd2, char *str)
 		dup2(fd, 1);
 }
 
+void	cat_exit(t_ms *ms, char *str, int num)
+{
+	if (num == -1)
+		ms->exit_num = 127;
+	if (ft_strcmp(str, "/bin/cat") == 0)
+	{
+		if (g_glob == SIGINT)
+			printf("\n");
+		if (g_glob == SIGQUIT)
+		{
+			ms->exit_num = 131;
+			printf("Quit: 3\n");
+		}
+	}
+}
+
 int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 {
 	int	i;
@@ -60,9 +76,13 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 		redir_dup(fd2, ms->tree[ms->ord]->_redir);
 		i = cmd_find(ms, cmd);
 		if (i == 0)
+		{
+			system("leaks minishell");
 			exit(0);
+		}
 		else if (i == 1)
 		{
+			system("leaks minishell");
 			printf("minishell: error\n");
 			exit(1);
 		}
@@ -71,9 +91,7 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 	}
 	while (wait(ptr) != -1)
 		;
-	if (ft_strcmp(cmd[0], "/bin/cat") == 0 && g_glob == SIGINT)
-		printf("\n");
-	ms->exit_num = ptr[0];
+	cat_exit(ms, cmd[0], ptr[0]);
 	return (ptr[0]);
 }
 

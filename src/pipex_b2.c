@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 13:35:32 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 14:13:10 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 	}
 	while (wait(ptr) != -1)
 		;
-	if (ft_strcmp(cmd[0], "/bin/cat") == 0 && g_glob == SIGINT)
-		printf("\n");
-	ms->exit_num = 127;
+	cat_exit(ms, cmd[0], ptr[0]);
 	if (ptr[0] > 0)
 	{
 		ft_search(ms);
@@ -106,9 +104,13 @@ char	*redir_find(char **argv)
 void	exec_with_redir_pipe3(int i)
 {
 	if (i == 0)
+	{
+		system("leaks minishell");
 		exit(0);
+	}
 	else if (i == 1)
 	{
+		system("leaks minishell");
 		printf("minishell: error\n");
 		exit(1);
 	}

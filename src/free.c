@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/11 10:43:32 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/11 13:52:03 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ int	exit_mode(int n, t_ms *ms)
 	if (n == 7)
 		ms->err = 1;
 	if (n == 7 || n == 3)
+	{
+		system("leaks minishell");
 		exit(127);
+	}
 	return (0);
 }
 

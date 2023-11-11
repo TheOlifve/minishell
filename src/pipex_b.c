@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/11 13:33:20 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 14:13:18 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ int	exec_with_redir_pipe2(t_ms *ms, char **cmd, char *file, int fd2)
 	}
 	while (wait(ptr) != -1)
 		;
-	if (ft_strcmp(cmd[0], "/bin/cat") == 0 && g_glob == SIGINT)
-		printf("\n");
-	ms->exit_num = 127;
+	cat_exit(ms, cmd[0], ptr[0]);
 	return (ptr[0]);
 }
 
@@ -112,9 +110,7 @@ int	child(t_ms *ms, t_pipex *pipex, char **argv)
 	}
 	while (wait(ptr) != -1)
 		;
-	if (ft_strcmp(cmd_args[0], "/bin/cat") == 0 && g_glob == SIGINT)
-		printf("\n");
-	ms->exit_num = 127;
+	cat_exit(ms, cmd_args[0], ptr[0]);
 	return (0);
 }
 
