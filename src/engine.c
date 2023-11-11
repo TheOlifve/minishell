@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/11 17:20:33 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/12 00:17:04 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int	exec_one_cmd(t_ms *ms)
 	i = cmd_find(ms, cmd);
 	if (i == 2)
 		i = exec_cmd(ms, cmd);
-		// printf("%d\n", ms->exit_num);
 	free(cmd);
 	return (i);
 }

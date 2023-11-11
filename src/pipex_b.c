@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/11 23:38:46 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/12 01:01:34 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,21 @@ char	**redir_cut(char **cmd)
 	return (tmp3);
 }
 
-int	exec_with_redir_pipe(t_ms *ms, char **cmd, char *file)
+int	exec_with_redir_pipe(t_ms *ms, t_pipex *pipex, char **cmd, char *file)
 {
 	int		fd;
 	int		ptr;
 	char	**tmp;
 
+	(void)pipex;
 	if (cmd[0][0] == '<' || cmd[0][0] == '>')
 		return (open_files(ms, ft_split(file, ' '), -1));
 	tmp = redir_cut(cmd);
 	fd = open_files(ms, ft_split(file, ' '), -1);
 	if (fd == -2)
 		return (1);
+	if (pipex->index != 0 && pipex->index != pipex->cmd_cnt - 1)
+		dup2(pipex->fd[pipex->index - 1][1], 1);
 	ptr = exec_with_redir_pipe2(ms, tmp, file, fd);
 	if (ptr > 0)
 	{
@@ -91,6 +94,13 @@ int	child(t_ms *ms, t_pipex *pipex, char **argv)
 	pipex->pid = fork();
 	if (pipex->pid == 0)
 	{
+		cmd_args = ft_split(argv[pipex->cmd_crnt], ' ');
+		if (!cmd_args)
+			exit_mode(3, ms);
+		if (redir_find(cmd_args) != NULL)
+			j = exec_with_redir_pipe(ms, pipex, cmd_args, redir_find(cmd_args));
+		else
+			j = cmd_find_p(ms, cmd_args);
 		if (pipex->index == 0)
 			dup2(pipex->fd[0][1], STDOUT);
 		else if (pipex->index == pipex->cmd_cnt - 1)
@@ -98,13 +108,6 @@ int	child(t_ms *ms, t_pipex *pipex, char **argv)
 		else
 			ft_dup2(pipex->fd[pipex->index - 1][0],
 				pipex->fd[pipex->index][1], ms);
-		cmd_args = ft_split(argv[pipex->cmd_crnt], ' ');
-		if (!cmd_args)
-			exit_mode(3, ms);
-		if (redir_find(cmd_args) != NULL)
-			j = exec_with_redir_pipe(ms, cmd_args, redir_find(cmd_args));
-		else
-			j = cmd_find_p(ms, cmd_args);
 		child_help(pipex, ms, cmd_args, j);
 		exit_mode(1, ms);
 	}
