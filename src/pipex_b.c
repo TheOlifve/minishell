@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/11 14:13:18 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 17:37:36 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,9 @@ void	pipex(t_ms *ms, char **argv, int num)
 		pipex.cmd_crnt++;
 		pipex.index += 1;
 	}
-	pipe_close(&pipex);
 	while (wait(ptr) != -1)
 		;
-	ms->exit_num = 127;
+	pipe_close(&pipex);
 	if (ptr[0] > 0)
 		ft_search(ms);
 }

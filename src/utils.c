@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 18:55:11 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 17:38:29 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,6 @@ void	pipe_close(t_pipex *pipex)
 			free(pipex->fd[i]);
 		i++;
 	}
+	i = -1;
 	free(pipex->fd);
 }

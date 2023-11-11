@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 14:13:10 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 17:37:23 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	cmd_find_p(t_ms *ms, char **cmd)
 
 void	pipe_open(t_pipex *pipex, t_ms *ms)
 {
-	int	i;
+		int	i;
 
 	i = -1;
 	pipex->fd = malloc(pipex->pipes_cnt * sizeof(int *));
