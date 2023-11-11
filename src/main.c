@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 20:25:31 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/11 09:47:28 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,11 @@ void	main_sig(t_ms *ms)
 	ms->bool_word = 0;
 	ms->dol2 = 0;
 	ms->err = 0;
-	ms->exit_num = g_glob;
-	// printf("%d\n", ms->exit_num);
+	rl_catch_signals = 0;
 	ms->sa.sa_handler = sig2;
-	if (sigaction(SIGINT, &ms->sa, NULL) < 0
-		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-		perror("minishell_ERROR");
+	sigaction(SIGQUIT, &ms->sa, NULL);
+	sigaction(SIGINT, &ms->sa, NULL);
+	rl_event_hook = &handler2;
 }
 
 void	main2(t_ms *ms, int i)
@@ -49,12 +48,13 @@ void	main2(t_ms *ms, int i)
 	ctrld(ms->args_old, ms);
 	if (ms->args_old)
 		add_history (ms->args_old);
+	if (g_glob == SIGINT)
+		ms->exit_num = 1;
 	ms->num = ft_strlen(ms->args_old);
 }
 
 int	loop(t_ms *m_s, t_lexer *lexer)
 {
-	rl_catch_signals = 0;
 	g_glob = 0;
 	main2(m_s, -1);
 	if (ft_strcmp(m_s->args_old, "\0") == 0)

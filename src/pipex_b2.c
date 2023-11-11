@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 20:31:39 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 23:31:07 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,12 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 	}
 	while (wait(ptr) != -1)
 		;
+	ms->exit_num = 127;
 	if (ptr[0] > 0)
 	{
-		ms->exit_num = ptr[0];
 		ft_search(ms);
 		return (1);
 	}
-	ms->exit_num = ptr[0];
 	return (0);
 }
 
