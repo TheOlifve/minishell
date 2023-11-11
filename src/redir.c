@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 16:55:52 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 18:01:51 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 		i = cmd_find(ms, cmd);
 		if (i == 0)
 		{
-			system("leaks minishell");
+			// system("leaks minishell");
 			exit(0);
 		}
 		else if (i == 1)
 		{
-			system("leaks minishell");
+			// system("leaks minishell");
 			printf("minishell: error\n");
 			exit(1);
 		}

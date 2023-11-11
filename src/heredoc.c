@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/11 14:39:04 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 18:00:38 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ int	open_files(t_ms *ms, char **file, int fd)
 		else if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
 		{
 			*file += 2;
+			if (ft_strcmp(*file,"\n"))
+				return (err(NULL, NULL, ms, 3));
 			fd = heredoc(*file, 0, NULL);
 		}
 		else if (ft_strncmp(*file, "<", 1) == 0 && *file != NULL)

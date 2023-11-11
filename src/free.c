@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/11 13:52:03 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 18:01:24 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ int	err(char *error, char *str, t_ms *ms, int type)
 	{
 		printf("minishell: %s: No such file or directory\n", str);
 		ms->exit_num = 1;
+		return (-2);
+	}
+	else if (type == 3)
+	{
+		printf("minishell: syntax error near unexpected token `newline'\n");
+		ms->exit_num = 258;
 		return (-2);
 	}
 	return (1);
@@ -63,7 +69,7 @@ int	exit_mode(int n, t_ms *ms)
 		ms->err = 1;
 	if (n == 7 || n == 3)
 	{
-		system("leaks minishell");
+		// system("leaks minishell");
 		exit(127);
 	}
 	return (0);

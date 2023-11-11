@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 17:37:23 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 18:01:45 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,12 @@ void	exec_with_redir_pipe3(int i)
 {
 	if (i == 0)
 	{
-		system("leaks minishell");
+		// system("leaks minishell");
 		exit(0);
 	}
 	else if (i == 1)
 	{
-		system("leaks minishell");
+		// system("leaks minishell");
 		printf("minishell: error\n");
 		exit(1);
 	}
