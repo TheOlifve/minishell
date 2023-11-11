@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/10 19:01:33 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 13:16:48 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,12 @@ int	exec_with_redir_pipe2(t_ms *ms, char **cmd, char *file, int fd2)
 {
 	int	i;
 	int	pid;
-	int	fd;
 	int	ptr[1];
 
-	fd = open("src/tmp", O_RDWR | O_TRUNC | O_CREAT, 0644);
 	pid = fork();
 	if (pid == 0)
 	{
-		if (fd2 >= 0)
-			dup2(fd2, 0);
-		if (ft_last(ft_split(file, ' ')) >= 0)
-			dup2(fd, 1);
+		redir_dup(fd2, file);
 		i = cmd_find(ms, cmd);
 		exec_with_redir_pipe3(i);
 		execve (cmd[0], cmd, ms->envp);

@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 19:01:21 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/11 12:18:10 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ char	*read_file(void)
 	return (tmp2);
 }
 
-void	redir_dup(t_ms *ms, int fd2)
+void	redir_dup(int fd2, char *str)
 {
 	int	i;
 	int	fd;
 	
 	fd = open("src/tmp", O_RDWR | O_TRUNC | O_CREAT, 0644);
-	i = ft_last(ft_split(ms->tree[ms->ord]->_redir, ' '));
+	i = ft_last(ft_split(str, ' '));
 	if (fd2 >= 0 && i == -3)
 		dup2(open("src/heredoc", O_RDWR), 0);
 	else if (fd2 >= 0 && i == -2)
@@ -57,7 +57,7 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 	pid = fork();
 	if (pid == 0)
 	{
-		redir_dup(ms, fd2);
+		redir_dup(fd2, ms->tree[ms->ord]->_redir);
 		i = cmd_find(ms, cmd);
 		if (i == 0)
 			exit(0);

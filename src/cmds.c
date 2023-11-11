@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 20:28:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/09 19:04:09 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/11 11:02:05 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ int	echo(t_ms *ms, int i)
 int	pwd(t_ms *ms, int mod)
 {
 	int		i;
-	char	buff[256];
+	char	buff[OPEN_MAX];
 	char	*oldpwd;
 
 	i = -1;
-	if (getcwd(buff, 254) == NULL)
+	if (getcwd(buff, OPEN_MAX) == NULL)
 		return (1);
 	oldpwd = NULL;
 	while (ms->envp[++i])

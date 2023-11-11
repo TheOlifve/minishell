@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_b2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/09 18:38:44 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/11 13:19:23 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,14 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 	pid = fork();
 	if (pid == 0)
 	{
+		dprintf(2, "env[4] - %s | cmd[0] - %s\n",ms->envp[4], cmd[0]);
 		execve (cmd[0], cmd, ms->envp);
 		printf("minishell: %s: command not found\n", cmd[0]);
 		exit_mode(7, ms);
 	}
 	while (wait(ptr) != -1)
 		;
+	if (ft_strcmp(cmd[0], "/bin/cat") == 0 && G_GLOB == SIGINIT)
 	if (ptr[0] > 0)
 	{
 		ms->exit_num = ptr[0];
