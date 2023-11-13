@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/10 13:14:19 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/13 23:30:12 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,12 @@ int	parser(t_lexer *lexer, t_ms *ms)
 			break ;
 	}
 	ms->ord = 0;
-	return (0);
-}
 	// while (ms->tree[ms->ord])
 	// {
 	// 	goto_start(ms);
 	// 	while (ms->tree[ms->ord])
 	// 	{
-	// 		printf("cmd - %s\noption - %s\nfile - %s\nword -
-		// %s\nredir - %s\npipe - %s\nand - %s\nor - %s\n",ms->tree[ms->ord]->_cmd,ms->tree[ms->ord]->_option,
+	// 		printf("cmd - %s\noption - %s\nfile - %s\nword - %s\nredir - %s\npipe - %s\nand - %s\nor - %s\n",ms->tree[ms->ord]->_cmd,ms->tree[ms->ord]->_option,
 	// 		ms->tree[ms->ord]->_file,ms->tree[ms->ord]->_word,
 	// 		ms->tree[ms->ord]->_redir,ms->tree[ms->ord]->_pipe,
 	// 		ms->tree[ms->ord]->_and,ms->tree[ms->ord]->_or);
@@ -103,3 +100,5 @@ int	parser(t_lexer *lexer, t_ms *ms)
 	// 	ms->ord++;
 	// } 
 	// ms->ord = 0;
+	return (0);
+}

@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/12 01:01:34 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/14 02:04:00 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ int	exec_with_redir_pipe2(t_ms *ms, char **cmd, char *file, int fd2)
 	}
 	while (wait(ptr) != -1)
 		;
-	cat_exit(ms, cmd[0], ptr[0]);
+	cat_exit(ms, cmd[0]);
+	if (ptr[0] > 0)
+		ms->exit_num = 127;
 	return (ptr[0]);
 }
 
@@ -65,7 +67,6 @@ int	exec_with_redir_pipe(t_ms *ms, t_pipex *pipex, char **cmd, char *file)
 	int		ptr;
 	char	**tmp;
 
-	(void)pipex;
 	if (cmd[0][0] == '<' || cmd[0][0] == '>')
 		return (open_files(ms, ft_split(file, ' '), -1));
 	tmp = redir_cut(cmd);
@@ -89,8 +90,8 @@ int	child(t_ms *ms, t_pipex *pipex, char **argv)
 {
 	int		j;
 	char	**cmd_args;
-	int		ptr[1];
 
+	j = -128;
 	pipex->pid = fork();
 	if (pipex->pid == 0)
 	{
@@ -99,21 +100,19 @@ int	child(t_ms *ms, t_pipex *pipex, char **argv)
 			exit_mode(3, ms);
 		if (redir_find(cmd_args) != NULL)
 			j = exec_with_redir_pipe(ms, pipex, cmd_args, redir_find(cmd_args));
-		else
-			j = cmd_find_p(ms, cmd_args);
 		if (pipex->index == 0)
-			dup2(pipex->fd[0][1], STDOUT);
+			ft_dup2(0, pipex->fd[pipex->index][1], ms);
 		else if (pipex->index == pipex->cmd_cnt - 1)
-			dup2(pipex->fd[pipex->index - 1][0], STDIN);
+			ft_dup2(pipex->fd[pipex->index - 1][0], 1, ms);
 		else
 			ft_dup2(pipex->fd[pipex->index - 1][0],
 				pipex->fd[pipex->index][1], ms);
+		if (j == -128)
+			j = cmd_find_p(ms, cmd_args);
 		child_help(pipex, ms, cmd_args, j);
+		cat_exit(ms, cmd_args[0]);
 		exit_mode(1, ms);
 	}
-	while (wait(ptr) != -1)
-		;
-	cat_exit(ms, cmd_args[0], ptr[0]);
 	return (0);
 }
 
@@ -134,11 +133,12 @@ void	pipex(t_ms *ms, char **argv, int num)
 	{
 		child(ms, &pipex, argv);
 		pipex.cmd_crnt++;
+		ms->ord += 1;
 		pipex.index += 1;
 	}
+	pipe_close(&pipex);
 	while (wait(ptr) != -1)
 		;
-	pipe_close(&pipex);
 	if (ptr[0] > 0)
 		ft_search(ms);
 }

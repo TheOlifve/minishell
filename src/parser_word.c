@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/09 17:53:29 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/12 10:59:23 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	word_distribute2(t_lexer **lexer, t_ms *ms, char *word, int type)
 	{
 		tree_add_back(&ms->tree[ms->ord], tree_new());
 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
-		if (type == 2 || type == 3)
+		if (type == 0 || type == 1 || type == 2 || type == 3)
 			ms->tree[ms->ord]->_file = ft_strdup(word);
 		else if (type == 4 || type == 5 || type == 0)
 			ms->tree[ms->ord]->_word = ft_strdup(word);

@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 18:01:45 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/14 02:03:52 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 	}
 	while (wait(ptr) != -1)
 		;
-	cat_exit(ms, cmd[0], ptr[0]);
+	cat_exit(ms, cmd[0]);
 	if (ptr[0] > 0)
 	{
 		ft_search(ms);

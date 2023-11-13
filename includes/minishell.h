@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 16:46:49 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/14 02:03:36 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,11 @@ int		echo(t_ms *ms, int flag);
 int		perr(char *str, t_ms *ms);
 int		exit_mode(int n, t_ms *ms);
 int		dol_count(char *str, int i);
+void	exec_with_redir_pipe3(int i);
 int		tabzz(t_ms *ms, int i, int c);
 int		wildcard(t_ms *ms, char *str);
 int		redir(char *str, char **str2);
+int		redir2(char **str);
 int		redir_after_exec(char **file);
 int		check_var(char *str, t_ms *ms);
 int		get_cmd(char *path, char *cmd);
@@ -170,9 +172,8 @@ void	ft_search(t_ms *ms);
 void	goto_start(t_ms *ms);
 void	pipe_close(t_pipex *pipex);
 void	ctrld(char *line, t_ms *ms);
-void	cat_exit(t_ms *ms, char *str, int num);
+void	cat_exit(t_ms *ms, char *str);
 void	redir_dup(int fd2, char *str);
-void	exec_with_redir_pipe3(int i);
 void	pipe_open(t_pipex *pipex, t_ms *ms);
 void	pipex(t_ms *ms, char **argv, int num);
 void	ft_dup2(int read, int write, t_ms *ms);

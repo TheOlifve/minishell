@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_operator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/09 17:51:43 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/12 12:13:09 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,12 @@ void	operator_distribute2(t_ms *ms, int type, char *opr)
 		ms->tree[ms->ord]->_redir = redir_build(ms, opr);
 	}
 	if (type == 1)
+	{
+		if (ms->bool_word == 0)
+			ms->tree[ms->ord] = tree_new();
+		goto_start(ms);
 		ms->tree[ms->ord]->_pipe = ft_strdup("|");
+	}
 	else if (type == 2)
 		ms->tree[ms->ord]->_and = ft_strdup("&&");
 	else if (type == 3)

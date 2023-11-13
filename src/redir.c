@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 18:01:51 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/14 01:33:24 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,8 @@ void	redir_dup(int fd2, char *str)
 		dup2(fd, 1);
 }
 
-void	cat_exit(t_ms *ms, char *str, int num)
+void	cat_exit(t_ms *ms, char *str)
 {
-	if (num == -1)
-		ms->exit_num = 127;
 	if (ft_strcmp(str, "/bin/cat") == 0)
 	{
 		if (g_glob == SIGINT)
@@ -91,8 +89,34 @@ int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
 	}
 	while (wait(ptr) != -1)
 		;
-	cat_exit(ms, cmd[0], ptr[0]);
+	cat_exit(ms, cmd[0]);
 	return (ptr[0]);
+}
+
+int	redir2(char **str)
+{
+	int		i;
+	int		fd;
+	char	*file;
+
+	fd = -1;
+	i = ft_last(str);
+	if (i < 0)
+		return (-1);
+	file = ft_strdup(str[i]);
+	if (ft_strncmp(file, ">>", 2) == 0 && file != NULL)
+	{
+		file += 2;
+		fd = open(file, O_RDWR | O_APPEND | O_CREAT, 0644);
+	}
+	else if (ft_strncmp(file, ">", 1) == 0 && file != NULL)
+	{
+		file += 1;
+		fd = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
+	}
+	if (fd < 0)
+		return (-1);
+	return (fd);
 }
 
 int	redir(char *str, char **str2)
