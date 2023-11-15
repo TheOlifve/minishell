@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/14 02:03:36 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/15 21:10:57 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int		eng(t_ms *ms);
 int		env(t_ms *ms);
 int		handler(void);
 int		handler2(void);
+void	heredoc(char *str, int file, char *tmp);
 int		ft_last(char **str);
 int		cd(t_ms *ms, int j);
 int		check_var2(char *str);
@@ -122,7 +123,6 @@ int		echo(t_ms *ms, int flag);
 int		perr(char *str, t_ms *ms);
 int		exit_mode(int n, t_ms *ms);
 int		dol_count(char *str, int i);
-void	exec_with_redir_pipe3(int i);
 int		tabzz(t_ms *ms, int i, int c);
 int		wildcard(t_ms *ms, char *str);
 int		redir(char *str, char **str2);
@@ -134,9 +134,9 @@ int		exec_cmd(t_ms *ms, char	**cmd);
 int		cmd_find(t_ms *ms, char **cmd);
 int		pars_err(char *error, t_ms *ms);
 int		parser(t_lexer *lexer, t_ms *ms);
+void	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd);
 int		o_space2(t_ms *ms, int i, int n);
 int		o_space3(t_ms *ms, int i, int n);
-int		cmd_find_p(t_ms *ms, char **cmd);
 int		exec_with_redir(t_ms *ms, int fd);
 int		space_help(t_ms *ms, int x, int n);
 int		ft_export3(t_ms *ms, int i, int j);
@@ -156,7 +156,7 @@ char	**caching(char **str);
 char	**path_x(char **envp);
 char	*get_next_line(int fd);
 char	*cmd_builder(t_ms *ms);
-char	*redir_find(char **argv);
+char	*redir_find(char **argv, int i);
 char	*dol_check(t_ms *ms, char *ptr);
 char	*cmd_build(t_ms *ms, char *word);
 char	*ft_concat(char *cmd, char *opt);
@@ -176,12 +176,13 @@ void	cat_exit(t_ms *ms, char *str);
 void	redir_dup(int fd2, char *str);
 void	pipe_open(t_pipex *pipex, t_ms *ms);
 void	pipex(t_ms *ms, char **argv, int num);
-void	ft_dup2(int read, int write, t_ms *ms);
+void	my_dup2(int read, int write, t_ms *ms);
 void	ft_bonus(t_ms *m, int x, int i, int n);
 void	lstadd_back(t_lexer **lst, t_lexer *new);
 void	tree_add_back(t_tree **tree, t_tree *new);
 void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j);
-void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int j);
+void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int check);
+int		heredoc_find(t_ms *ms, char **cmd_args);
 t_lexer	*lstnew(void);
 t_tree	*tree_new(void);
 

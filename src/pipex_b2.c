@@ -6,53 +6,11 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/14 02:03:52 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/15 20:49:08 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	cmd_find_p(t_ms *ms, char **cmd)
-{
-	if (get_cmd(cmd[0], "export") == 1)
-		return (ft_export(ms, cmd, 1, 0));
-	else if (get_cmd(cmd[0], "unset") == 1 && !cmd[1])
-		return (ft_export3(ms, 0, 0));
-	else if (get_cmd(cmd[0], "unset") == 1)
-		return (ft_unset(ms, cmd, 1));
-	else if (get_cmd(cmd[0], "echo") == 1)
-		return (echo(ms, 0));
-	else if (get_cmd(cmd[0], "cd") == 1)
-		return (cd(ms, -1));
-	else if (get_cmd(cmd[0], "pwd") == 1)
-		return (pwd(ms, 1));
-	else if (get_cmd(cmd[0], "env") == 1)
-		return (env(ms));
-	else if (get_cmd(cmd[0], "exit") == 1 && ms->exit == 5)
-		;
-	else if (get_cmd(cmd[0], "exit") == 1)
-		exit_mode(0, ms);
-	return (2);
-}
-
-void	pipe_open(t_pipex *pipex, t_ms *ms)
-{
-		int	i;
-
-	i = -1;
-	pipex->fd = malloc(pipex->pipes_cnt * sizeof(int *));
-	if (!pipex->fd)
-		perr("Error", ms);
-	while (++i < pipex->pipes_cnt)
-	{
-		pipex->fd[i] = malloc(sizeof(int) * 2);
-		if (!pipex->fd[i])
-			perr("Error", ms);
-	}
-	i = -1;
-	while (++i < pipex->pipes_cnt)
-		pipe(pipex->fd[i]);
-}
 
 int	exec_cmd(t_ms *ms, char	**cmd)
 {
@@ -77,7 +35,7 @@ int	exec_cmd(t_ms *ms, char	**cmd)
 	return (0);
 }
 
-char	*redir_find(char **argv)
+char	*out_find(char **cmd)
 {
 	int		i;
 	char	*tmp;
@@ -85,13 +43,13 @@ char	*redir_find(char **argv)
 
 	i = 0;
 	tmp = NULL;
-	while (argv && argv[i])
+	while (cmd && cmd[i])
 	{
-		if (argv[i][0] == '<' || argv[i][0] == '>')
+		if (cmd[i][0] == '>')
 		{
 			if (tmp == NULL)
 				tmp = ft_strdup("");
-			tmp2 = ft_join(tmp, argv[i], 1);
+			tmp2 = ft_join(tmp, cmd[i], 1);
 			free(tmp);
 			tmp = ft_strdup(tmp2);
 			free(tmp2);
@@ -101,17 +59,64 @@ char	*redir_find(char **argv)
 	return (tmp);
 }
 
-void	exec_with_redir_pipe3(int i)
+char	*in_find(char **cmd)
 {
-	if (i == 0)
+	int		i;
+	char	*tmp;
+	char	*tmp2;
+
+	i = 0;
+	tmp = NULL;
+	while (cmd && cmd[i])
 	{
-		// system("leaks minishell");
-		exit(0);
+		if (cmd[i][0] == '<')
+		{
+			if (tmp == NULL)
+				tmp = ft_strdup("");
+			tmp2 = ft_join(tmp, cmd[i], 1);
+			free(tmp);
+			tmp = ft_strdup(tmp2);
+			free(tmp2);
+		}
+		i++;
 	}
-	else if (i == 1)
+	return (tmp);
+}
+
+void	out_dup(t_ms *ms, t_pipex *pipex, char *out_file)
+{
+	int	fd;
+
+	fd = open_files(ms, ft_split(out_file, ' '), -1);
+	if (pipex->index == 0)
+		my_dup2(0, fd, ms);
+	else
+		my_dup2(pipex->fd[pipex->index - 1][0], fd, ms);
+}
+
+void	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd)
+{
+	int		fd;
+	char	*in_file;
+	char	*out_file;
+
+	in_file = in_find(cmd);
+	out_file = out_find(cmd);
+	if (pipex->index == 0 && in_file == NULL)
+		my_dup2(0, pipex->fd[pipex->index][1], ms);
+	else if (pipex->index == pipex->cmd_cnt - 1 && in_file == NULL)
+		my_dup2(pipex->fd[pipex->index - 1][0], 1, ms);
+	else if (in_file == NULL)
+		my_dup2(pipex->fd[pipex->index - 1][0],
+			pipex->fd[pipex->index][1], ms);
+	if (in_file != NULL)
 	{
-		// system("leaks minishell");
-		printf("minishell: error\n");
-		exit(1);
+		fd = open_files(ms, ft_split(in_file, ' '), -1);
+		if (pipex->index == pipex->cmd_cnt - 1)
+			my_dup2(fd, 1, ms);
+		else
+			my_dup2(fd, pipex->fd[pipex->index][1], ms);
 	}
+	if (out_file != NULL)
+		out_dup(ms, pipex, out_file);
 }

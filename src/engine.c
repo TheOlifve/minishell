@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/14 00:16:56 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/15 20:20:52 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,15 +116,9 @@ int	engine(t_ms *ms, int n)
 		n = eng(ms);
 		(void)n;
 		if (ms->tree[ms->ord]->_pipe != NULL)
-		{
-			printf("PIPE_CMD\n");
 			exec_pipe_cmd(ms, NULL, NULL, NULL);
-		}
 		else if (ms->tree[ms->ord]->_pipe == NULL)
-		{
-			printf("ONE_CMD\n");
 			exec_one_cmd(ms);
-		}
 		if ((ms->bb == 8 && n == -1)
 			|| (ms->ord == n && ms->err == 0))
 			break ;

@@ -6,36 +6,29 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/14 02:04:00 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/15 20:50:58 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	exec_with_redir_pipe2(t_ms *ms, char **cmd, char *file, int fd2)
+void	pipe_open(t_pipex *pipex, t_ms *ms)
 {
-	int	i;
-	int	pid;
-	int	ptr[1];
+		int	i;
 
-	pid = fork();
-	if (pid == 0)
+	i = -1;
+	pipex->fd = malloc(pipex->pipes_cnt * sizeof(int *));
+	if (!pipex->fd)
+		perr("Error", ms);
+	while (++i < pipex->pipes_cnt)
 	{
-		redir_dup(fd2, file);
-		i = cmd_find(ms, cmd);
-		exec_with_redir_pipe3(i);
-		execve (cmd[0], cmd, ms->envp);
-		dup2(1, STDOUT);
-		write (2, "minishell: ",11);
-		printf("%s: command not found\n", cmd[0]);
-		exit_mode(7, ms);
+		pipex->fd[i] = malloc(sizeof(int) * 2);
+		if (!pipex->fd[i])
+			perr("Error", ms);
 	}
-	while (wait(ptr) != -1)
-		;
-	cat_exit(ms, cmd[0]);
-	if (ptr[0] > 0)
-		ms->exit_num = 127;
-	return (ptr[0]);
+	i = -1;
+	while (++i < pipex->pipes_cnt)
+		pipe(pipex->fd[i]);
 }
 
 char	**redir_cut(char **cmd)
@@ -61,65 +54,53 @@ char	**redir_cut(char **cmd)
 	return (tmp3);
 }
 
-int	exec_with_redir_pipe(t_ms *ms, t_pipex *pipex, char **cmd, char *file)
+int	heredoc_find(t_ms *ms, char **cmd_args)
 {
-	int		fd;
-	int		ptr;
-	char	**tmp;
-
-	if (cmd[0][0] == '<' || cmd[0][0] == '>')
-		return (open_files(ms, ft_split(file, ' '), -1));
-	tmp = redir_cut(cmd);
-	fd = open_files(ms, ft_split(file, ' '), -1);
-	if (fd == -2)
-		return (1);
-	if (pipex->index != 0 && pipex->index != pipex->cmd_cnt - 1)
-		dup2(pipex->fd[pipex->index - 1][1], 1);
-	ptr = exec_with_redir_pipe2(ms, tmp, file, fd);
-	if (ptr > 0)
+	char	*tmp_cmd;
+	while (*cmd_args)
 	{
-		unlink("src/tmp");
-		return (1);
+		if (ft_strncmp(*cmd_args, "<<", 2) == 0 && *cmd_args != NULL)
+		{
+			tmp_cmd = *cmd_args;
+			*cmd_args += 2;
+			if (ft_strcmp(*cmd_args, "\0") == 0)
+				return (err(NULL, NULL, ms, 3));
+			heredoc(*cmd_args, 0, NULL);
+			*cmd_args = tmp_cmd;
+		}
+		cmd_args++;
 	}
-	redir(read_file(), ft_split(file, ' '));
-	unlink("src/tmp");
 	return (0);
 }
 
-int	child(t_ms *ms, t_pipex *pipex, char **argv)
+int	child(t_ms *ms, t_pipex *pipex, char *argv)
 {
-	int		j;
 	char	**cmd_args;
 
-	j = -128;
+	
+	cmd_args = ft_split(argv, ' ');
+	if (!cmd_args)
+		exit_mode(3, ms);
+	heredoc_find(ms, cmd_args);
 	pipex->pid = fork();
 	if (pipex->pid == 0)
 	{
-		cmd_args = ft_split(argv[pipex->cmd_crnt], ' ');
-		if (!cmd_args)
-			exit_mode(3, ms);
-		if (redir_find(cmd_args) != NULL)
-			j = exec_with_redir_pipe(ms, pipex, cmd_args, redir_find(cmd_args));
-		if (pipex->index == 0)
-			ft_dup2(0, pipex->fd[pipex->index][1], ms);
-		else if (pipex->index == pipex->cmd_cnt - 1)
-			ft_dup2(pipex->fd[pipex->index - 1][0], 1, ms);
-		else
-			ft_dup2(pipex->fd[pipex->index - 1][0],
-				pipex->fd[pipex->index][1], ms);
-		if (j == -128)
-			j = cmd_find_p(ms, cmd_args);
-		child_help(pipex, ms, cmd_args, j);
+		if (cmd_args[0][0] == '<' || cmd_args[0][0] == '>')
+			return (open_files(ms, cmd_args, -1));
+		child_dup(ms, pipex, cmd_args);
+		cmd_args = redir_cut(ft_split(argv, ' '));
+		child_help(pipex, ms, cmd_args, cmd_find(ms, cmd_args));
 		cat_exit(ms, cmd_args[0]);
 		exit_mode(1, ms);
 	}
 	return (0);
 }
 
+
 void	pipex(t_ms *ms, char **argv, int num)
 {
-	t_pipex	pipex;
 	int		ptr[1];
+	t_pipex	pipex;
 
 	pipex.cmd_cnt = 0;
 	pipex.cmd_crnt = 0;
@@ -131,7 +112,7 @@ void	pipex(t_ms *ms, char **argv, int num)
 	pipe_open(&pipex, ms);
 	while (++num <= pipex.pipes_cnt)
 	{
-		child(ms, &pipex, argv);
+		child(ms, &pipex, argv[pipex.cmd_crnt]);
 		pipex.cmd_crnt++;
 		ms->ord += 1;
 		pipex.index += 1;

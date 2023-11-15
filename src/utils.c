@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 17:38:29 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/15 19:32:19 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	get_cmd(char *path, char *cmd)
 	return (1);
 }
 
-void	ft_dup2(int read, int write, t_ms *ms)
+void	my_dup2(int read, int write, t_ms *ms)
 {
 	if (dup2(read, 0) < 0)
 		perr("Error", ms);

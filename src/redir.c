@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/14 01:33:24 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/15 21:17:34 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,13 +154,14 @@ int	exec_with_redir(t_ms *ms, int fd)
 	char	*file;
 	char	**cmd;
 
+	cmd = ft_split(cmd_builder(ms), ' ');
+	heredoc_find(ms, cmd);
 	if (!ms->tree[ms->ord]->_cmd && ms->tree[ms->ord]->_redir)
 		return (open_files(ms, ft_split(ms->tree[ms->ord]->_redir, ' '), fd));
 	file = ft_strdup(ms->tree[ms->ord]->_redir);
 	fd = open_files(ms, ft_split(file, ' '), fd);
 	if (fd == -2)
 		return (1);
-	cmd = ft_split(cmd_builder(ms), ' ');
 	pid = 0;
 	ptr = exec_with_redir2(ms, cmd, pid, fd);
 	if (ptr > 0)

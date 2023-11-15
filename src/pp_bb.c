@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 15:11:33 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/12 13:58:13 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/15 20:51:27 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ void	ft_search(t_ms *ms)
 	}
 }
 
-void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int j)
+void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int check)
 {
-	if (j == 1)
+	if (check == 1)
 	{
 		pipe_close(pipex);
 		exit_mode(1, ms);
 	}
-	else if (j == 2)
+	else if (check == 2)
 	{
 		pipe_close(pipex);
 		execve(cmd_args[0], cmd_args, ms->envp);
