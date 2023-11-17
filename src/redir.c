@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/15 21:17:34 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:29:11 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,115 +61,4 @@ void	cat_exit(t_ms *ms, char *str)
 			printf("Quit: 3\n");
 		}
 	}
-}
-
-int	exec_with_redir2(t_ms *ms, char **cmd, int pid, int fd2)
-{
-	int	i;
-	int	ptr[1];
-
-	pid = fork();
-	if (pid == 0)
-	{
-		redir_dup(fd2, ms->tree[ms->ord]->_redir);
-		i = cmd_find(ms, cmd);
-		if (i == 0)
-		{
-			// system("leaks minishell");
-			exit(0);
-		}
-		else if (i == 1)
-		{
-			// system("leaks minishell");
-			printf("minishell: error\n");
-			exit(1);
-		}
-		execve (cmd[0], cmd, ms->envp);
-		exit_mode(7, ms);
-	}
-	while (wait(ptr) != -1)
-		;
-	cat_exit(ms, cmd[0]);
-	return (ptr[0]);
-}
-
-int	redir2(char **str)
-{
-	int		i;
-	int		fd;
-	char	*file;
-
-	fd = -1;
-	i = ft_last(str);
-	if (i < 0)
-		return (-1);
-	file = ft_strdup(str[i]);
-	if (ft_strncmp(file, ">>", 2) == 0 && file != NULL)
-	{
-		file += 2;
-		fd = open(file, O_RDWR | O_APPEND | O_CREAT, 0644);
-	}
-	else if (ft_strncmp(file, ">", 1) == 0 && file != NULL)
-	{
-		file += 1;
-		fd = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
-	}
-	if (fd < 0)
-		return (-1);
-	return (fd);
-}
-
-int	redir(char *str, char **str2)
-{
-	int		i;
-	int		fd;
-	char	*file;
-
-	fd = 0;
-	i = ft_last(str2);
-	if (i < 0)
-		return (1);
-	file = ft_strdup(str2[i]);
-	if (ft_strncmp(file, ">>", 2) == 0 && file != NULL)
-	{
-		file += 2;
-		fd = open(file, O_RDWR | O_APPEND | O_CREAT, 0644);
-	}
-	else if (ft_strncmp(file, ">", 1) == 0 && file != NULL)
-	{
-		file += 1;
-		fd = open(file, O_RDWR | O_TRUNC | O_CREAT, 0644);
-	}
-	write(fd, str, ft_strlen(str));
-	close(fd);
-	if (fd < 0)
-		return (1);
-	return (0);
-}
-
-int	exec_with_redir(t_ms *ms, int fd)
-{
-	int		pid;
-	int		ptr;
-	char	*file;
-	char	**cmd;
-
-	cmd = ft_split(cmd_builder(ms), ' ');
-	heredoc_find(ms, cmd);
-	if (!ms->tree[ms->ord]->_cmd && ms->tree[ms->ord]->_redir)
-		return (open_files(ms, ft_split(ms->tree[ms->ord]->_redir, ' '), fd));
-	file = ft_strdup(ms->tree[ms->ord]->_redir);
-	fd = open_files(ms, ft_split(file, ' '), fd);
-	if (fd == -2)
-		return (1);
-	pid = 0;
-	ptr = exec_with_redir2(ms, cmd, pid, fd);
-	if (ptr > 0)
-	{
-		unlink("src/tmp");
-		return (1);
-	}
-	redir(read_file(), ft_split(file, ' '));
-	unlink("src/tmp");
-	return (0);
 }

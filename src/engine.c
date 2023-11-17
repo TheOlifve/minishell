@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/15 20:20:52 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:32:02 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,34 @@ int	exec_one_cmd(t_ms *ms)
 {
 	int		i;
 	char	**cmd;
+	int		pid;
+	int		ptr[1];
 
 	if (ms->tree[ms->ord]->_redir != NULL)
-		return (exec_with_redir(ms, 0));
+		heredoc_find(ms, ft_split(ms->tree[ms->ord]->_redir, ' '));
 	cmd = ft_split(cmd_builder(ms), ' ');
-	i = cmd_find(ms, cmd);
-	if (i == 2)
-		i = exec_cmd(ms, cmd);
+	pid = fork();
+	if (pid == 0)
+	{
+		if (ms->tree[ms->ord]->_redir != NULL)
+			std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' '));
+		i = cmd_find(ms, cmd);
+		if (i != 2)
+			return (i);
+		execve (cmd[0], cmd, ms->envp);
+		printf("minishell: %s: command not found\n", cmd[0]);
+		exit_mode(7, ms);
+	}
+	while (wait(ptr) != -1)
+		;
+	cat_exit(ms, cmd[0]);
+	if (ptr[0] > 0)
+	{
+		ft_search(ms);
+		return (1);
+	}
 	free(cmd);
-	return (i);
+	return (0);
 }
 
 void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
