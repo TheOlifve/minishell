@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/17 14:32:19 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 15:02:10 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,27 @@ void	out_dup(t_ms *ms, t_pipex *pipex, char *out_file)
 		my_dup2(pipex->fd[pipex->index - 1][0], fd, ms);
 }
 
-void	std_dup(t_ms *ms, char **file)
+int	std_dup(t_ms *ms, char **file)
 {
+	int		fd;
 	char	*in_file;
 	char	*out_file;
 
 	in_file = in_find(file);
 	out_file = out_find(file);
 	if (in_file != NULL)
-		my_dup2(open_files(ms, ft_split(in_file, ' '), -1), 1, ms);
+	{
+		fd = open_files(ms, ft_split(in_file, ' '), -1);
+		if (fd < 0)
+			return (1);
+		my_dup2(fd, 1, ms);
+	}
 	if (out_file != NULL)
 		my_dup2(0, open_files(ms, ft_split(out_file, ' '), -1), ms);
+	return (0);
 }
 
-void	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd)
+int	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd)
 {
 	int		fd;
 	char	*in_file;
@@ -102,6 +109,8 @@ void	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd)
 	if (in_file != NULL)
 	{
 		fd = open_files(ms, ft_split(in_file, ' '), -1);
+		if (fd < 0)
+			return (1);
 		if (pipex->index == pipex->cmd_cnt - 1)
 			my_dup2(fd, 1, ms);
 		else
@@ -109,4 +118,5 @@ void	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd)
 	}
 	if (out_file != NULL)
 		out_dup(ms, pipex, out_file);
+	return (0);
 }

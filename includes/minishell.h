@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/17 14:34:49 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 15:21:47 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,6 @@ char	*cmd_build(t_ms *ms, char *word);
 char	*ft_concat(char *cmd, char *opt);
 char	**ft_masjoin(char **tmp, char *str);
 char	*ft_join(char *str, char *str2, int i);
-char	*ft_join(char *str, char *str2, int i);
 char	*dol2(char *ptr, char *str, int i, int n);
 char	*hard_bon_help(t_ms *m, int n, char *str, char *str2);
 void	navak1(void);
@@ -170,15 +169,16 @@ void	pipe_close(t_pipex *pipex);
 void	ctrld(char *line, t_ms *ms);
 void	cat_exit(t_ms *ms, char *str);
 void	redir_dup(int fd2, char *str);
-void	std_dup(t_ms *ms, char **file);
+int		std_dup(t_ms *ms, char **file);
 void	pipe_open(t_pipex *pipex, t_ms *ms);
 void	pipex(t_ms *ms, char **argv, int num);
 void	my_dup2(int read, int write, t_ms *ms);
 void	ft_bonus(t_ms *m, int x, int i, int n);
 void	heredoc(char *str, int file, char *tmp);
+int		my_exit(int n, int mod);
 void	lstadd_back(t_lexer **lst, t_lexer *new);
 void	tree_add_back(t_tree **tree, t_tree *new);
-void	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd);
+int		child_dup(t_ms	*ms, t_pipex *pipex, char **cmd);
 void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j);
 void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int check);
 t_lexer	*lstnew(void);

@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/17 14:32:02 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 16:00:37 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ char	*cmd_builder(t_ms *ms)
 
 int	exec_one_cmd(t_ms *ms)
 {
-	int		i;
 	char	**cmd;
 	int		pid;
 	int		ptr[1];
@@ -74,10 +73,10 @@ int	exec_one_cmd(t_ms *ms)
 	if (pid == 0)
 	{
 		if (ms->tree[ms->ord]->_redir != NULL)
-			std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' '));
-		i = cmd_find(ms, cmd);
-		if (i != 2)
-			return (i);
+			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1);
+		if (cmd[0] == NULL)
+			exit (0);
+		my_exit(cmd_find(ms, cmd), 0);
 		execve (cmd[0], cmd, ms->envp);
 		printf("minishell: %s: command not found\n", cmd[0]);
 		exit_mode(7, ms);

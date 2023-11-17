@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/15 20:50:58 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 16:19:46 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,19 @@ int	child(t_ms *ms, t_pipex *pipex, char *argv)
 	if (pipex->pid == 0)
 	{
 		if (cmd_args[0][0] == '<' || cmd_args[0][0] == '>')
-			return (open_files(ms, cmd_args, -1));
-		child_dup(ms, pipex, cmd_args);
+			my_exit(open_files(ms, cmd_args, -1), 1);
+		my_exit(child_dup(ms, pipex, cmd_args), 1);
 		cmd_args = redir_cut(ft_split(argv, ' '));
-		child_help(pipex, ms, cmd_args, cmd_find(ms, cmd_args));
-		cat_exit(ms, cmd_args[0]);
-		exit_mode(1, ms);
+		if (cmd_args[0] == NULL)
+			exit (0);
+		pipe_close(pipex);
+		my_exit(cmd_find(ms, cmd_args), 0);
+		execve(cmd_args[0], cmd_args, ms->envp);
+		write(2, "minishell: command not found\n", 29);
+		exit_mode(7, ms);
 	}
+	cat_exit(ms, cmd_args[0]);
+	free(cmd_args);
 	return (0);
 }
 
