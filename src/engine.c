@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/17 16:00:37 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 16:25:16 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*cmd_builder(t_ms *ms)
 	return (cmd);
 }
 
-int	exec_one_cmd(t_ms *ms)
+void	exec_one_cmd(t_ms *ms)
 {
 	char	**cmd;
 	int		pid;
@@ -85,12 +85,8 @@ int	exec_one_cmd(t_ms *ms)
 		;
 	cat_exit(ms, cmd[0]);
 	if (ptr[0] > 0)
-	{
 		ft_search(ms);
-		return (1);
-	}
 	free(cmd);
-	return (0);
 }
 
 void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
