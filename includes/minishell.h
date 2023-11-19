@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/17 15:21:47 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 20:52:01 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int		cd(t_ms *ms, int j);
 int		check_var2(char *str);
 int		pwd(t_ms *ms, int mod);
 int		engine(t_ms *ms, int n);
+int		my_exit(int n, int mod);
 int		simbol(t_ms *ms, int i);
 int		echo(t_ms *ms, int flag);
 int		perr(char *str, t_ms *ms);
@@ -127,6 +128,7 @@ int		wildcard(t_ms *ms, char *str);
 int		check_var(char *str, t_ms *ms);
 int		get_cmd(char *path, char *cmd);
 int		cmd_find(t_ms *ms, char **cmd);
+int		std_dup(t_ms *ms, char **file);
 int		pars_err(char *error, t_ms *ms);
 int		parser(t_lexer *lexer, t_ms *ms);
 int		o_space2(t_ms *ms, int i, int n);
@@ -143,6 +145,7 @@ int		ft_export_env(t_ms *ms, char **str, int i);
 int		ft_export(t_ms *ms, char **str, int i, int j);
 int		check_var3(char *str, int i, int j, t_ms *ms);
 int		err(char *error, char *str, t_ms *ms, int type);
+int		child_dup(t_ms	*ms, t_pipex *pipex, char **cmd);
 int		word_distribute(t_lexer **lexer, t_ms *ms, char *word);
 char	*read_file(void);
 char	*in_find(char **cmd);
@@ -163,22 +166,21 @@ void	navak1(void);
 void	navak2(void);
 void	sig2(int sig);
 void	ft_free2(t_ms *ms);
+void	my_write(char *str);
 void	ft_search(t_ms *ms);
+void	pipe_check(t_ms *ms);
 void	goto_start(t_ms *ms);
 void	pipe_close(t_pipex *pipex);
 void	ctrld(char *line, t_ms *ms);
 void	cat_exit(t_ms *ms, char *str);
 void	redir_dup(int fd2, char *str);
-int		std_dup(t_ms *ms, char **file);
 void	pipe_open(t_pipex *pipex, t_ms *ms);
 void	pipex(t_ms *ms, char **argv, int num);
 void	my_dup2(int read, int write, t_ms *ms);
 void	ft_bonus(t_ms *m, int x, int i, int n);
 void	heredoc(char *str, int file, char *tmp);
-int		my_exit(int n, int mod);
 void	lstadd_back(t_lexer **lst, t_lexer *new);
 void	tree_add_back(t_tree **tree, t_tree *new);
-int		child_dup(t_ms	*ms, t_pipex *pipex, char **cmd);
 void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j);
 void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int check);
 t_lexer	*lstnew(void);

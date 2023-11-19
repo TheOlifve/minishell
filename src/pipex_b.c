@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/17 16:19:46 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 20:53:02 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	child(t_ms *ms, t_pipex *pipex, char *argv)
 		pipe_close(pipex);
 		my_exit(cmd_find(ms, cmd_args), 0);
 		execve(cmd_args[0], cmd_args, ms->envp);
-		write(2, "minishell: command not found\n", 29);
+		my_write(cmd_args[0]);
 		exit_mode(7, ms);
 	}
 	cat_exit(ms, cmd_args[0]);

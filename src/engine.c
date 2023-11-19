@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/17 16:25:16 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 20:50:30 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	exec_one_cmd(t_ms *ms)
 			exit (0);
 		my_exit(cmd_find(ms, cmd), 0);
 		execve (cmd[0], cmd, ms->envp);
-		printf("minishell: %s: command not found\n", cmd[0]);
+		my_write(cmd[0]);
 		exit_mode(7, ms);
 	}
 	while (wait(ptr) != -1)

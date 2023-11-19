@@ -6,11 +6,18 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/17 14:29:11 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 20:50:58 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	my_write(char *str)
+{
+	write(2, "minishell: ", 11);
+	write(2, str, ft_strlen(str));
+	write(2, ": command not found\n", 20);
+}
 
 char	*read_file(void)
 {

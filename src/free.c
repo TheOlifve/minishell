@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/17 15:36:19 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 20:56:00 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,6 @@ int	exit_mode(int n, t_ms *ms)
 		// system("leaks minishell");
 		exit(127);
 	}
-	return (0);
-}
-
-int	my_exit(int n, int mod)
-{
-	if (mod == 0 && (n == 0 || n == 1))
-		exit (n);
-	else if (mod == 1 && (n == 1 || n < 0 ))
-		exit (1);
 	return (0);
 }
 

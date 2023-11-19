@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/10 23:24:59 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/17 20:02:42 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ void	l_analys(t_ms *m, t_lexer **lexer)
 
 void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 {
+	pipe_check(m);
 	if (ft_scope(m, -1, 0, 0) == 1)
 		return ;
 	m->str = ft_split(m->args, ' ');

@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 18:01:27 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 19:58:03 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 	}
 	else
 	{
-		m_s->args = m_s->args_old;
+		m_s->args = ft_strdup(m_s->args_old);
 		tokenizer(m_s, &lexer, -1, -1);
 		free(m_s->args_old);
 		ft_free2(m_s);
