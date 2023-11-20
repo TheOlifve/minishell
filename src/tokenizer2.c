@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:02:08 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/17 21:00:52 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 17:38:59 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ void	pipe_check(t_ms *ms)
 int	my_exit(int n, int mod)
 {
 	if (mod == 0 && (n == 0 || n == 1))
-		exit (n);
+		return (1);
 	else if (mod == 1 && (n == 1 || n < 0 ))
 		exit (1);
+	if (mod == 2 && (n == 1 || n < 0 ))
+		return (1);
 	return (0);
 }

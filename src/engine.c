@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/17 20:50:30 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:30:42 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	cmd_find(t_ms *ms, char **cmd)
 		return (ft_export(ms, cmd, 1, 0));
 	else if (ft_strcmp(cmd[0], "unset") == 0)
 		return (ft_unset(ms, cmd, 1));
-	else if (ft_strcmp(cmd[0], "echo") == 0 || ft_strcmp(cmd[0], "ECHO") == 0)
+	else if (ft_strcmp(cmd[0], "echo") % 32 == 0 || ft_strcmp(cmd[0], "ECHO") == 0)
 		return (echo(ms, 0));
 	else if (ft_strcmp(cmd[0], "cd") == 0)
 		return (cd(ms, -1));
@@ -60,7 +60,32 @@ char	*cmd_builder(t_ms *ms)
 	return (cmd);
 }
 
-void	exec_one_cmd(t_ms *ms)
+int	exec_builtin(t_ms *ms, char **cmd)
+{
+	int	i;
+	
+	if (ms->tree[ms->ord]->_redir != NULL)
+			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2);
+	i = my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2);
+	if (i == 1)
+	{
+		ms->exit_num = 1;
+		return (1);
+	}
+	i = cmd_find(ms, cmd);
+	if (i == 0)
+	{
+		dup2(ms->_stdin_backup_, 0);
+		dup2(ms->_stdout_backup_, 1);
+	}
+	else if (i == 1)
+		ms->exit_num = 1;
+	cat_exit(ms, cmd[0]);
+	free(cmd);
+	return (0);
+}
+
+int	exec_one_cmd(t_ms *ms)
 {
 	char	**cmd;
 	int		pid;
@@ -69,6 +94,8 @@ void	exec_one_cmd(t_ms *ms)
 	if (ms->tree[ms->ord]->_redir != NULL)
 		heredoc_find(ms, ft_split(ms->tree[ms->ord]->_redir, ' '));
 	cmd = ft_split(cmd_builder(ms), ' ');
+	if (check_built(cmd[0]))
+		return (exec_builtin(ms, cmd));
 	pid = fork();
 	if (pid == 0)
 	{
@@ -76,7 +103,6 @@ void	exec_one_cmd(t_ms *ms)
 			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1);
 		if (cmd[0] == NULL)
 			exit (0);
-		my_exit(cmd_find(ms, cmd), 0);
 		execve (cmd[0], cmd, ms->envp);
 		my_write(cmd[0]);
 		exit_mode(7, ms);
@@ -87,6 +113,7 @@ void	exec_one_cmd(t_ms *ms)
 	if (ptr[0] > 0)
 		ft_search(ms);
 	free(cmd);
+	return (0);
 }
 
 void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)

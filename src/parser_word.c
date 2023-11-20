@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/12 10:59:23 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:28:15 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ int	word_distribute(t_lexer **lexer, t_ms *ms, char *word)
 	type = word_cmp(ms, word);
 	if (ms->bool_word == 0)
 	{
-		ms->tree[ms->ord] = tree_new();
+		if (!ms->tree[ms->ord])
+			ms->tree[ms->ord] = tree_new();
 		if (type == 1 && !ms->tree[ms->ord]->_cmd)
 			ms->tree[ms->ord]->_cmd = cmd_build(ms, word);
 		else if (!ms->tree[ms->ord]->_cmd)

@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/13 23:30:12 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:01:45 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	parser(t_lexer *lexer, t_ms *ms)
 	ms->tree[ms->ord] = tree_new();
 	while (lexer)
 	{
-		prior(&lexer, -1, 0);
+		// prior(&lexer, -1, 0);
 		if (ft_strcmp(lexer->id, "word\0") == 0)
 		{
 			word_distribute(&lexer, ms, lexer->kw);

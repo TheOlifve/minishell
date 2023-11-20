@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/17 20:52:01 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:14:13 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ typedef struct s_ms
 	int		exit_num;
 	int		bool_word;
 	int		save_stdout;
+	int		_stdin_backup_;
+	int		_stdout_backup_;
 	char	*ptr;
 	char	*path;
 	char	*args;
@@ -112,6 +114,7 @@ int		eng(t_ms *ms);
 int		env(t_ms *ms);
 int		handler(void);
 int		handler2(void);
+int		check_built(char *str);
 int		ft_last(char **str);
 int		cd(t_ms *ms, int j);
 int		check_var2(char *str);

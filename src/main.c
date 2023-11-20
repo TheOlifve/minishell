@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/17 19:58:03 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 17:15:22 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	main2(t_ms *ms, int i)
 
 int	loop(t_ms *m_s, t_lexer *lexer)
 {
+	m_s->_stdin_backup_ = dup(0);
+	m_s->_stdout_backup_ = dup(1);
 	g_glob = 0;
 	main2(m_s, -1);
 	if (ft_strcmp(m_s->args_old, "\0") == 0)

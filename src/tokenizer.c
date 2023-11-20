@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/17 20:02:42 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:01:03 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	ft_scope(t_ms *m, int i, int x, int y)
 		pars_err("(", m);
 		return (1);
 	}
-	ft_bonus(m, 0, -1, 0);
+	// ft_bonus(m, 0, -1, 0);
 	return (0);
 }
 
