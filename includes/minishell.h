@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/20 12:43:28 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:14:13 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 
 # define STDIN 0
 # define STDOUT 1
+
+extern int g_glob;
 
 typedef struct s_lexer
 {
@@ -89,17 +91,21 @@ typedef struct s_ms
 	int		p_err;
 	int		index;
 	int		prior;
-	int		bonus;
 	int		exit_num;
 	int		bool_word;
 	int		save_stdout;
+	int		_stdin_backup_;
+	int		_stdout_backup_;
 	char	*ptr;
 	char	*path;
 	char	*args;
 	char	**str;
 	char	**envp;
+	char	*scope;
+	char	*scope2;
 	char	*wd_tmp;
 	char	*args_old;
+	char	ptr2[OPEN_MAX];
 	t_tree	*tree[OPEN_MAX];
 	struct sigaction	sa;
 }				t_ms;
@@ -108,10 +114,11 @@ int		eng(t_ms *ms);
 int		env(t_ms *ms);
 int		handler(void);
 int		handler2(void);
+int		check_built(char *str);
+int		ft_last(char **str);
 int		cd(t_ms *ms, int j);
 int		check_var2(char *str);
 int		pwd(t_ms *ms, int mod);
-int		spaces(t_ms *ms, int i);
 int		engine(t_ms *ms, int n);
 int		my_exit(int n, int mod);
 int		simbol(t_ms *ms, int i);
@@ -141,37 +148,46 @@ int		ft_export_env(t_ms *ms, char **str, int i);
 int		ft_export(t_ms *ms, char **str, int i, int j);
 int		check_var3(char *str, int i, int j, t_ms *ms);
 int		err(char *error, char *str, t_ms *ms, int type);
+int		child_dup(t_ms	*ms, t_pipex *pipex, char **cmd);
 int		word_distribute(t_lexer **lexer, t_ms *ms, char *word);
-int		child_dup(t_ms	*ms, t_pipex *pipex, char **cmd, int fd);
 char	*read_file(void);
 char	*in_find(char **cmd);
 char	*out_find(char **cmd);
 char	**caching(char **str);
+char	**path_x(char **envp);
 char	*get_next_line(int fd);
 char	*cmd_builder(t_ms *ms);
+char	*redir_find(char **argv, int i);
 char	*dol_check(t_ms *ms, char *ptr);
 char	*cmd_build(t_ms *ms, char *word);
 char	*ft_concat(char *cmd, char *opt);
+char	**ft_masjoin(char **tmp, char *str);
 char	*ft_join(char *str, char *str2, int i);
 char	*dol2(char *ptr, char *str, int i, int n);
-void	main_sig(t_ms *ms);
+char	*hard_bon_help(t_ms *m, int n, char *str, char *str2);
+void	navak1(void);
+void	navak2(void);
+void	sig2(int sig);
 void	ft_free2(t_ms *ms);
+void	my_write(char *str);
 void	ft_search(t_ms *ms);
+void	pipe_check(t_ms *ms);
 void	goto_start(t_ms *ms);
 void	pipe_close(t_pipex *pipex);
 void	ctrld(char *line, t_ms *ms);
 void	cat_exit(t_ms *ms, char *str);
+void	redir_dup(int fd2, char *str);
 void	pipe_open(t_pipex *pipex, t_ms *ms);
 void	pipex(t_ms *ms, char **argv, int num);
 void	my_dup2(int read, int write, t_ms *ms);
+void	ft_bonus(t_ms *m, int x, int i, int n);
 void	heredoc(char *str, int file, char *tmp);
 void	lstadd_back(t_lexer **lst, t_lexer *new);
 void	tree_add_back(t_tree **tree, t_tree *new);
 void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j);
+void	child_help(t_pipex *pipex, t_ms *ms, char **cmd_args, int check);
 t_lexer	*lstnew(void);
 t_tree	*tree_new(void);
-
-int g_glob;
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/20 12:30:56 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/15 01:23:52 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ void	sig_handler(int sig)
 	}
 }
 
-void	sig3(void)
+void	sig3()
 {
 	struct sigaction	sa;
-
+	
 	rl_catch_signals = 0;
 	sa.sa_handler = sig_handler;
 	sigaction(SIGQUIT, &sa, NULL);

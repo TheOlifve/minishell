@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/20 12:26:09 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:01:03 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	ft_scope(t_ms *m, int i, int x, int y)
 		pars_err("(", m);
 		return (1);
 	}
+	// ft_bonus(m, 0, -1, 0);
 	return (0);
 }
 
@@ -107,8 +108,7 @@ void	l_analys(t_ms *m, t_lexer **lexer)
 
 void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 {
-	if (spaces(m, -1) == 1)
-		return ;
+	pipe_check(m);
 	if (ft_scope(m, -1, 0, 0) == 1)
 		return ;
 	m->str = ft_split(m->args, ' ');
@@ -132,4 +132,5 @@ void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 	parser(*lexer, m);
 	if (m->p_err == 0)
 		engine(m, -1);
+		// printf("%d\n", m->exit_num);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/17 20:13:18 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:28:15 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	word_cmp(t_ms *ms, char *word)
 		|| ft_strcmp(word, "exit") == 0 || ft_strcmp(word, "unset") == 0
 		|| ft_strcmp(word, "export") == 0 || ft_strncmp(word, "./", 2) == 0)
 		return (0);
-	else if (ft_strcmp(word, "..") == 0 || ft_strcmp(word, ".") == 0)
+	else if (ft_strcmp(word, "..") == 0)
 		return (5);
 	else if (word[0] == '-')
 		return (2);
@@ -107,7 +107,8 @@ int	word_distribute(t_lexer **lexer, t_ms *ms, char *word)
 	type = word_cmp(ms, word);
 	if (ms->bool_word == 0)
 	{
-		ms->tree[ms->ord] = tree_new();
+		if (!ms->tree[ms->ord])
+			ms->tree[ms->ord] = tree_new();
 		if (type == 1 && !ms->tree[ms->ord]->_cmd)
 			ms->tree[ms->ord]->_cmd = cmd_build(ms, word);
 		else if (!ms->tree[ms->ord]->_cmd)

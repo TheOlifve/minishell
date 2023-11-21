@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 11:01:34 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:54:29 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ char	*cd2(char *ptr, char *buff, t_ms *ms, int i)
 int	ft_chdir(t_ms *ms, char *ptr, int j)
 {
 	char	*vp;
-	char	buff[256];
+	char	*buff;
 
 	if (ptr == NULL && ms->tree[ms->ord]->next->_file)
 		ptr = ft_strdup(ms->tree[ms->ord]->next->_file);
 	else if (ptr == NULL && ms->tree[ms->ord]->next->_word)
 		ptr = ft_strdup(ms->tree[ms->ord]->next->_word);
-	if (getcwd(buff, 256) == NULL)
-		return (perr("minishell: cd", ms));
+	buff = getcwd(NULL, 0);
+		// return (perr("minishell: cd", ms));
 	vp = cd2(ptr, buff, ms, -1);
 	if (chdir(vp) != 0)
 		return (perr("minishell: cd", ms));

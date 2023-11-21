@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/20 12:50:02 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/20 17:15:22 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int g_glob = 0;
+
+void	main_sig(t_ms *ms)
+{
+	ms->c1 = 0;
+	ms->c2 = 0;
+	ms->ord = 0;
+	ms->bool_word = 0;
+	ms->dol2 = 0;
+	ms->err = 0;
+	rl_catch_signals = 0;
+	ms->sa.sa_handler = sig2;
+	sigaction(SIGQUIT, &ms->sa, NULL);
+	sigaction(SIGINT, &ms->sa, NULL);
+	rl_event_hook = &handler2;
+}
 
 void	main2(t_ms *ms, int i)
 {
@@ -24,12 +41,8 @@ void	main2(t_ms *ms, int i)
 	ms->index = -1;
 	ms->bb = 0;
 	ms->exit = 0;
-	ms->c1 = 0;
-	ms->c2 = 0;
-	ms->ord = 0;
-	ms->bool_word = 0;
-	ms->dol2 = 0;
-	ms->err = 0;
+	ms->scope = NULL;
+	ms->scope2 = NULL;
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);
@@ -42,6 +55,8 @@ void	main2(t_ms *ms, int i)
 
 int	loop(t_ms *m_s, t_lexer *lexer)
 {
+	m_s->_stdin_backup_ = dup(0);
+	m_s->_stdout_backup_ = dup(1);
 	g_glob = 0;
 	main2(m_s, -1);
 	if (ft_strcmp(m_s->args_old, "\0") == 0)
@@ -54,7 +69,7 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 	}
 	else
 	{
-		m_s->args = m_s->args_old;
+		m_s->args = ft_strdup(m_s->args_old);
 		tokenizer(m_s, &lexer, -1, -1);
 		free(m_s->args_old);
 		ft_free2(m_s);
@@ -62,25 +77,10 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 	return (0);
 }
 
-void	ft_shlvl2(char **envp, t_ms *ms, int i, int n)
-{
-	char	**env;
-
-	env = malloc(sizeof(char *) * (i + 1));
-	i = -1;
-	while (envp[++i])
-	{
-		if (ft_strncmp(envp[i], "OLDPWD=", 7) == 0)
-			i++;
-		env[n++] = (envp[i]);
-	}
-	env[n] = NULL;
-	ms->envp = env;
-}
-
 void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 {
 	int		j;
+	char	**env;
 
 	while (envp[++i])
 	{
@@ -96,7 +96,17 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 	i = 0;
 	while (envp[i])
 		i++;
-	ft_shlvl2(envp, ms, i, n);
+	env = malloc(sizeof(char *) * (i + 1));
+	i = -1;
+	while (envp[++i])
+	{
+		if (ft_strncmp(envp[i], "OLDPWD=", 7) == 0)
+			i++;
+		env[n++] = (envp[i]);
+	}
+	env[n] = NULL;
+	i = -1;
+	ms->envp = env;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -114,4 +124,5 @@ int	main(int argc, char **argv, char **envp)
 	m_s.exit_num = 0;
 	while (1)
 		loop(&m_s, &lexer);
+	// system("leaks minishell");
 }

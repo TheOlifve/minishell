@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/20 12:54:44 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/17 20:56:00 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,8 @@ int	exit_mode(int n, t_ms *ms)
 {
 	if (n == 0)
 	{
-		printf("exit\n");
-		if (ms->tree[ms->ord]->next || ms->tree[ms->ord]->next->_word)
-		{
-			ms->exit_num = ft_atoi(ms->tree[ms->ord]->next->_word);
-			n = ms->exit_num;
-			ft_free2(ms);
-			exit (n);
-		}
 		ft_free2(ms);
+		printf("exit\n");
 		exit (0);
 	}
 	else if (n == 1)
@@ -75,7 +68,10 @@ int	exit_mode(int n, t_ms *ms)
 	if (n == 7)
 		ms->err = 1;
 	if (n == 7 || n == 3)
+	{
+		// system("leaks minishell");
 		exit(127);
+	}
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
+#    By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/11/20 12:50:20 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/11/17 20:06:04 by hrahovha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,36 +16,37 @@ BUILD = build
 
 CC = cc
 
-SRC = 	src/main.c				\
-		src/cd.c				\
+SRC =	src/cd.c				\
+		src/main.c				\
 		src/cmds.c				\
 		src/mems.c				\
-		src/tokenizer.c			\
-		src/simbol.c			\
-		src/dollar2.c			\
-		src/export.c			\
-		src/export2.c			\
-		src/get_next_line.c		\
-		src/unset.c				\
-		src/dollar.c			\
-		src/list_tree.c			\
-		src/redir.c				\
-		src/list_lexer.c		\
-		src/wildcard.c			\
-		src/pipex_b2.c			\
-		src/engine.c			\
-		src/pipex_b.c			\
 		src/free.c				\
+		src/bonus.c				\
+		src/pp_bb.c				\
+		src/unset.c				\
+		src/redir.c				\
 		src/utils.c				\
+		src/simbol.c			\
+		src/export.c			\
+		src/dollar.c			\
+		src/engine.c			\
 		src/utils2.c			\
 		src/signal.c			\
+		src/parser.c			\
+		src/pipex_b.c			\
+		src/heredoc.c			\
+		src/dollar2.c			\
+		src/export2.c			\
+		src/pipex_b2.c			\
+		src/wildcard.c			\
+		src/list_tree.c			\
+		src/tokenizer.c			\
+		src/list_lexer.c		\
+		src/tokenizer2.c		\
 		src/parser_word.c		\
 		src/parser_word2.c		\
-		src/parser.c			\
-		src/parser_operator.c	\
-		src/pp_bb.c				\
-		src/heredoc.c			\
-		src/bonus.c
+		src/get_next_line.c		\
+		src/parser_operator.c
 
 LIBFT = libft
 
@@ -55,7 +56,7 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 
 MINI = $(patsubst %.o, $(BUILD)/%.o, $(OBJ))
 
-CFLAGS = -g -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
 
 INC = -Ireadline/include -Ilibft
 
