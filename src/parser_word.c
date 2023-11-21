@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 16:47:07 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 19:08:05 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,19 @@ char	*option_build(t_lexer **lexer, char *word)
 	return (tmp);
 }
 
+void	doublefree(char **str)
+{
+	int	i;
+	
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
 int	word_cmp2(t_ms *ms, char *word)
 {
 	int		i;
@@ -57,14 +70,14 @@ int	word_cmp2(t_ms *ms, char *word)
 		if (access(tmp2, X_OK) == 0)
 		{
 			free(tmp);
-			free(path);
+			doublefree(path);
 			free(tmp2);
 			return (1);
 		}
 		free(tmp2);
 	}
 	free(tmp);
-	free(path);
+	doublefree(path);
 	if (access(word, F_OK) == 0)
 		return (3);
 	return (4);

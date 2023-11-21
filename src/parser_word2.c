@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_word2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 16:47:13 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 18:56:13 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ char	*cmd_build(t_ms *ms, char *word)
 		tmp2 = ft_strjoin(path[i], tmp);
 		if (access(tmp2, X_OK) == 0)
 		{
-			free(path);
+			doublefree(path);
 			free(tmp);
 			return (tmp2);
 		}
 		free(tmp2);
 	}
-	free(path);
+	doublefree(path);
 	free(tmp);
 	return (NULL);
 }

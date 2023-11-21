@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 17:58:37 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 18:13:16 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,23 +106,17 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 
 int	main(int argc, char **argv, char **envp)
 {
-	// t_ms	m_s;
-	// t_lexer	lexer;
-	
-	int *a = malloc(111);
-	a = NULL;
-	system("leaks minishell");
-	// if (argc > 1)
-	// {
-	// 	perror("minishell_ERROR");
-	// 	exit (1);
-	// }
+	t_ms	m_s;
+	t_lexer	lexer;
+
+	if (argc > 1)
+	{
+		perror("minishell_ERROR");
+		exit (1);
+	}
 	(void) argv;
-	(void)a;
-	(void) argc;
-	(void)envp;
-	// ft_shlvl(envp, &m_s, -1, 0);
-	// m_s.exit_num = 0;
-	// while (1)
-	// 	loop(&m_s, &lexer);
+	ft_shlvl(envp, &m_s, -1, 0);
+	m_s.exit_num = 0;
+	while (1)
+		loop(&m_s, &lexer);
 }

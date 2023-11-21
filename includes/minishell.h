@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 17:01:59 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 18:55:46 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ void	ft_search(t_ms *ms);
 void	my_write(char *str);
 void	goto_start(t_ms *ms);
 void	pipe_check(t_ms *ms);
+void	doublefree(char **str);
 void	pipe_close(t_pipex *pipex);
 void	ctrld(char *line, t_ms *ms);
 void	cat_exit(t_ms *ms, char *str);
