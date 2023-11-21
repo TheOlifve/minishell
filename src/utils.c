@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/19 15:23:11 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/15 19:32:19 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	get_cmd(char *path, char *cmd)
 	return (1);
 }
 
-void	ft_dup2(int read, int write, t_ms *ms)
+void	my_dup2(int read, int write, t_ms *ms)
 {
 	if (dup2(read, 0) < 0)
 		perr("Error", ms);
@@ -48,4 +48,41 @@ int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)
 	if (ft_strncmp(lex, "./", 2) == 0)
 		ms->ptr = lex;
 	return (1);
+}
+
+int	ft_last(char **str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = -1;
+	while(str[i])
+	{
+		if (ft_strncmp(str[i], ">>", 2) == 0 || ft_strncmp(str[i], ">", 1) == 0)
+			j = i;
+		else if (ft_strncmp(str[i], "<<", 2) == 0)
+			j = -3;
+		else if (ft_strncmp(str[i], "<", 1) == 0)
+			j = -2;
+		i++;
+	}
+	return (j);
+}
+
+void	pipe_close(t_pipex *pipex)
+{
+	int	i;
+
+	i = 0;
+	while (i < pipex->pipes_cnt)
+	{
+		close(pipex->fd[i][0]);
+		close(pipex->fd[i][1]);
+		if (pipex->fd[i])
+			free(pipex->fd[i]);
+		i++;
+	}
+	i = -1;
+	free(pipex->fd);
 }

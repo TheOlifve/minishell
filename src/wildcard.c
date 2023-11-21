@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 13:05:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/27 12:55:11 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/09 17:56:37 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ char	**get_files(void)
 }
 
 int	wildcard(t_ms *ms, char *str)
-{	
-	(void)str;
+{
 	char	**file;
 
 	file = get_files();

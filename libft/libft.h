@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 10:59:22 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/07 22:47:19 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/10 18:53:51 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int		ft_isprint(int c);
 size_t	ft_strlen(const char *str);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
+int		ft_strcmp2(char *s1, char *s2);
 char	*ft_strchr(char *str, int n);
 char	*ft_strrchr(const char *str, int n);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -45,6 +46,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strjoin2(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
+int		ft_strcmp2(char *s1, char *s2);
 char	**ft_split(char const *s, char c);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));

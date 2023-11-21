@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/24 22:09:41 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/17 20:56:00 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,38 @@ int	pars_err(char *error, t_ms *ms)
 {
 	printf("minishell: pars error near `%s'\n", error);
 	ms->p_err = 1;
+	ms->exit_num = 1;
 	return (2);
 }
 
-int	ERR(char *error, char *str, t_ms *ms)
+int	err(char *error, char *str, t_ms *ms, int type)
 {
-	printf("minishell: %s: `%s': not a valid identifier\n", error, str);
-	ms->err = 1;
+	if (type == 0)
+	{
+		printf("minishell: %s: `%s': not a valid identifier\n", error, str);
+		ms->err = 1;
+		ms->exit_num = 1;
+	}
+	else if (type == 1)
+	{
+		printf("minishell: %s: No such file or directory\n", str);
+		ms->exit_num = 1;
+		return (-2);
+	}
+	else if (type == 3)
+	{
+		printf("minishell: syntax error near unexpected token `newline'\n");
+		ms->exit_num = 258;
+		return (-2);
+	}
 	return (1);
-}
-
-int	ERR2(char *str)
-{
-	printf("minishell: %s: No such file or directory\n", str);
-	return (-2);
 }
 
 int	perr(char *str, t_ms *ms)
 {
 	perror(str);
 	ms->err = 1;
+	ms->exit_num = 1;
 	return (1);
 }
 
@@ -49,16 +61,15 @@ int	exit_mode(int n, t_ms *ms)
 	}
 	else if (n == 1)
 		exit (0);
-	else if (n == 2)
-	{
-		perror("minishell_ERROR");
-		exit(0);
-	}
-	else if (n == 4)
+	if (n == 4)
 		exit (0);
-	else if (n == 7)
-	{
+	if (n == 3)
+		perr("Error", ms);
+	if (n == 7)
 		ms->err = 1;
+	if (n == 7 || n == 3)
+	{
+		// system("leaks minishell");
 		exit(127);
 	}
 	return (0);
@@ -75,20 +86,4 @@ void	ft_free2(t_ms *ms)
 		ms->ord += 1;
 	}
 	ms->ord = 0;
-}
-
-void	pipe_close(t_pipex *pipex)
-{
-	int	i;
-
-	i = 0;
-	while (i < pipex->pipes_cnt)
-	{
-		close(pipex->fd[i][0]);
-		close(pipex->fd[i][1]);
-		if (pipex->fd[i])
-			free(pipex->fd[i]);
-		i++;
-	}
-	free(pipex->fd);
 }

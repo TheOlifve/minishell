@@ -6,32 +6,11 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 19:10:19 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/19 11:40:05 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:40:15 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// void	new1(t_lcmd *new)
-// {
-// 	new->prev = NULL;
-// 	new->next = NULL;
-// 	new->lpp = NULL;
-// 	new->lb = NULL;
-// 	new->tree = NULL;
-// }
-
-// void	infos3(t_lcmd *new, char **info)
-// {
-// 	if (info[0])
-// 			new->file = info[0];
-// 	else
-// 		new->file = NULL;
-// 	new->f_id = info[1];
-// 	new->cmd = NULL;
-// 	new->flag = NULL;
-// 	new->word = NULL;
-// }
 
 t_lexer	*lstnew(void)
 {

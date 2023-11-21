@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 3223/07/10 14:44:13 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/19 13:52:14 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 17:36:41 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,15 @@ int	str_join2(t_ms *ms, int i, char c, int n)
 	return (n);
 }
 
-int	str_join(t_ms *ms, int i, char c) 
+int	str_join(t_ms *ms, int i, char c)
 {
 	ms->x = i;
 	if ((c == 39 && ms->args_old[i + 1] != 39 && ms->c1 % 2 == 0)
 		|| (c == 34 && ms->args_old[i + 1] != 34 && ms->c2 % 2 == 0))
+	{
 		while (ms->args_old && ms->args_old[++i])
 		{
-			tabzz(ms, i);
-			if (ms->args_old[i] == 36 && c == 34)
-				i = dol_prep(ms, i, -1, 0);
+			i = tabzz(ms, i, c);
 			if (ms->args_old[i] == c)
 			{
 				ms->num = ms->num - str_join2(ms, ms->x, c, 1);
@@ -57,6 +56,7 @@ int	str_join(t_ms *ms, int i, char c)
 				return (ms->x - i + 1);
 			}
 		}
+	}
 	if ((c == 34 && ms->c2 % 2 != 0) || (c == 39 && ms->c1 % 2 != 0))
 		return (0);
 	else
@@ -66,7 +66,7 @@ int	str_join(t_ms *ms, int i, char c)
 
 int	simbol2(t_ms *ms, int i)
 {
-	if (ms->args_old[i] && ms->args_old[i] == 34 && ms->c2 %2 != 0)
+	if (ms->args_old[i] && ms->args_old[i] == 34 && ms->c2 % 2 != 0)
 	{
 		while (ms && ms->args_old && ms->args_old[++i])
 		{
@@ -76,7 +76,7 @@ int	simbol2(t_ms *ms, int i)
 				return (i);
 		}	
 	}
-	else if (ms->args_old[i] && ms->args_old[i] == 39 && ms->c1 %2 != 0)
+	else if (ms->args_old[i] && ms->args_old[i] == 39 && ms->c1 % 2 != 0)
 	{
 		while (ms && ms->args_old && ms->args_old[++i])
 		{
@@ -102,16 +102,17 @@ int	o_space(t_ms *ms, int i)
 			return (o_space2(ms, i, 0) - 1);
 	if ((ms->args_old[i] == '|' && ms->args_old[i + 1] == '|')
 		|| (ms->args_old[i] == '&' && ms->args_old[i + 1] == '&'))
-			if (ms->args_old[i + 2] != 32)
-				return (o_space2(ms, i, 2));
-	if (ms->args_old[i] == '|')
-		if (ms->args_old[i + 1] != 32)
-			return (o_space2(ms , i, 1));
+		if (ms->args_old[i + 2] != 32)
+			return (o_space2(ms, i, 2));
+	if (ms->args_old[i] == '|' || ms->args_old[i] == ')')
+		if ((ms->args_old[i + 1] != 32 && ms->args_old[i] == '|')
+			|| (ms->args_old[i] == ')' && ms->args_old[i - 1] == 32))
+			return (o_space2(ms, i, 1));
 	if ((ms->args_old[i] == '>' && ms->args_old[i + 1] == '>')
 		|| (ms->args_old[i] == '<' && ms->args_old[i + 1] == '<'))
 		if (ms->args_old[i + 2] == 32)
 			return (o_space3(ms, i, 2));
-	if (ms->args_old[i] == '>' || ms->args_old[i] == '<')
+	if (ms->args_old[i] == 60 || ms->args_old[i] == 62 || ms->args_old[i] == 40)
 		if (ms->args_old[i + 1] == 32)
 			return (o_space3(ms, i, 1));
 	return (0);
@@ -121,20 +122,21 @@ int	simbol(t_ms *ms, int i)
 {
 	while (++i < ms->num)
 	{
-		if (ms->args_old[i] == 34 && (ms->c1 %2 != 0 || simbol2(ms, i) != 2))
+		if (ms->args_old[i] == 34 && (ms->c1 % 2 != 0 || simbol2(ms, i) != 2))
 			ms->c1++;
-		if (ms->args_old[i] == 39 && (ms->c2 %2 != 0 || simbol2(ms, i) != 2))
+		if (ms->args_old[i] == 39 && (ms->c2 % 2 != 0 || simbol2(ms, i) != 2))
 			ms->c2++;
 		if (ms->args_old[i] == 32 && (ms->c2 % 2 != 0 || ms->c1 % 2 != 0))
 			ms->args_old[i] = 5;
 		if (ms->args_old[i] == '\t' && (ms->c2 % 2 != 0 || ms->c1 % 2 != 0))
 			ms->args_old[i] = 4;
-		if (ms->args_old[i] == 39 && (ms->c2 %2 != 0 || simbol2(ms, i) != 2))
+		if (ms->args_old[i] == 39 && (ms->c2 % 2 != 0 || simbol2(ms, i) != 2))
 			i -= str_join(ms, i, 39);
-		else if (ms->args_old[i] == 34 && (ms->c1 %2 != 0 || simbol2(ms, i) != 2))
+		else if (ms->args_old[i] == 34 && (ms->c1 % 2 != 0
+				|| simbol2(ms, i) != 2))
 			i -= str_join(ms, i, 34);
 		if (ms->args_old[i] == 36 && (!(i > 1 && ms->args_old[i - 1] == '<'
-			&& ms->args_old[i - 2] == '<')))
+					&& ms->args_old[i - 2] == '<')))
 			i = dol_prep(ms, i, -1, 0);
 		i += o_space(ms, i);
 		if (ms->args_old[i] == ';')

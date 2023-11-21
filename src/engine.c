@@ -6,53 +6,26 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/24 18:09:40 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:30:42 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*ft_join(char *str, char *str2, int i)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = NULL;
-	tmp2 = NULL;
-	if (i == 0)
-		return (ft_strjoin(str, str2));
-	else if (i == 2)
-	{
-		if (!str)
-			str = ft_strdup("");
-		tmp = ft_strjoin(str, str2);
-		tmp2 = ft_strjoin(tmp, "|");
-		free(tmp);
-		return (tmp2);
-	}
-	else
-	{
-		if (!str)
-			str = ft_strdup("");
-		tmp = ft_strjoin(str, str2);
-		tmp2 = ft_strjoin(tmp, " ");
-		free(tmp);
-		return (tmp2);
-	}
-}
 
 int	cmd_find(t_ms *ms, char **cmd)
 {
 	if (ft_strcmp(cmd[0], "export") == 0 && cmd[1] == NULL)
 		return (ft_export3(ms, 0, 0));
 	else if (ft_strcmp(cmd[0], "export") == 0)
-		return (ft_export(ms, cmd, 1));
+		return (ft_export(ms, cmd, 1, 0));
 	else if (ft_strcmp(cmd[0], "unset") == 0)
 		return (ft_unset(ms, cmd, 1));
-	else if (ft_strcmp(cmd[0], "echo") == 0 || ft_strcmp(cmd[0], "ECHO") == 0)
+	else if (ft_strcmp(cmd[0], "echo") % 32 == 0 || ft_strcmp(cmd[0], "ECHO") == 0)
 		return (echo(ms, 0));
 	else if (ft_strcmp(cmd[0], "cd") == 0)
 		return (cd(ms, -1));
+	else if (ft_strcmp(cmd[0], "exit") == 0 && ms->exit == 5)
+		return (0);
 	else if (ft_strcmp(cmd[0], "exit") == 0)
 		return (exit_mode(0, ms));
 	else if (ft_strcmp(cmd[0], "pwd") == 0 || ft_strcmp(cmd[0], "PWD") == 0)
@@ -87,20 +60,60 @@ char	*cmd_builder(t_ms *ms)
 	return (cmd);
 }
 
+int	exec_builtin(t_ms *ms, char **cmd)
+{
+	int	i;
+	
+	if (ms->tree[ms->ord]->_redir != NULL)
+			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2);
+	i = my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2);
+	if (i == 1)
+	{
+		ms->exit_num = 1;
+		return (1);
+	}
+	i = cmd_find(ms, cmd);
+	if (i == 0)
+	{
+		dup2(ms->_stdin_backup_, 0);
+		dup2(ms->_stdout_backup_, 1);
+	}
+	else if (i == 1)
+		ms->exit_num = 1;
+	cat_exit(ms, cmd[0]);
+	free(cmd);
+	return (0);
+}
+
 int	exec_one_cmd(t_ms *ms)
 {
-	int		i;
 	char	**cmd;
+	int		pid;
+	int		ptr[1];
 
 	if (ms->tree[ms->ord]->_redir != NULL)
-		return (exec_with_redir(ms, 0));
+		heredoc_find(ms, ft_split(ms->tree[ms->ord]->_redir, ' '));
 	cmd = ft_split(cmd_builder(ms), ' ');
-	i = cmd_find(ms, cmd);
-	if (i == 2)
-		i = exec_cmd(ms, cmd);
+	if (check_built(cmd[0]))
+		return (exec_builtin(ms, cmd));
+	pid = fork();
+	if (pid == 0)
+	{
+		if (ms->tree[ms->ord]->_redir != NULL)
+			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1);
+		if (cmd[0] == NULL)
+			exit (0);
+		execve (cmd[0], cmd, ms->envp);
+		my_write(cmd[0]);
+		exit_mode(7, ms);
+	}
+	while (wait(ptr) != -1)
+		;
+	cat_exit(ms, cmd[0]);
+	if (ptr[0] > 0)
+		ft_search(ms);
 	free(cmd);
-	// printf("%d\n", ms->err);
-	return (i);
+	return (0);
 }
 
 void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
@@ -124,64 +137,39 @@ void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
 		free(tmp);
 		free(tmp2);
 		if (ms->tree[ms->ord]->_pipe == NULL)
-			break;
+			break ;
 		ms->ord += 1;
 	}
+	ms->ord = 0;
 	argv = ft_split(str, '|');
+	free(str);
 	pipex(ms, argv, -1);
-	// printf("%d\n", ms->err);
 }
 
-int	engine(t_ms *ms)
+int	engine(t_ms *ms, int n)
 {
 	while (ms->tree[ms->ord])
 	{
-		// printf("%s\n", ms->tree[ms->ord]->_or);
-		// printf("%s\n", ms->tree[ms->ord]->_and);
-		// if (ms->tree[ms->ord]->_or && ms->exit_num == 0)
-		//printf("%d\n", ms->err);
-		if (ms->tree[ms->ord]->next && ms->tree[ms->ord]->next->_and
-			&& ms->err == 1)
+		if (!ms->tree[ms->ord])
 			break ;
 		if (ms->tree[ms->ord])
 			goto_start(ms);
-		// if (ms->tree[ms->ord]->_or && ms->exit_num > 0)
-		// {
-		// 	if (ms->tree[ms->ord]->next)
-		// 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
-		// 	else
-		// 		break ;
-		// }
-		// printf("%d\n", ms->exit_num);
+		n = eng(ms);
+		(void)n;
 		if (ms->tree[ms->ord]->_pipe != NULL)
 			exec_pipe_cmd(ms, NULL, NULL, NULL);
 		else if (ms->tree[ms->ord]->_pipe == NULL)
 			exec_one_cmd(ms);
+		if ((ms->bb == 8 && n == -1)
+			|| (ms->ord == n && ms->err == 0))
+			break ;
+		else if (ms->err == 1 && n >= 0)
+		{
+			ms->ord = n + 1;
+			engine(ms, 0);
+			break ;
+		}
 		ms->ord += 1;
 	}
 	return (0);
 }
-
-// int	eufind(char *str)
-// {
-// 	if (ft_strcmp(str, "export") == 0 ||
-// 		ft_strcmp(str, "unset") == 0)
-// 			return (0);
-// 	return (1);
-// }
-
-// int	cmd_find(t_ms *ms, int i)
-// {
-// 	char	*cmd;
-
-// 	else if (get_cmd(cmd, "cd") == 1)
-// 		return (cd(ms, i, -1));
-// 	else if (get_cmd(cmd, "pwd") == 1)
-// 		return (pwd(ms, 1));
-// 	else if (get_cmd(cmd, "exit") == 1)
-// 		exit_mode(0, ms);
-// 	else if (eufind(cmd) == 0 && !ms->lcmd[i]->next)
-// 		return (1);
-
-// 	return (2);
-// }

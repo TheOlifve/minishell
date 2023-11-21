@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmds.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 20:28:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/09/22 19:01:47 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/14 00:19:39 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ int	echo(t_ms *ms, int i)
 int	pwd(t_ms *ms, int mod)
 {
 	int		i;
-	char	buff[256];
+	char	buff[OPEN_MAX];
 	char	*oldpwd;
 
 	i = -1;
-	if (getcwd(buff, 254) == NULL)
+	if (getcwd(buff, OPEN_MAX) == NULL)
 		return (1);
 	oldpwd = NULL;
 	while (ms->envp[++i])
@@ -73,13 +73,13 @@ int	pwd(t_ms *ms, int mod)
 		{
 			oldpwd = ft_strdup(ms->envp[i]);
 			ms->envp[i] = ft_strjoin("PWD=", buff);
-			break;
+			break ;
 		}
 	}
 	if (mod == 1)
 		printf("%s\n", buff);
 	else
-		ms->envp[i + 1] = ft_strjoin("OLD",oldpwd);
+		ms->envp[i + 1] = ft_strjoin("OLD", oldpwd);
 	if (oldpwd)
 		free(oldpwd);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/10/19 15:20:17 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/09 18:30:46 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,18 @@ int	check_var1(char *str, t_ms *ms)
 	i = 0;
 	if (!str)
 		return (1);
-	if ((str[0] > 64 && str[0] < 91)
-			|| (str[0] > 96 && str[0] < 123)
-				|| (str[0] == '_'))
+	if ((str[0] > 64 && str[0] < 91) || (str[0] > 96 && str[0] < 123)
+		|| (str[0] == '_'))
 		;
 	else
-		return (ERR("unset", str, ms));
+		return (err("unset", str, ms, 0));
 	while (str && str[i])
 	{
-		if (((str[i] > 64 && str[i] < 91)
-				|| (str[i] > 96 && str[i] < 123)
-				|| (str[i] > 47 && str[i] < 58))
-				|| str[i] == '_')
-				i++;
+		if (((str[i] > 64 && str[i] < 91) || (str[i] > 96 && str[i] < 123)
+				|| (str[i] > 47 && str[i] < 58)) || str[i] == '_')
+			i++;
 		else
-			return (ERR("unset", str, ms));
+			return (err("unset", str, ms, 0));
 	}
 	return (0);
 }
@@ -74,6 +71,21 @@ int	ft_unset2(char **str, int i, t_ms *ms)
 	return (0);
 }
 
+int	unset_help(t_ms *ms, char **str, int i, int test)
+{
+	if (test == 0)
+	{
+		i++;
+		ft_unset(ms, str, i);
+		i--;
+	}
+	else if (test == 1)
+		return (1);
+	else if (!ms->envp)
+		return (1);
+	return (0);
+}
+
 int	ft_unset(t_ms *ms, char **str, int i)
 {
 	int		j;
@@ -84,15 +96,7 @@ int	ft_unset(t_ms *ms, char **str, int i)
 	if (!str[i])
 		return (1);
 	test = ft_unset2(str, i, ms);
-	if (test == 0)
-	{
-		i++;
-		ft_unset(ms, str, i);
-		i--;
-	}
-	else if (test == 1)
-		return (1);
-	else if (!ms->envp)
+	if (unset_help(ms, str, i, test) == 1)
 		return (1);
 	str2 = ft_strdup(str[i]);
 	free(str[i]);

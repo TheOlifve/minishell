@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/09/22 18:13:51 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:28:15 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,10 @@ int	word_cmp2(t_ms *ms, char *word)
 
 int	word_cmp(t_ms *ms, char *word)
 {
-	if (ft_strcmp(word, "cd") == 0 ||
-		ft_strcmp(word, "pwd") == 0 ||
-		ft_strcmp(word, "env") == 0 ||
-		ft_strcmp(word, "echo") == 0 ||
-		ft_strcmp(word, "exit") == 0 ||
-		ft_strcmp(word, "unset") == 0 ||
-		ft_strcmp(word, "export") == 0 ||
-		ft_strncmp(word, "./", 2) == 0)
+	if (ft_strcmp(word, "cd") == 0 || ft_strcmp(word, "pwd") == 0
+		|| ft_strcmp(word, "env") == 0 || ft_strcmp(word, "echo") == 0
+		|| ft_strcmp(word, "exit") == 0 || ft_strcmp(word, "unset") == 0
+		|| ft_strcmp(word, "export") == 0 || ft_strncmp(word, "./", 2) == 0)
 		return (0);
 	else if (ft_strcmp(word, "..") == 0)
 		return (5);
@@ -96,7 +92,7 @@ int	word_distribute2(t_lexer **lexer, t_ms *ms, char *word, int type)
 	{
 		tree_add_back(&ms->tree[ms->ord], tree_new());
 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
-		if (type == 2 || type == 3)
+		if (type == 0 || type == 1 || type == 2 || type == 3)
 			ms->tree[ms->ord]->_file = ft_strdup(word);
 		else if (type == 4 || type == 5 || type == 0)
 			ms->tree[ms->ord]->_word = ft_strdup(word);
@@ -104,14 +100,15 @@ int	word_distribute2(t_lexer **lexer, t_ms *ms, char *word, int type)
 	return (0);
 }
 
-int	word_distribute(t_lexer **lexer, t_ms *ms, char *word) //cmd - 0 | cmd_w_p - 1| option - 2 | file - 3 | word - 4
+int	word_distribute(t_lexer **lexer, t_ms *ms, char *word)
 {
 	int	type;
 
 	type = word_cmp(ms, word);
 	if (ms->bool_word == 0)
 	{
-		ms->tree[ms->ord] = tree_new();
+		if (!ms->tree[ms->ord])
+			ms->tree[ms->ord] = tree_new();
 		if (type == 1 && !ms->tree[ms->ord]->_cmd)
 			ms->tree[ms->ord]->_cmd = cmd_build(ms, word);
 		else if (!ms->tree[ms->ord]->_cmd)
