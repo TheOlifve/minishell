@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/17 20:50:58 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 12:30:16 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	my_write(char *str)
-{
-	write(2, "minishell: ", 11);
-	write(2, str, ft_strlen(str));
-	write(2, ": command not found\n", 20);
-}
 
 char	*read_file(void)
 {
@@ -32,7 +25,7 @@ char	*read_file(void)
 	{
 		tmp = get_next_line(file);
 		if (!tmp)
-			break;
+			break ;
 		tmp3 = ft_strjoin(tmp2, tmp);
 		free(tmp2);
 		tmp2 = ft_strdup(tmp3);
@@ -41,23 +34,19 @@ char	*read_file(void)
 	return (tmp2);
 }
 
-void	redir_dup(int fd2, char *str)
+int	my_exit(int n, int mod)
 {
-	int	i;
-	int	fd;
-	
-	fd = open("src/tmp", O_RDWR | O_TRUNC | O_CREAT, 0644);
-	i = ft_last(ft_split(str, ' '));
-	if (fd2 >= 0 && i == -3)
-		dup2(open("src/heredoc", O_RDWR), 0);
-	else if (fd2 >= 0 && i == -2)
-		dup2(fd2, 0);
-	if (i >= 0)
-		dup2(fd, 1);
+	if (mod == 0 && (n == 0 || n == 1))
+		exit (n);
+	else if (mod == 1 && (n == 1 || n < 0))
+		exit (1);
+	return (0);
 }
 
 void	cat_exit(t_ms *ms, char *str)
 {
+	if (ms->prior == 4)
+		ms->prior = 5;
 	if (ft_strcmp(str, "/bin/cat") == 0)
 	{
 		if (g_glob == SIGINT)

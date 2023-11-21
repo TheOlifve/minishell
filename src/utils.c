@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/15 19:32:19 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/20 12:26:19 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,29 @@ int	get_cmd(char *path, char *cmd)
 
 void	my_dup2(int read, int write, t_ms *ms)
 {
-	if (dup2(read, 0) < 0)
-		perr("Error", ms);
-	if (dup2(write, 1) < 0)
-		perr("Error", ms);
+	if (ms->prior > 0 && ms->prior < 5)
+	{
+		printf("aaa\n");
+		if (access("bonus_help", F_OK) != 0)
+			ms->bonus = open("bonus_help", O_RDWR | O_APPEND | O_CREAT, 0644);
+		dup2(read, 0);
+		dup2(ms->bonus, 1);
+	}
+	else if (ms->prior == 5)
+	{
+		ms->prior = 0;
+		if (dup2(ms->bonus, 0) < 0)
+			perr("Error", ms);
+		if (dup2(write, 1) < 0)
+			perr("Error", ms);
+	}
+	else
+	{
+		if (dup2(read, 0) < 0)
+			perr("Error", ms);
+		if (dup2(write, 1) < 0)
+			perr("Error", ms);
+	}
 }
 
 int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)
@@ -48,26 +67,6 @@ int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)
 	if (ft_strncmp(lex, "./", 2) == 0)
 		ms->ptr = lex;
 	return (1);
-}
-
-int	ft_last(char **str)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = -1;
-	while(str[i])
-	{
-		if (ft_strncmp(str[i], ">>", 2) == 0 || ft_strncmp(str[i], ">", 1) == 0)
-			j = i;
-		else if (ft_strncmp(str[i], "<<", 2) == 0)
-			j = -3;
-		else if (ft_strncmp(str[i], "<", 1) == 0)
-			j = -2;
-		i++;
-	}
-	return (j);
 }
 
 void	pipe_close(t_pipex *pipex)
