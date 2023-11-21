@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_b2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/20 12:24:19 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:49:09 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	std_dup(t_ms *ms, char **file)
 	char	*in_file;
 	char	*out_file;
 
+	fd = 0;
 	in_file = in_find(file);
 	out_file = out_find(file);
 	if (in_file != NULL)
@@ -87,8 +88,8 @@ int	std_dup(t_ms *ms, char **file)
 		my_dup2(fd, 1, ms);
 	}
 	if (out_file != NULL)
-		my_dup2(0, open_files(ms, ft_split(out_file, ' '), -1), ms);
-	return (0);
+		fd = my_dup2(0, open_files(ms, ft_split(out_file, ' '), -1), ms);
+	return (fd);
 }
 
 int	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd, int fd)

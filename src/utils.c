@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 14:55:49 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:47:26 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	get_cmd(char *path, char *cmd)
 	return (1);
 }
 
-void	my_dup2(int read, int write, t_ms *ms)
+int	my_dup2(int read, int write, t_ms *ms)
 {
 	// if (ms->prior > 0 && ms->prior < 5)
 	// {
@@ -54,10 +54,17 @@ void	my_dup2(int read, int write, t_ms *ms)
 	// else
 	// {
 		if (dup2(read, 0) < 0)
+		{
 			perr("Error", ms);
+			return (-1);
+		}
 		if (dup2(write, 1) < 0)
+		{
 			perr("Error", ms);
+			return (-1);
+		}
 	// }
+	return (0);
 }
 
 int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)

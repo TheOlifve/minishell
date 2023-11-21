@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 14:54:02 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:50:47 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ int		ft_export3(t_ms *ms, int i, int j);
 int		ft_unset(t_ms *ms, char **str, int i);
 int		dol_prep(t_ms *ms, int i, int x, int y);
 int		ft_export2(t_ms *ms, char **str, int i);
+int		my_dup2(int read, int write, t_ms *ms);
 int		heredoc_find(t_ms *ms, char **cmd_args);
 int		operator_distribute(t_ms *ms, char *opr);
 int		open_files(t_ms *ms, char **file, int fd);
@@ -168,7 +169,6 @@ void	ctrld(char *line, t_ms *ms);
 void	cat_exit(t_ms *ms, char *str);
 void	pipe_open(t_pipex *pipex, t_ms *ms);
 void	pipex(t_ms *ms, char **argv, int num);
-void	my_dup2(int read, int write, t_ms *ms);
 void	heredoc(char *str, int file, char *tmp);
 void	lstadd_back(t_lexer **lst, t_lexer *new);
 void	tree_add_back(t_tree **tree, t_tree *new);

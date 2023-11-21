@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/11 11:01:34 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:47:10 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	ft_chdir(t_ms *ms, char *ptr, int j)
 	vp = cd2(ptr, buff, ms, -1);
 	if (chdir(vp) != 0)
 		return (perr("minishell: cd", ms));
+	system("leaks minishell");
 	env2(ms, ms->envp[j], 0, 0);
 	if (ptr && ptr[0] && ptr[0] == '-' && ptr[1] && ptr[1] == '-'
 		&& ptr[2] && ptr[2] == '-')

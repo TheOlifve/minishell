@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   engine.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 14:33:09 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:24:38 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*cmd_builder(t_ms *ms)
 int	exec_builtin(t_ms *ms, char **cmd)
 {
 	int	i;
-	
+
 	if (ms->tree[ms->ord]->_redir != NULL)
 			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2);
 	i = my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2);

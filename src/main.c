@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 14:50:44 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:58:20 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ void	ft_shlvl2(char **envp, t_ms *ms, int i, int n)
 
 void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 {
-	int		j;
+	int	tmp;
+	int	j;
 
 	while (envp[++i])
 	{
@@ -89,8 +90,10 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 		{
 			envp[i] += 6;
 			j = ft_atoi(envp[i]);
+			free(envp[i]);
 			j += 1;
-			envp[i] = ft_strjoin("SHLVL=", ft_itoa(j));
+			tmp = ft_itoa(j);
+			envp[i] = ft_strjoin("SHLVL=", tmp);
 			break ;
 		}
 	}
@@ -98,6 +101,7 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 	while (envp[i])
 		i++;
 	ft_shlvl2(envp, ms, i, n);
+	free(tmp);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -112,6 +116,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	(void) argv;
 	ft_shlvl(envp, &m_s, -1, 0);
+	system("leaks minishell");
 	m_s.exit_num = 0;
 	while (1)
 		loop(&m_s, &lexer);

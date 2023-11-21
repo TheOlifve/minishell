@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:40:23 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/20 12:27:45 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:24:26 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ char	*word_cmp3(t_ms *ms, char *word)
 	char	**path;
 
 	i = -1;
+	if (check_built(word))
+		return (word);
 	path = ft_split(ms->path, ':');
 	tmp = ft_strjoin("/", word);
 	while (path && path[++i])
