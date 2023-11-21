@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/11/21 14:46:46 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/11/21 16:48:35 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 
 MINI = $(patsubst %.o, $(BUILD)/%.o, $(OBJ))
 
-CFLAGS = -g -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror #-g3 -fsanitize=address
 
 INC = -Ireadline/include -Ilibft
 

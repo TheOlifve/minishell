@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 14:50:44 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:46:53 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	main2(t_ms *ms, int i)
 	ms->p_err = 0;
 	ms->index = -1;
 	ms->bb = 0;
-	ms->exit = 0;
 	ms->c1 = 0;
 	ms->c2 = 0;
 	ms->ord = 0;
@@ -57,6 +56,8 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 	{
 		m_s->args = m_s->args_old;
 		tokenizer(m_s, &lexer, -1, -1);
+		// if (m_s->prior == 5 && access("bonus_help", F_OK) == 0)
+		// 	unlink("bonus_help");
 		free(m_s->args_old);
 		ft_free2(m_s);
 	}

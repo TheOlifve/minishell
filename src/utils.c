@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 14:55:49 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:50:26 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,31 +33,32 @@ int	get_cmd(char *path, char *cmd)
 	return (1);
 }
 
-void	my_dup2(int read, int write, t_ms *ms)
+int	my_dup2(int read, int write1, t_ms *ms)
 {
-	// if (ms->prior > 0 && ms->prior < 5)
-	// {
-	// 	printf("aaa\n");
-	// 	if (access("bonus_help", F_OK) != 0)
-	// 		ms->bonus = open("bonus_help", O_RDWR | O_APPEND | O_CREAT, 0644);
-	// 	dup2(read, 0);
-	// 	dup2(ms->bonus, 1);
-	// }
-	// else if (ms->prior == 5)
-	// {
-	// 	ms->prior = 0;
-	// 	if (dup2(ms->bonus, 0) < 0)
-	// 		perr("Error", ms);
-	// 	if (dup2(write, 1) < 0)
-	// 		perr("Error", ms);
-	// }
-	// else
-	// {
+	if (ms->prior > 0 && ms->prior < 5)
+	{
+		dup2(0, 0);
+		dup2(ms->bonus, 1);
+		if (ms->prior == 4)
+		{
+			dup2(ms->bonus, 0);
+			dup2(write1, 0);
+		}
+	}
+	else
+	{
 		if (dup2(read, 0) < 0)
+		{
 			perr("Error", ms);
-		if (dup2(write, 1) < 0)
+			return (-1);
+		}
+		if (dup2(write1, 1) < 0)
+		{
 			perr("Error", ms);
-	// }
+			return (-1);
+		}
+	}
+	return (0);
 }
 
 int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)
