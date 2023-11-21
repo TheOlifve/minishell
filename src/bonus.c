@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:40:23 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 15:24:26 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 17:01:19 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,29 +108,43 @@ char	*word_cmp3(t_ms *ms, char *word)
 	return (word);
 }
 
+void	eng2(t_ms *ms, int n)
+{
+	if (ms->prior == 0 && access("bonus_help", F_OK) == 0)
+		unlink("bonus_help");
+	while (ms->tree[++n])
+	{
+		if (ms->tree[n]->_cmd)
+			ms->tree[n]->_cmd = word_cmp3(ms, priority(ms, ms->tree[n]->_cmd, -1));
+		if (ms->tree[n]->_option)
+			ms->tree[n]->_option = priority(ms, ms->tree[n]->_option, -1);
+		if (ms->tree[n]->_redir)
+			ms->tree[n]->_redir = priority(ms, ms->tree[n]->_redir, -1);
+		if (ms->tree[n]->_file)
+			ms->tree[n]->_file = priority(ms, ms->tree[n]->_file, -1);
+		if (ms->tree[n]->_word)
+			ms->tree[n]->_word = priority(ms, ms->tree[n]->_word, -1);
+		if (!ms->tree[n]->_pipe)
+			break ;
+	}
+	if (access("bonus_help", F_OK) != 0 && ms->prior > 0)
+			ms->bonus = open("bonus_help", O_RDWR | O_APPEND | O_CREAT, 0644);
+}
+
 int	eng(t_ms *ms)
 {
 	int	n;
+	int	x;
 
-	n = ms->ord;
+	n = ms->ord - 1;
+	x = ms->ord;
 	ms->index = ms->ord;
-	if (ms->prior == 0 && access("bonus_help", F_OK) == 0)
-		unlink("bonus_help");
-	if (ms->tree[n]->_cmd)
-		ms->tree[n]->_cmd = word_cmp3(ms, priority(ms, ms->tree[n]->_cmd, -1));
-	if (ms->tree[n]->_option)
-		ms->tree[n]->_option = priority(ms, ms->tree[n]->_option, -1);
-	if (ms->tree[n]->_redir)
-		ms->tree[n]->_redir = priority(ms, ms->tree[n]->_redir, -1);
-	if (ms->tree[n]->_file)
-		ms->tree[n]->_file = priority(ms, ms->tree[n]->_file, -1);
-	if (ms->tree[n]->_word)
-		ms->tree[n]->_word = priority(ms, ms->tree[n]->_word, -1);
-	while (ms && ms->tree[n])
+	eng2(ms, n);
+	while (ms && ms->tree[x])
 	{
-		if (ms->tree[n]->_or)
-			return (n);
-		n++;
+		if (ms->tree[x]->_or)
+			return (x);
+		x++;
 	}
 	return (-1);
 }

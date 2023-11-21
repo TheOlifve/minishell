@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 14:55:23 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 15:13:53 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ int	child(t_ms *ms, t_pipex *pipex, char *argv)
 	if (pipex->pid == 0)
 	{
 		if (cmd_args[0][0] == '<' || cmd_args[0][0] == '>')
-			my_exit(open_files(ms, cmd_args, -1), 1);
-		my_exit(child_dup(ms, pipex, cmd_args, 0), 1);
+			my_exit(open_files(ms, cmd_args, -1), 1, ms);
+		my_exit(child_dup(ms, pipex, cmd_args, 0), 1, ms);
 		cmd_args = redir_cut(ft_split(argv, ' '));
 		if (cmd_args[0] == NULL)
 			exit (0);

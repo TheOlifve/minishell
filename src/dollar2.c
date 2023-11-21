@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:39:01 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/09 18:58:36 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 17:33:03 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	ft_isit(t_ms *ms, char i, int n)
 int	dol_prep2(t_ms *ms, char *ptr, int x, int i)
 {
 	char	*tmp;
+	char	*tmp2;
 	int		y;
 
 	if (x == 1 && ptr[0] == '$' && ptr[1] == '\0')
@@ -39,11 +40,13 @@ int	dol_prep2(t_ms *ms, char *ptr, int x, int i)
 	y = ft_strlen(tmp);
 	ms->num = ms->num - ft_strlen(ptr) + ft_strlen(tmp);
 	free(ptr);
-	ptr = ft_strjoin2(ft_substr(ms->args_old, 0, ms->dol2), tmp);
+	tmp2 = ft_substr(ms->args_old, 0, ms->dol2);
+	ptr = ft_strjoin2(tmp2, tmp);
 	tmp = ft_substr(ms->args_old, i, ft_strlen(ms->args_old));
 	ms->args_old = ft_strjoin2(ptr, tmp);
 	free(ptr);
 	free(tmp);
+	free(tmp2);
 	return (y);
 }
 
@@ -65,6 +68,7 @@ int	dol_prep(t_ms *ms, int i, int x, int y)
 		ptr[x] = ms->args_old[y++];
 	ptr[x] = '\0';
 	y = dol_prep2(ms, ptr, x, i);
+	free(ptr);
 	return (ms->dol2 + y - 1);
 }
 

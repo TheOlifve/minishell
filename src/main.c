@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 16:58:20 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 17:58:37 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	main2(t_ms *ms, int i)
 	ms->p_err = 0;
 	ms->index = -1;
 	ms->bb = 0;
-	ms->exit = 0;
 	ms->c1 = 0;
 	ms->c2 = 0;
 	ms->ord = 0;
@@ -57,6 +56,8 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 	{
 		m_s->args = m_s->args_old;
 		tokenizer(m_s, &lexer, -1, -1);
+		// if (m_s->prior == 5 && access("bonus_help", F_OK) == 0)
+		// 	unlink("bonus_help");
 		free(m_s->args_old);
 		ft_free2(m_s);
 	}
@@ -81,8 +82,8 @@ void	ft_shlvl2(char **envp, t_ms *ms, int i, int n)
 
 void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 {
-	int	tmp;
-	int	j;
+	int		j;
+	char	*tmp;
 
 	while (envp[++i])
 	{
@@ -90,7 +91,6 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 		{
 			envp[i] += 6;
 			j = ft_atoi(envp[i]);
-			free(envp[i]);
 			j += 1;
 			tmp = ft_itoa(j);
 			envp[i] = ft_strjoin("SHLVL=", tmp);
@@ -106,18 +106,23 @@ void	ft_shlvl(char **envp, t_ms *ms, int i, int n)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_ms	m_s;
-	t_lexer	lexer;
-
-	if (argc > 1)
-	{
-		perror("minishell_ERROR");
-		exit (1);
-	}
-	(void) argv;
-	ft_shlvl(envp, &m_s, -1, 0);
+	// t_ms	m_s;
+	// t_lexer	lexer;
+	
+	int *a = malloc(111);
+	a = NULL;
 	system("leaks minishell");
-	m_s.exit_num = 0;
-	while (1)
-		loop(&m_s, &lexer);
+	// if (argc > 1)
+	// {
+	// 	perror("minishell_ERROR");
+	// 	exit (1);
+	// }
+	(void) argv;
+	(void)a;
+	(void) argc;
+	(void)envp;
+	// ft_shlvl(envp, &m_s, -1, 0);
+	// m_s.exit_num = 0;
+	// while (1)
+	// 	loop(&m_s, &lexer);
 }

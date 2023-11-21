@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/20 12:54:44 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:15:17 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	exit_mode(int n, t_ms *ms)
 	if (n == 0)
 	{
 		printf("exit\n");
-		if (ms->tree[ms->ord]->next || ms->tree[ms->ord]->next->_word)
+		if (ms->tree[ms->ord]->next && ms->tree[ms->ord]->next->_word)
 		{
 			ms->exit_num = ft_atoi(ms->tree[ms->ord]->next->_word);
 			n = ms->exit_num;

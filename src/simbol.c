@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simbol.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 3223/07/10 14:44:13 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/09 17:36:41 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 17:37:29 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	str_join2(t_ms *ms, int i, char c, int n)
 		ms->c1 = ms->c1 + (n - 1);
 	else if (c == 39)
 		ms->c2 = ms->c2 + (n - 1);
+	free(str1);
+	free(str2);
 	return (n);
 }
 

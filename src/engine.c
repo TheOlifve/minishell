@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 15:24:38 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 17:02:40 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	cmd_find(t_ms *ms, char **cmd)
 		return (echo(ms, 0));
 	else if (ft_strcmp(cmd[0], "cd") == 0)
 		return (cd(ms, -1));
-	else if (ft_strcmp(cmd[0], "exit") == 0 && ms->exit == 5)
+	else if (ft_strcmp(cmd[0], "exit") == 0 && ms->prior > 0)
 		return (0);
 	else if (ft_strcmp(cmd[0], "exit") == 0)
 		return (exit_mode(0, ms));
@@ -65,8 +65,8 @@ int	exec_builtin(t_ms *ms, char **cmd)
 	int	i;
 
 	if (ms->tree[ms->ord]->_redir != NULL)
-			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2);
-	i = my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2);
+			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2, ms);
+	i = my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2, ms);
 	if (i == 1)
 	{
 		ms->exit_num = 1;
@@ -99,8 +99,8 @@ int	exec_one_cmd(t_ms *ms)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (ms->tree[ms->ord]->_redir != NULL)
-			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1);
+		if (ms->tree[ms->ord]->_redir != NULL || ms->prior > 0)
+			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1, ms);
 		if (cmd[0] == NULL)
 			exit (0);
 		execve (cmd[0], cmd, ms->envp);

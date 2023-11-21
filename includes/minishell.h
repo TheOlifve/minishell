@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 15:50:47 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 17:01:59 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ typedef struct s_ms
 	int		ord;
 	int		err;
 	int		dol2;
-	int		exit;
 	int		fd[2];
 	int		p_err;
 	int		index;
@@ -115,7 +114,6 @@ int		pwd(t_ms *ms, int mod);
 int		check_built(char *str);
 int		spaces(t_ms *ms, int i);
 int		engine(t_ms *ms, int n);
-int		my_exit(int n, int mod);
 int		simbol(t_ms *ms, int i);
 int		echo(t_ms *ms, int flag);
 int		perr(char *str, t_ms *ms);
@@ -131,9 +129,11 @@ int		pars_err(char *error, t_ms *ms);
 int		parser(t_lexer *lexer, t_ms *ms);
 int		o_space2(t_ms *ms, int i, int n);
 int		o_space3(t_ms *ms, int i, int n);
+int		my_exit(int n, int mod, t_ms *ms);
 int		space_help(t_ms *ms, int x, int n);
 int		ft_export3(t_ms *ms, int i, int j);
 int		ft_unset(t_ms *ms, char **str, int i);
+int		my_dup2(int read, int write, t_ms *ms);
 int		dol_prep(t_ms *ms, int i, int x, int y);
 int		ft_export2(t_ms *ms, char **str, int i);
 int		my_dup2(int read, int write, t_ms *ms);
