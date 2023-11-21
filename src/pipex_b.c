@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/20 12:24:58 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 14:55:23 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,13 @@ int	heredoc_find(t_ms *ms, char **cmd_args)
 int	child(t_ms *ms, t_pipex *pipex, char *argv)
 {
 	char	**cmd_args;
-
+	
 	cmd_args = ft_split(argv, ' ');
 	if (!cmd_args)
 		exit_mode(3, ms);
 	heredoc_find(ms, cmd_args);
+	if (check_built(cmd_args[0]))
+		return (child_builtin(ms, pipex, cmd_args));
 	pipex->pid = fork();
 	if (pipex->pid == 0)
 	{
@@ -92,11 +94,12 @@ int	child(t_ms *ms, t_pipex *pipex, char *argv)
 		if (cmd_args[0] == NULL)
 			exit (0);
 		pipe_close(pipex);
-		my_exit(cmd_find(ms, cmd_args), 0);
 		execve(cmd_args[0], cmd_args, ms->envp);
-		write(2, "minishell: command not found\n", 29);
+		my_write(cmd_args[0]);
 		exit_mode(7, ms);
 	}
+	else if (pipex->pid == 0)
+		exit (0);
 	cat_exit(ms, cmd_args[0]);
 	free(cmd_args);
 	return (0);

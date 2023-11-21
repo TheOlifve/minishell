@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/20 12:50:02 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 14:50:44 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	main2(t_ms *ms, int i)
 	while (ms->envp[++i])
 		if (ft_strncmp(ms->envp[i], "PATH=", 5) == 0)
 			ms->path = ms->envp[i] + 5;
-	ms->save_stdout = dup(1);
 	ms->prior = 0;
 	ms->p_err = 0;
 	ms->index = -1;
@@ -42,6 +41,8 @@ void	main2(t_ms *ms, int i)
 
 int	loop(t_ms *m_s, t_lexer *lexer)
 {
+	m_s->_stdin_backup_ = dup(0);
+	m_s->_stdout_backup_ = dup(1);
 	g_glob = 0;
 	main2(m_s, -1);
 	if (ft_strcmp(m_s->args_old, "\0") == 0)

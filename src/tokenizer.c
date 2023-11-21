@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/20 12:26:09 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 14:45:36 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	l_analys(t_ms *m, t_lexer **lexer)
 
 void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 {
+	pipe_check(m);
 	if (spaces(m, -1) == 1)
 		return ;
 	if (ft_scope(m, -1, 0, 0) == 1)

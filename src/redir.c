@@ -6,11 +6,18 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/20 12:30:16 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 14:56:33 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	my_write(char *str)
+{
+	write(2, "minishell: ", 11);
+	write(2, str, ft_strlen(str));
+	write(2, ": command not found\n", 20);
+}
 
 char	*read_file(void)
 {
@@ -32,15 +39,6 @@ char	*read_file(void)
 		free(tmp3);
 	}
 	return (tmp2);
-}
-
-int	my_exit(int n, int mod)
-{
-	if (mod == 0 && (n == 0 || n == 1))
-		exit (n);
-	else if (mod == 1 && (n == 1 || n < 0))
-		exit (1);
-	return (0);
 }
 
 void	cat_exit(t_ms *ms, char *str)

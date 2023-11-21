@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/20 12:43:28 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/21 14:54:02 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ typedef struct s_ms
 	int		bonus;
 	int		exit_num;
 	int		bool_word;
-	int		save_stdout;
+	int		_stdin_backup_;
+	int		_stdout_backup_;
 	char	*ptr;
 	char	*path;
 	char	*args;
@@ -111,6 +112,7 @@ int		handler2(void);
 int		cd(t_ms *ms, int j);
 int		check_var2(char *str);
 int		pwd(t_ms *ms, int mod);
+int		check_built(char *str);
 int		spaces(t_ms *ms, int i);
 int		engine(t_ms *ms, int n);
 int		my_exit(int n, int mod);
@@ -141,6 +143,7 @@ int		ft_export_env(t_ms *ms, char **str, int i);
 int		ft_export(t_ms *ms, char **str, int i, int j);
 int		check_var3(char *str, int i, int j, t_ms *ms);
 int		err(char *error, char *str, t_ms *ms, int type);
+int		child_builtin(t_ms *ms, t_pipex *pipex, char **cmd);
 int		word_distribute(t_lexer **lexer, t_ms *ms, char *word);
 int		child_dup(t_ms	*ms, t_pipex *pipex, char **cmd, int fd);
 char	*read_file(void);
@@ -157,7 +160,9 @@ char	*dol2(char *ptr, char *str, int i, int n);
 void	main_sig(t_ms *ms);
 void	ft_free2(t_ms *ms);
 void	ft_search(t_ms *ms);
+void	my_write(char *str);
 void	goto_start(t_ms *ms);
+void	pipe_check(t_ms *ms);
 void	pipe_close(t_pipex *pipex);
 void	ctrld(char *line, t_ms *ms);
 void	cat_exit(t_ms *ms, char *str);

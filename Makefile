@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/11/20 12:50:20 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/11/21 14:46:46 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC = 	src/main.c				\
 		src/cmds.c				\
 		src/mems.c				\
 		src/tokenizer.c			\
+		src/tokenizer2.c		\
 		src/simbol.c			\
 		src/dollar2.c			\
 		src/export.c			\

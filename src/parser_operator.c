@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_operator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/12 12:13:09 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 14:35:33 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ char	*redir_build(t_ms *ms, char *opr)
 		free(tmp);
 		return (tmp2);
 	}
-	ms->bool_word += 1;
 	tmp2 = ft_strdup(opr);
 	return (tmp2);
 }
