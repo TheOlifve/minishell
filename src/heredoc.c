@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 18:52:30 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 21:27:27 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ void	heredoc(char *str, int file, char *tmp)
 			break ;
 		if (ft_strcmp2(str, tmp) == -10)
 			break ;
-		ft_putstr_fd(ft_strjoin(tmp, "\n"), file);
+		free(tmp);
+		tmp = ft_strjoin(tmp, "\n");
+		ft_putstr_fd(tmp, file);
 		free(tmp);
 	}
 	g_glob = 0;

@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 18:55:46 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 18:33:00 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ typedef struct s_ms
 	char	*args;
 	char	**str;
 	char	**envp;
+	char	*my_cmd;
 	char	*wd_tmp;
 	char	*args_old;
 	t_tree	*tree[OPEN_MAX];
@@ -129,7 +130,7 @@ int		pars_err(char *error, t_ms *ms);
 int		parser(t_lexer *lexer, t_ms *ms);
 int		o_space2(t_ms *ms, int i, int n);
 int		o_space3(t_ms *ms, int i, int n);
-int		my_exit(int n, int mod, t_ms *ms);
+int		my_exit(int n, int mod);
 int		space_help(t_ms *ms, int x, int n);
 int		ft_export3(t_ms *ms, int i, int j);
 int		ft_unset(t_ms *ms, char **str, int i);
@@ -155,7 +156,7 @@ char	*get_next_line(int fd);
 char	*cmd_builder(t_ms *ms);
 char	*dol_check(t_ms *ms, char *ptr);
 char	*cmd_build(t_ms *ms, char *word);
-char	*ft_concat(char *cmd, char *opt);
+void	ft_concat(t_ms *ms, char *cmd);
 char	*ft_join(char *str, char *str2, int i);
 char	*dol2(char *ptr, char *str, int i, int n);
 void	main_sig(t_ms *ms);

@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 18:13:16 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 17:01:31 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	main2(t_ms *ms, int i)
 	ms->c2 = 0;
 	ms->ord = 0;
 	ms->bool_word = 0;
+	ms->my_cmd = NULL;
 	ms->dol2 = 0;
 	ms->err = 0;
 	ms->args_old = NULL;

@@ -3,40 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 12:11:50 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 16:48:06 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/22 17:27:23 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*ft_concat(char *cmd, char *opt)
+void	ft_concat(t_ms *ms, char *cmd)
 {
-	int		i;
 	char	*tmp;
 	char	*tmp2;
-	char	**option;
 
-	i = 0;
-	if (!cmd)
-		cmd = ft_strdup("");
-	tmp2 = ft_strdup(cmd);
-	free(cmd);
-	option = ft_split(opt, ' ');
-	while (option && option[i])
+	if (ms->my_cmd == NULL)
+		tmp = ft_strdup(" ");
+	else
 	{
-		tmp = ft_strdup(tmp2);
-		free(tmp2);
-		tmp2 = ft_strjoin(tmp, option[i]);
-		free(tmp);
-		i++;
+		tmp = ft_strdup(ms->my_cmd);
+		free(ms->my_cmd);
 	}
-	cmd = ft_strjoin(tmp2, " ");
+	tmp2 = ft_join(tmp, cmd, 3);
+	free(tmp);
+	ms->my_cmd = ft_strdup(tmp2);
 	free(tmp2);
-	free(option);
-	return (cmd);
 }
 
 // void	hard_bon_help(t_ms *m, char *ptr, int n, int i)

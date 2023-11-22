@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:40:23 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 17:01:19 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/21 21:23:59 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,14 @@ char	*word_cmp3(t_ms *ms, char *word)
 		if (access(tmp2, X_OK) == 0)
 		{
 			free(tmp);
-			free(path);
+			doublefree(path);
 			free(word);
 			return (tmp2);
 		}
 		free(tmp2);
 	}
 	free(tmp);
-	free(path);
+	doublefree(path);
 	return (word);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 17:02:40 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 18:45:10 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,38 +35,55 @@ int	cmd_find(t_ms *ms, char **cmd)
 	return (2);
 }
 
+// char	*cmd_builder2(t_ms *ms, char *cmd)
+// {
+// 	char	*tmp;
+	
+// 	if (ms->tree[ms->ord]->_cmd != NULL)
+// 		cmd = ft_strjoin(ms->tree[ms->ord]->_cmd, " ");
+// 	if (ms->tree[ms->ord]->_option != NULL)
+// 		cmd = ft_concat(tmp, ms->tree[ms->ord]->_option);
+// 	if (ms->tree[ms->ord]->_file != NULL)
+// 		cmd = ft_concat(tmp, ms->tree[ms->ord]->_file);
+// 	if (ms->tree[ms->ord]->_word != NULL)
+// 		cmd = ft_concat(tmp, ms->tree[ms->ord]->_word);
+// 	return (tmp);
+// }
+
 char	*cmd_builder(t_ms *ms)
 {
-	char	*cmd;
-
-	cmd = ft_strdup("");
 	goto_start(ms);
 	while (ms->tree[ms->ord])
 	{
 		if (ms->tree[ms->ord]->_cmd != NULL)
-			cmd = ft_strjoin(ms->tree[ms->ord]->_cmd, " ");
+			ft_concat(ms, ms->tree[ms->ord]->_cmd);
 		if (ms->tree[ms->ord]->_option != NULL)
-			cmd = ft_concat(cmd, ms->tree[ms->ord]->_option);
+			ft_concat(ms, ms->tree[ms->ord]->_option);;
 		if (ms->tree[ms->ord]->_file != NULL)
-			cmd = ft_concat(cmd, ms->tree[ms->ord]->_file);
+			ft_concat(ms, ms->tree[ms->ord]->_file);;
 		if (ms->tree[ms->ord]->_word != NULL)
-			cmd = ft_concat(cmd, ms->tree[ms->ord]->_word);
+			ft_concat(ms, ms->tree[ms->ord]->_word);;
 		if (ms->tree[ms->ord]->next)
 			ms->tree[ms->ord] = ms->tree[ms->ord]->next;
 		else
 			break ;
 	}
 	goto_start(ms);
-	return (cmd);
+	return (ms->my_cmd);
 }
 
 int	exec_builtin(t_ms *ms, char **cmd)
 {
-	int	i;
+	int		i;
+	char	**tmp;
 
+	i = 0;
 	if (ms->tree[ms->ord]->_redir != NULL)
-			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2, ms);
-	i = my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2, ms);
+	{
+		tmp = ft_split(ms->tree[ms->ord]->_redir, ' ');
+		i = my_exit(std_dup(ms, tmp), 2);
+		doublefree(tmp);
+	}
 	if (i == 1)
 	{
 		ms->exit_num = 1;
@@ -81,30 +98,37 @@ int	exec_builtin(t_ms *ms, char **cmd)
 	else if (i == 1)
 		ms->exit_num = 1;
 	cat_exit(ms, cmd[0]);
-	free(cmd);
+	doublefree(cmd);
 	return (0);
 }
 
 int	exec_one_cmd(t_ms *ms)
 {
 	char	**cmd;
+	char	*tmp;
 	int		pid;
 	int		ptr[1];
 
 	if (ms->tree[ms->ord]->_redir != NULL)
-		heredoc_find(ms, ft_split(ms->tree[ms->ord]->_redir, ' '));
-	cmd = ft_split(cmd_builder(ms), ' ');
+	{
+		cmd = ft_split(ms->tree[ms->ord]->_redir, ' ');
+		heredoc_find(ms, cmd);
+		doublefree(cmd);
+	}
+	tmp = cmd_builder(ms);
+	cmd = ft_split(tmp, ' ');
 	if (check_built(cmd[0]))
 		return (exec_builtin(ms, cmd));
 	pid = fork();
 	if (pid == 0)
 	{
 		if (ms->tree[ms->ord]->_redir != NULL || ms->prior > 0)
-			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1, ms);
+			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1);
 		if (cmd[0] == NULL)
 			exit (0);
 		execve (cmd[0], cmd, ms->envp);
 		my_write(cmd[0]);
+		doublefree(cmd);
 		exit_mode(7, ms);
 	}
 	while (wait(ptr) != -1)
@@ -112,7 +136,7 @@ int	exec_one_cmd(t_ms *ms)
 	cat_exit(ms, cmd[0]);
 	if (ptr[0] > 0)
 		ft_search(ms);
-	free(cmd);
+	doublefree(cmd);
 	return (0);
 }
 

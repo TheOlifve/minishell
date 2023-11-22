@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 17:03:22 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 18:50:19 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,25 @@ int	std_dup(t_ms *ms, char **file)
 	int		fd;
 	char	*in_file;
 	char	*out_file;
+	char	**tmp;
 
 	fd = 0;
 	in_file = in_find(file);
 	out_file = out_find(file);
 	if (in_file != NULL)
 	{
-		fd = open_files(ms, ft_split(in_file, ' '), -1);
+		tmp = ft_split(in_file, ' ');
+		fd = open_files(ms, tmp, -1);
 		if (fd < 0)
 			return (1);
 		my_dup2(fd, 1, ms);
 	}
 	if (out_file != NULL)
-		fd = my_dup2(0, open_files(ms, ft_split(out_file, ' '), -1), ms);
+	{	
+		tmp = ft_split(out_file, ' ');
+		fd = my_dup2(0, open_files(ms, tmp, -1), ms);
+		system("leaks minishell");
+	}
 	return (fd);
 }
 
