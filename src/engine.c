@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/22 18:45:10 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 23:40:06 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,12 @@ int	exec_builtin(t_ms *ms, char **cmd)
 	i = 0;
 	if (ms->tree[ms->ord]->_redir != NULL)
 	{
+		// system("leaks minishell");
 		tmp = ft_split(ms->tree[ms->ord]->_redir, ' ');
-		i = my_exit(std_dup(ms, tmp), 2);
+		i = std_dup(ms, tmp);
+		my_exit(i, 2);
 		doublefree(tmp);
+		// exit(0);
 	}
 	if (i == 1)
 	{

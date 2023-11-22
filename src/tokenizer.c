@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 21:16:19 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/23 00:13:35 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	o_space3(t_ms *ms, int i, int n)
 
 int	o_space2(t_ms *ms, int i, int n)
 {
+	char	*tmp;
 	char	*str1;
 	char	*str2;
 
@@ -47,7 +48,9 @@ int	o_space2(t_ms *ms, int i, int n)
 	else
 	{
 		i = i + n;
-		str1 = ft_strjoin(ft_substr(ms->args_old, 0, i), " ");
+		tmp = ft_substr(ms->args_old, 0, i);
+		str1 = ft_strjoin(tmp, " ");
+		free(tmp);
 		str2 = ft_substr(ms->args_old, i, ft_strlen(ms->args_old) - i);
 		free(ms->args_old);
 		ms->args_old = ft_strjoin(str1, str2);

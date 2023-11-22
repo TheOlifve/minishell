@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 3223/07/10 14:44:13 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 17:37:29 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/23 00:06:55 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	str_join(t_ms *ms, int i, char c)
 
 int	simbol2(t_ms *ms, int i)
 {
+
 	if (ms->args_old[i] && ms->args_old[i] == 34 && ms->c2 % 2 != 0)
 	{
 		while (ms && ms->args_old && ms->args_old[++i])

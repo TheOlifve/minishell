@@ -1,0 +1,13 @@
+Makefile
+a
+b
+build
+g1.memgraph
+g2.memgraph
+includes
+libft
+minishell
+readline
+readline-8.2
+readline.sh
+src

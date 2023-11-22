@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:39:01 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 17:33:03 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/23 00:06:24 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	dol_prep(t_ms *ms, int i, int x, int y)
 		ptr[x] = ms->args_old[y++];
 	ptr[x] = '\0';
 	y = dol_prep2(ms, ptr, x, i);
-	free(ptr);
 	return (ms->dol2 + y - 1);
 }
 
