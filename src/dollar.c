@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 14:38:53 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 16:46:29 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/23 00:09:05 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
 	if (!ptr)
 		return (NULL);
 	if (ptr[0] == '?')
-		return (ft_itoa(ms->exit_num));
+		return (exit_num(ms));
 	i = -1;
 	while (ms->envp[++i])
 	{

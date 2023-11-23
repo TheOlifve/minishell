@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 23:50:50 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 17:41:39 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,6 @@ int	parser(t_lexer *lexer, t_ms *ms)
 			lexer = lexer->next;
 		else
 			break ;
-	}
-	ms->ord = 0;
-	return (0);
-}
 	// while (ms->tree[ms->ord])
 	// {
 	// 	goto_start(ms);
@@ -70,3 +66,7 @@ int	parser(t_lexer *lexer, t_ms *ms)
 	// 	ms->ord++;
 	// } 
 	// ms->ord = 0;
+	}
+	ms->ord = 0;
+	return (0);
+}

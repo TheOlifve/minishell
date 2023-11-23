@@ -3,55 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 12:11:50 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/22 17:27:23 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 11:42:23 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_concat(t_ms *ms, char *cmd)
+char	*ft_concat(char *cmd, char *opt)
 {
+	int		i;
 	char	*tmp;
 	char	*tmp2;
+	char	**option;
 
-	if (ms->my_cmd == NULL)
-		tmp = ft_strdup(" ");
-	else
+	i = 0;
+	if (!cmd)
+		cmd = ft_strdup("");
+	tmp2 = ft_strdup(cmd);
+	free(cmd);
+	option = ft_split(opt, ' ');
+	while (option && option[i])
 	{
-		tmp = ft_strdup(ms->my_cmd);
-		free(ms->my_cmd);
+		tmp = ft_strdup(tmp2);
+		free(tmp2);
+		tmp2 = ft_strjoin(tmp, option[i]);
+		free(tmp);
+		i++;
 	}
-	tmp2 = ft_join(tmp, cmd, 3);
-	free(tmp);
-	ms->my_cmd = ft_strdup(tmp2);
+	cmd = ft_strjoin(tmp2, " ");
 	free(tmp2);
+	free(option);
+	return (cmd);
 }
-
-// void	hard_bon_help(t_ms *m, char *ptr, int n, int i)
-// {
-// 	char	*str;
-// 	char	*str2;
-
-// 	str = ft_substr(ptr, 0, i - 1);
-// 	str2 = ft_substr(ptr, i - 1, ft_strlen(ptr) - i + 2);
-// 	free(ptr);
-// 	if (n == 1)
-// 		ptr = ft_strjoin(str, m->scope);
-// 	else
-// 		ptr = ft_strjoin(str, m->scope2);
-// 	free(str);
-// 	str = ft_strjoin(ptr, str2);
-// 	free(ptr);
-// 	ptr = ft_strdup(str);
-// 	free(str);
-// 	free(str2);
-// 	i = i + 2 + ft_strlen(m->scope);
-// 	if (n != 1)
-// 		i = i + 2 + ft_strlen(m->scope2);
-// }
 
 int	space_help(t_ms *ms, int x, int n)
 {

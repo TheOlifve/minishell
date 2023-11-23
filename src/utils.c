@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 17:04:39 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/23 00:15:07 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+char	*exit_num(t_ms *ms)
+{
+	int		fd;
+	char	*tmp;
+
+	if (access("exit_file", F_OK) != 0)
+		open("exit_file", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	fd = open("exit_file", O_RDWR);
+	tmp = get_next_line(fd);
+	if (tmp && ft_atoi(tmp) == 0)
+		return (ft_itoa(ms->exit_num));
+	else if (tmp)
+	{
+		close(fd);
+		fd = open("exit_file", O_RDWR | O_TRUNC | O_CREAT, 0644);
+		write (fd, 0, 2);
+		return (tmp);
+	}
+	return (ft_itoa(ms->exit_num));
+}
+
+int	perr(char *str, t_ms *ms)
+{
+	perror(str);
+	ms->err = 1;
+	ms->exit_num = 1;
+	return (1);
+}
 
 int	get_cmd(char *path, char *cmd)
 {
@@ -31,34 +60,6 @@ int	get_cmd(char *path, char *cmd)
 		i--;
 	}
 	return (1);
-}
-
-int	my_dup2(int read, int write1, t_ms *ms)
-{
-	if (ms->prior > 0 && ms->prior < 5)
-	{
-		dup2(0, 0);
-		dup2(ms->bonus, 1);
-		if (ms->prior == 4)
-		{
-			dup2(ms->bonus, 0);
-			dup2(write1, 0);
-		}
-	}
-	else
-	{
-		if (dup2(read, 0) < 0)
-		{
-			perr("Error", ms);
-			return (-1);
-		}
-		if (dup2(write1, 1) < 0)
-		{
-			perr("Error", ms);
-			return (-1);
-		}
-	}
-	return (0);
 }
 
 int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)

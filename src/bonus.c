@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:40:23 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 21:23:59 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 18:59:19 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,23 +97,58 @@ char	*word_cmp3(t_ms *ms, char *word)
 		if (access(tmp2, X_OK) == 0)
 		{
 			free(tmp);
-			doublefree(path);
+			free(path);
 			free(word);
 			return (tmp2);
 		}
 		free(tmp2);
 	}
 	free(tmp);
-	doublefree(path);
+	free(path);
 	return (word);
+}
+
+void	file_cmd(t_ms *ms, int i, int j, char *tmp)
+{
+	char	**file;
+	
+	file = ft_split(ms->tree[ms->ord]->_redir, ' ');
+	while (ms->tree[ms->ord]->_redir && file[++i] && ms->bonus2 == 0)
+	{
+		while (file[i] && file[i][++j] && ms->bonus2 == 0)
+		{
+			if (file[i] && file[i][j] != ')' && file[i][j + 1] == ')')
+			{
+				tmp = ft_strtrim(ft_strdup(file[i]), ")");
+				if (ft_strncmp(file[i], ">>", 2) == 0 && file[i] != NULL)
+					ms->bonus2 = open(tmp + 2, O_RDWR | O_APPEND | O_CREAT, 0644);
+				else if (ft_strncmp(file[i], ">", 1) == 0 && file[i] != NULL)
+					ms->bonus2 = open(tmp + 1, O_RDWR | O_TRUNC | O_CREAT, 0644);
+				free(tmp);
+				break ;
+			}
+		}
+	}
+	i = -1;
+	while (ms->tree[ms->ord]->_redir && file[++i])
+		free(file[i]);
+	if (ms->tree[ms->ord]->_redir)
+		free(file);
 }
 
 void	eng2(t_ms *ms, int n)
 {
+	if (ms->prior == 5)
+		ms->prior = 0;
 	if (ms->prior == 0 && access("bonus_help", F_OK) == 0)
-		unlink("bonus_help");
-	while (ms->tree[++n])
 	{
+		close(ms->bonus);
+		unlink("bonus_help");
+	}
+	while (ms->tree[n])
+	{
+		if (ms->tree[n]->_redir && !ms->tree[n]->_pipe)
+			file_cmd(ms, -1, -1, NULL);
 		if (ms->tree[n]->_cmd)
 			ms->tree[n]->_cmd = word_cmp3(ms, priority(ms, ms->tree[n]->_cmd, -1));
 		if (ms->tree[n]->_option)
@@ -126,6 +161,7 @@ void	eng2(t_ms *ms, int n)
 			ms->tree[n]->_word = priority(ms, ms->tree[n]->_word, -1);
 		if (!ms->tree[n]->_pipe)
 			break ;
+		n++;
 	}
 	if (access("bonus_help", F_OK) != 0 && ms->prior > 0)
 			ms->bonus = open("bonus_help", O_RDWR | O_APPEND | O_CREAT, 0644);
@@ -136,7 +172,7 @@ int	eng(t_ms *ms)
 	int	n;
 	int	x;
 
-	n = ms->ord - 1;
+	n = ms->ord;
 	x = ms->ord;
 	ms->index = ms->ord;
 	eng2(ms, n);

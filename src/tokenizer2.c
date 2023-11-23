@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:02:08 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/22 18:33:25 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 17:45:57 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	child_builtin(t_ms *ms, t_pipex *pipex, char **cmd)
 {
 	int	i;
 
-	i = my_exit(child_dup(ms, pipex, cmd, 0), 2);
+	i = my_exit(child_dup(ms, pipex, cmd, 0), 2, ms);
 	if (i == 1)
 	{
 		ms->exit_num = 1;
@@ -79,8 +79,21 @@ void	pipe_check(t_ms *ms)
 	}
 }
 
-int	my_exit(int n, int mod)
+int	my_exit(int n, int mod, t_ms *ms)
 {
+	if (ms->prior > 0 && ms->tree[ms->ord] && !ms->tree[ms->ord]->_redir)
+	{
+		if (ms->prior > 0 && ms->prior < 5)
+		{
+			if (dup2(0, 0) < 0 || dup2(ms->bonus, 1) < 0)
+			{
+				perr("Error", ms);
+				return (-1);
+			}
+		}
+	}
+	else
+		n = 3;
 	if (mod == 0 && (n == 0 || n == 1))
 		return (1);
 	else if (mod == 1 && (n == 1 || n < 0 ))

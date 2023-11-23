@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   engine.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/22 23:40:06 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/23 00:01:46 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,58 +35,13 @@ int	cmd_find(t_ms *ms, char **cmd)
 	return (2);
 }
 
-// char	*cmd_builder2(t_ms *ms, char *cmd)
-// {
-// 	char	*tmp;
-	
-// 	if (ms->tree[ms->ord]->_cmd != NULL)
-// 		cmd = ft_strjoin(ms->tree[ms->ord]->_cmd, " ");
-// 	if (ms->tree[ms->ord]->_option != NULL)
-// 		cmd = ft_concat(tmp, ms->tree[ms->ord]->_option);
-// 	if (ms->tree[ms->ord]->_file != NULL)
-// 		cmd = ft_concat(tmp, ms->tree[ms->ord]->_file);
-// 	if (ms->tree[ms->ord]->_word != NULL)
-// 		cmd = ft_concat(tmp, ms->tree[ms->ord]->_word);
-// 	return (tmp);
-// }
-
-char	*cmd_builder(t_ms *ms)
-{
-	goto_start(ms);
-	while (ms->tree[ms->ord])
-	{
-		if (ms->tree[ms->ord]->_cmd != NULL)
-			ft_concat(ms, ms->tree[ms->ord]->_cmd);
-		if (ms->tree[ms->ord]->_option != NULL)
-			ft_concat(ms, ms->tree[ms->ord]->_option);;
-		if (ms->tree[ms->ord]->_file != NULL)
-			ft_concat(ms, ms->tree[ms->ord]->_file);;
-		if (ms->tree[ms->ord]->_word != NULL)
-			ft_concat(ms, ms->tree[ms->ord]->_word);;
-		if (ms->tree[ms->ord]->next)
-			ms->tree[ms->ord] = ms->tree[ms->ord]->next;
-		else
-			break ;
-	}
-	goto_start(ms);
-	return (ms->my_cmd);
-}
-
 int	exec_builtin(t_ms *ms, char **cmd)
 {
-	int		i;
-	char	**tmp;
+	int	i;
 
-	i = 0;
 	if (ms->tree[ms->ord]->_redir != NULL)
-	{
-		// system("leaks minishell");
-		tmp = ft_split(ms->tree[ms->ord]->_redir, ' ');
-		i = std_dup(ms, tmp);
-		my_exit(i, 2);
-		doublefree(tmp);
-		// exit(0);
-	}
+			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2, ms);
+	i = my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 2, ms);
 	if (i == 1)
 	{
 		ms->exit_num = 1;
@@ -101,45 +56,40 @@ int	exec_builtin(t_ms *ms, char **cmd)
 	else if (i == 1)
 		ms->exit_num = 1;
 	cat_exit(ms, cmd[0]);
-	doublefree(cmd);
+	free(cmd);
 	return (0);
 }
 
 int	exec_one_cmd(t_ms *ms)
 {
 	char	**cmd;
-	char	*tmp;
 	int		pid;
 	int		ptr[1];
 
 	if (ms->tree[ms->ord]->_redir != NULL)
-	{
-		cmd = ft_split(ms->tree[ms->ord]->_redir, ' ');
-		heredoc_find(ms, cmd);
-		doublefree(cmd);
-	}
-	tmp = cmd_builder(ms);
-	cmd = ft_split(tmp, ' ');
+		if (heredoc_find(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')) == 270)
+			return (270);
+	cmd = ft_split(cmd_builder(ms), ' ');
 	if (check_built(cmd[0]))
 		return (exec_builtin(ms, cmd));
 	pid = fork();
 	if (pid == 0)
 	{
 		if (ms->tree[ms->ord]->_redir != NULL || ms->prior > 0)
-			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1);
+			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1, ms);
 		if (cmd[0] == NULL)
 			exit (0);
 		execve (cmd[0], cmd, ms->envp);
 		my_write(cmd[0]);
-		doublefree(cmd);
 		exit_mode(7, ms);
 	}
 	while (wait(ptr) != -1)
 		;
+	ms->exit_num = ptr[0];
 	cat_exit(ms, cmd[0]);
 	if (ptr[0] > 0)
 		ft_search(ms);
-	doublefree(cmd);
+	free(cmd);
 	return (0);
 }
 
@@ -173,30 +123,43 @@ void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
 	pipex(ms, argv, -1);
 }
 
+int	engine2(t_ms *ms, int n)
+{
+	if (ms->bb == 8 && n == -1)
+		return (1);
+	if (ms->ord == n && ms->err == 0)
+	{
+		ms->prior = 4;
+		bonus_dup(ms, 0);
+		return (1);
+	}
+	else if (ms->err == 1 && n >= 0)
+	{
+		ms->ord = n + 1;
+		engine(ms, 0);
+		return (1);
+	}
+	return (0);
+}
+
 int	engine(t_ms *ms, int n)
 {
 	while (ms->tree[ms->ord])
 	{
 		if (!ms->tree[ms->ord])
 			break ;
+		n = eng(ms);
 		if (ms->tree[ms->ord])
 			goto_start(ms);
-		n = eng(ms);
 		if (ms->prior == 7)
-			return (0);
+			return (bonus_file(ms));
 		if (ms->tree[ms->ord]->_pipe != NULL)
 			exec_pipe_cmd(ms, NULL, NULL, NULL);
 		else if (ms->tree[ms->ord]->_pipe == NULL)
 			exec_one_cmd(ms);
-		if ((ms->bb == 8 && n == -1)
-			|| (ms->ord == n && ms->err == 0))
+		bonus_dup(ms, 0);
+		if (engine2(ms, n) == 1)
 			break ;
-		else if (ms->err == 1 && n >= 0)
-		{
-			ms->ord = n + 1;
-			engine(ms, 0);
-			break ;
-		}
 		ms->ord += 1;
 	}
 	return (0);

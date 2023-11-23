@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/11/22 22:08:25 by hrahovha         ###   ########.fr        #
+#    Updated: 2023/11/22 12:11:04 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,8 @@ SRC = 	src/main.c				\
 		src/wildcard.c			\
 		src/pipex_b2.c			\
 		src/engine.c			\
+		src/engine2.c			\
+		src/dup.c				\
 		src/pipex_b.c			\
 		src/free.c				\
 		src/utils.c				\
@@ -56,7 +58,7 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 
 MINI = $(patsubst %.o, $(BUILD)/%.o, $(OBJ))
 
-CFLAGS = -g -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror -g3 -fsanitize=address
 
 INC = -Ireadline/include -Ilibft
 

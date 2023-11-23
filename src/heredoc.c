@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 21:27:27 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 17:29:17 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,29 @@ void	sig3(void)
 	rl_event_hook = &handler;
 }
 
-void	heredoc(char *str, int file, char *tmp)
+int	heredoc(char *str, int file, char *tmp)
 {
 	g_glob = 5;
 	file = open("src/heredoc", O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (file < 0)
-		return ;
+		return (0);
 	while (1)
 	{
 		sig3();
 		tmp = readline("heredoc> ");
 		if (g_glob == 7)
-			break ;
+			return (270);
 		if (!tmp)
 			break ;
 		if (ft_strcmp2(str, tmp) == -10)
 			break ;
-		free(tmp);
-		tmp = ft_strjoin(tmp, "\n");
-		ft_putstr_fd(tmp, file);
+		ft_putstr_fd(ft_strjoin(tmp, "\n"), file);
 		free(tmp);
 	}
 	g_glob = 0;
 	free(tmp);
 	close(file);
+	return (0);
 }
 
 int	open_files_help(t_ms *ms, char **file, int fd)

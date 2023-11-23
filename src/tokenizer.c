@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/23 14:02:24 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 20:09:18 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,12 @@ int	o_space3(t_ms *ms, int i, int n)
 			i, ft_strlen(ms->args_old) - i);
 	free(ms->args_old);
 	ms->args_old = ft_strjoin(str1, str2);
-	free(str1);
-	free(str2);
 	ms->num -= x;
 	return (0);
 }
 
 int	o_space2(t_ms *ms, int i, int n)
 {
-	char	*tmp;
 	char	*str1;
 	char	*str2;
 
@@ -50,9 +47,7 @@ int	o_space2(t_ms *ms, int i, int n)
 	else
 	{
 		i = i + n;
-		tmp = ft_substr(ms->args_old, 0, i);
-		str1 = ft_strjoin(tmp, " ");
-		free(tmp);
+		str1 = ft_strjoin(ft_substr(ms->args_old, 0, i), " ");
 		str2 = ft_substr(ms->args_old, i, ft_strlen(ms->args_old) - i);
 		free(ms->args_old);
 		ms->args_old = ft_strjoin(str1, str2);
@@ -75,7 +70,7 @@ int	ft_scope(t_ms *m, int i, int x, int y)
 		pars_err(")", m);
 		return (1);
 	}
-	else if (y > x)
+	else if (x > y)
 	{
 		pars_err("(", m);
 		return (1);
@@ -133,7 +128,6 @@ void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 	while (i-- > 1)
 		lstadd_back(lexer, lstnew());
 	l_analys(m, lexer);
-	doublefree(m->str);
 	while ((*lexer)->prev)
 		*lexer = (*lexer)->prev;
 	parser(*lexer, m);

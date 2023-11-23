@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/22 17:15:24 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/23 00:15:49 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,30 @@ int	err(char *error, char *str, t_ms *ms, int type)
 		ms->exit_num = 258;
 		return (-2);
 	}
+	else if (type == 4)
+	{
+		printf("minishell cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
+		ms->err = 1;
+		ms->exit_num = 0;
+	}
 	return (1);
 }
 
-int	perr(char *str, t_ms *ms)
+void	ft_exit(t_ms *ms, int n)
 {
-	perror(str);
-	ms->err = 1;
-	ms->exit_num = 1;
-	return (1);
+	int		fd;
+	char	*fd2;
+	
+	if (access("exit_file", F_OK) != 0)
+		open("exit_file", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	ms->exit_num = ft_atoi(ms->tree[ms->ord]->next->_word);
+		fd = open("exit_file", O_RDWR);
+	fd2 = ft_itoa(ms->exit_num);
+	write(fd, fd2, ft_strlen(fd2));
+	n = ms->exit_num;
+	close(fd);
+	ft_free2(ms);
+	exit (n);
 }
 
 int	exit_mode(int n, t_ms *ms)
@@ -57,12 +72,7 @@ int	exit_mode(int n, t_ms *ms)
 	{
 		printf("exit\n");
 		if (ms->tree[ms->ord]->next && ms->tree[ms->ord]->next->_word)
-		{
-			ms->exit_num = ft_atoi(ms->tree[ms->ord]->next->_word);
-			n = ms->exit_num;
-			ft_free2(ms);
-			exit (n);
-		}
+			ft_exit(ms, n);
 		ft_free2(ms);
 		exit (0);
 	}

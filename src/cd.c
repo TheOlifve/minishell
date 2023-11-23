@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 17:02:22 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 02:19:25 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ int	ft_chdir(t_ms *ms, char *ptr, int j)
 		ptr = ft_strdup(ms->tree[ms->ord]->next->_word);
 	buff = getcwd(NULL, 0);
 	vp = cd2(ptr, buff, ms, -1);
+	printf("%s\n", vp);
 	chdir(vp);
+		// err(NULL, NULL, ms, 4);
 	free(buff);
 	free(vp);
 	// system("leaks minishell");

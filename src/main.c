@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/23 14:00:43 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/22 20:37:02 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,20 @@ void	main2(t_ms *ms, int i)
 	ms->prior = 0;
 	ms->p_err = 0;
 	ms->index = -1;
+	ms->bonus = -1;
+	ms->bonus2 = -1;
 	ms->bb = 0;
 	ms->c1 = 0;
 	ms->c2 = 0;
 	ms->ord = 0;
 	ms->bool_word = 0;
-	ms->my_cmd = NULL;
 	ms->dol2 = 0;
 	ms->err = 0;
+	ms->pipe_cmd = 0;
 	ms->args_old = NULL;
 	ms->args_old = readline("minishell% ");
 	ctrld(ms->args_old, ms);
-	if (ms->args_old)
+	if (ms->args_old && *ms->args_old)
 		add_history (ms->args_old);
 	if (g_glob == SIGINT)
 		ms->exit_num = 1;
@@ -57,8 +59,10 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 	{
 		m_s->args = m_s->args_old;
 		tokenizer(m_s, &lexer, -1, -1);
-		// if (m_s->prior == 5 && access("bonus_help", F_OK) == 0)
-		// 	unlink("bonus_help");
+		if (access("src/heredoc", F_OK) == 0)
+			unlink("src/heredoc");
+		if (access("bonus_help", F_OK) == 0)
+			unlink("bonus_help");
 		free(m_s->args_old);
 		ft_free2(m_s);
 	}

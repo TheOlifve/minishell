@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 16:47:20 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/22 11:17:18 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ char	*read_file(void)
 
 void	cat_exit(t_ms *ms, char *str)
 {
-	if (ms->prior == 4)
-		ms->prior = 5;
 	if (ft_strcmp(str, "/bin/cat") == 0)
 	{
 		if (g_glob == SIGINT)
