@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/23 00:13:35 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/23 14:02:24 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	o_space3(t_ms *ms, int i, int n)
 			i, ft_strlen(ms->args_old) - i);
 	free(ms->args_old);
 	ms->args_old = ft_strjoin(str1, str2);
+	free(str1);
+	free(str2);
 	ms->num -= x;
 	return (0);
 }
@@ -131,6 +133,7 @@ void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 	while (i-- > 1)
 		lstadd_back(lexer, lstnew());
 	l_analys(m, lexer);
+	doublefree(m->str);
 	while ((*lexer)->prev)
 		*lexer = (*lexer)->prev;
 	parser(*lexer, m);
