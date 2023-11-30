@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   engine2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 12:10:06 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/24 23:56:45 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/29 00:33:48 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,18 @@
 
 int	bonus_file(t_ms *ms)
 {
+	char	**file;
+
 	if (ms->tree[ms->ord])
 			goto_start(ms);
 	while (ms->tree[ms->ord])
 	{
 		if (ms->tree[ms->ord]->_redir)
-			open_files(ms, ft_split(ms->tree[ms->ord]->_redir, ' '), 0);
+		{
+			file = ft_split(ms->tree[ms->ord]->_redir, ' ');
+			open_files(ms, file, 0);
+		}
+		// doublefree(file);
 		ms->ord += 1;
 	}
 	return (0);

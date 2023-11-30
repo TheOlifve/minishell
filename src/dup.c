@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:27:39 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/23 15:54:26 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/30 14:00:36 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,12 @@ int	my_dup2(int read, int write1, t_ms *ms)
 	{
 		if (dup2(read, 0) < 0)
 			return (my_write("minishell: Bad file descriptor\n", 1));
-		if (dup2(ms->bonus, 1) < 0)
-			return (my_write("minishell: Bad file descriptor\n", 1));
-	}
-	else if (ms->prior == 5)
-	{
-		if (dup2(ms->bonus, 0) < 0)
-			return (my_write("minishell: Bad file descriptor\n", 1));
 		if (ms->bonus2 > 0)
-			write1 = ms->bonus2;
-		if (dup2(write1, 1) < 0)
+		{
+			if (dup2(ms->bonus2, 1) < 0)
+				return (my_write("minishell: Bad file descriptor\n", 1));
+		}
+		else if (dup2(ms->bonus, 1) < 0)
 			return (my_write("minishell: Bad file descriptor\n", 1));
 	}
 	else
@@ -44,12 +40,14 @@ void	bonus_dup2(t_ms *ms, int n)
 {
 	char	*tmp;
 	int		fd;
-	
-	if (ms->tree[n] && ms->tree[n]->_redir)
-		my_exit(std_dup(ms, ft_split(ms->tree[n]->_redir, ' ')), 1, ms);
-	else
-		my_exit(3, 3, ms);
-	if (ms->tree[0] && !ms->tree[0]->_pipe)
+
+	if (ms->bonus2 > 0)
+		my_dup2(ms->bonus, ms->bonus2, ms);
+	else if (ms->c2 > 0)
+		my_dup2(ms->bonus, ms->c2, ms);
+	else if (ms->bonus2 == 0)
+		my_exit(ms->bonus, 0, ms);
+	if (!ms->tree[n]->_pipe)
 	{
 		fd = open("bonus_help", O_RDONLY);
 		tmp = get_next_line(fd);
@@ -72,7 +70,9 @@ void	bonus_dup(t_ms *ms, int pid)
 	n = ms->ord;
 	if (ms->pipe_cmd == 1)
 		n -= 1;
-	if (ms->prior == 4 && ms->tree[n])
+	if (ms->c1 == 1)
+		ms->bonus2 = 0;
+	if (ms->prior == 4 && ms->c1 == 1)
 	{
 		ms->prior = 5;
 		pid = fork();
@@ -93,6 +93,7 @@ int	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd, int fd)
 {
 	char	*in_file;
 	char	*out_file;
+	char	**file;
 
 	in_file = in_find(cmd);
 	out_file = out_find(cmd);
@@ -105,13 +106,15 @@ int	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd, int fd)
 			pipex->fd[pipex->index][1], ms);
 	if (in_file != NULL)
 	{
-		fd = open_files(ms, ft_split(in_file, ' '), -1);
+		file = ft_split(in_file, ' ');
+		fd = open_files(ms, file, -1);
 		if (fd < 0)
 			return (1);
 		if (pipex->index == pipex->cmd_cnt - 1)
 			my_dup2(fd, 1, ms);
 		else
 			my_dup2(fd, pipex->fd[pipex->index][1], ms);
+		doublefree(file);
 	}
 	if (out_file != NULL)
 		out_dup(ms, pipex, out_file);

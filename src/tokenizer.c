@@ -3,38 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/23 15:38:35 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/30 14:17:30 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	o_space3(t_ms *ms, int i, int n)
-{
-	char	*str1;
-	char	*str2;
-	int		x;
-
-	x = 0;
-	i = i + n;
-	str1 = ft_substr(ms->args_old, 0, i);
-	while (ms->args_old[i] == ' ')
-	{
-		i++;
-		x++;
-	}
-	str2 = ft_substr(ms->args_old,
-			i, ft_strlen(ms->args_old) - i);
-	free(ms->args_old);
-	ms->args_old = ft_strjoin(str1, str2);
-	free(str1);
-	free(str2);
-	ms->num -= x;
-	return (0);
-}
 
 int	o_space2(t_ms *ms, int i, int n)
 {
@@ -110,13 +86,11 @@ void	l_analys(t_ms *m, t_lexer **lexer)
 	(*lexer) = head;
 }
 
-void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
+int	tokenizer2(t_ms *m, int i, int j)
 {
-	pipe_check(m);
-	if (spaces(m, -1) == 1)
-		return ;
-	if (ft_scope(m, -1, 0, 0) == 1)
-		return ;
+	m->c1 = 0;
+	m->c2 = 0;
+	m->x = 0;
 	m->str = ft_split(m->args, ' ');
 	while (m && m->str && m->str[++i])
 	{
@@ -129,6 +103,19 @@ void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 				m->str[i][j] = '\t';
 		}
 	}
+	return (i);
+}
+
+void	tokenizer(t_ms *m, t_lexer **lexer)
+{
+	int	i;
+	
+	pipe_check(m);
+	if (spaces(m, -1) == 1)
+		return ;
+	if (ft_scope(m, -1, 0, 0) == 1)
+		return ;
+	i = tokenizer2(m, -1, -1);
 	(*lexer) = lstnew();
 	while (i-- > 1)
 		lstadd_back(lexer, lstnew());
@@ -137,6 +124,9 @@ void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j)
 	while ((*lexer)->prev)
 		*lexer = (*lexer)->prev;
 	parser(*lexer, m);
+	// ft_free2(m);
+	// system("leaks minishell");
+	// exit(0);
 	if (m->p_err == 0)
 		engine(m, -1);
 }

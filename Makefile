@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 10:59:36 by rugrigor          #+#    #+#              #
-#    Updated: 2023/11/23 16:06:53 by hrahovha         ###   ########.fr        #
+#    Updated: 2023/11/30 14:14:17 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,8 @@ SRC = 	src/main.c				\
 		src/parser_operator.c	\
 		src/pp_bb.c				\
 		src/heredoc.c			\
-		src/bonus.c
+		src/bonus.c				\
+		src/bonus2.c
 
 LIBFT = libft
 
@@ -58,7 +59,7 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 
 MINI = $(patsubst %.o, $(BUILD)/%.o, $(OBJ))
 
-CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror #-fsanitize=address
 
 INC = -Ireadline/include -Ilibft
 

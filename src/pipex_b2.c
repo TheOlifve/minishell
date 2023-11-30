@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_b2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/23 15:37:04 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/27 15:26:57 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,12 @@ char	*in_find(char **cmd)
 
 void	out_dup(t_ms *ms, t_pipex *pipex, char *out_file)
 {
-	int	fd;
+	int		fd;
+	char	**file;
 
+	file = ft_split(out_file, ' ');
 	fd = open_files(ms, ft_split(out_file, ' '), -1);
+	doublefree(file);
 	if (pipex->index == 0)
 		my_dup2(0, fd, ms);
 	else
@@ -87,6 +90,7 @@ int	std_dup(t_ms *ms, char **file)
 		tmp = ft_split(in_file, ' ');
 		free(in_file);
 		fd = open_files(ms, tmp, -1);
+		free(tmp);
 		if (fd < 0)
 			return (1);
 		my_dup2(fd, 1, ms);
@@ -96,6 +100,7 @@ int	std_dup(t_ms *ms, char **file)
 		tmp2 = ft_split(out_file, ' ');
 		free(out_file);
 		fd = my_dup2(0, open_files(ms, tmp2, -1), ms);
+		free(tmp2);
 	}
 	return (fd);
 }

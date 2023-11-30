@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:02:35 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/23 15:57:35 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/30 14:05:12 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ char	*cmd_build(t_ms *ms, char *word);
 void	ft_concat(t_ms *ms, char *cmd);
 char	*ft_join(char *str, char *str2, int i);
 char	*dol2(char *ptr, char *str, int i, int n);
+char	*priority2(t_ms *ms, char *str, char *ptr, int n);
 void	main_sig(t_ms *ms);
 void	ft_free2(t_ms *ms);
 void	ft_search(t_ms *ms);
@@ -175,11 +176,12 @@ void	pipe_close(t_pipex *pipex);
 void	ctrld(char *line, t_ms *ms);
 void	bonus_dup(t_ms *ms, int pid);
 void	cat_exit(t_ms *ms, char *str);
+void	tokenizer(t_ms *m, t_lexer **lexer);
 void	pipe_open(t_pipex *pipex, t_ms *ms);
+void	file_cmd(t_ms *ms, int i, char *tmp);
 void	pipex(t_ms *ms, char **argv, int num);
 void	lstadd_back(t_lexer **lst, t_lexer *new);
 void	tree_add_back(t_tree **tree, t_tree *new);
-void	tokenizer(t_ms *m, t_lexer **lexer, int i, int j);
 void	out_dup(t_ms *ms, t_pipex *pipex, char *out_file);
 t_lexer	*lstnew(void);
 t_tree	*tree_new(void);

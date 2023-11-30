@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 19:59:02 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/20 12:44:29 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/11/30 14:04:10 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ void	sig2(int sig)
 
 void	main_sig(t_ms *ms)
 {
+	ms->bb = 0;
+	ms->c1 = 0;
+	ms->c2 = 0;
+	ms->ord = 0;
 	rl_catch_signals = 0;
 	ms->sa.sa_handler = sig2;
 	sigemptyset(&ms->sa.sa_mask);

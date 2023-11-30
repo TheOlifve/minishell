@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/21 17:02:22 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/27 15:34:29 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ int	ft_chdir(t_ms *ms, char *ptr, int j)
 	vp = cd2(ptr, buff, ms, -1);
 	chdir(vp);
 	free(buff);
-	free(vp);
+	if (ptr && ptr[0] && !(ptr[0] == '-'))
+		free(vp);
 	// system("leaks minishell");
 	env2(ms, ms->envp[j], 0, 0);
 	if (ptr && ptr[0] && ptr[0] == '-' && ptr[1] && ptr[1] == '-'

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   engine.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/24 23:22:27 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/30 13:45:39 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ int	engine2(t_ms *ms, int n)
 	}
 	else if (ms->err == 1 && n >= 0)
 	{
+		ms->bb = 0;
 		ms->ord = n + 1;
 		engine(ms, 0);
 		return (1);

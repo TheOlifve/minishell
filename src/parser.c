@@ -3,14 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/23 16:50:39 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/01 00:09:44 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	o_space3(t_ms *ms, int i, int n)
+{
+	char	*str1;
+	char	*str2;
+	int		x;
+
+	x = 0;
+	i = i + n;
+	str1 = ft_substr(ms->args_old, 0, i);
+	while (ms->args_old[i] == ' ')
+	{
+		i++;
+		x++;
+	}
+	str2 = ft_substr(ms->args_old,
+			i, ft_strlen(ms->args_old) - i);
+	free(ms->args_old);
+	ms->args_old = ft_strjoin(str1, str2);
+	free(str1);
+	free(str2);
+	ms->num -= x;
+	return (0);
+}
 
 int	spaces(t_ms *ms, int i)
 {
@@ -52,9 +76,17 @@ int	parser(t_lexer *lexer, t_ms *ms)
 		else
 			break ;
 	}
+	// while (lexer)
+	// {
+	// 	free(lexer->id);
+	// 	free(lexer->kw);
+	// 	if (lexer->next)
+	// 		lexer = lexer->next;
+	// 	else
+	// 		break ;
+	// }
+	// ft_free2(ma
 	ms->ord = 0;
-	return (0);
-}
 	// while (ms->tree[ms->ord])
 	// {
 	// 	goto_start(ms);
@@ -70,3 +102,5 @@ int	parser(t_lexer *lexer, t_ms *ms)
 	// 	ms->ord++;
 	// } 
 	// ms->ord = 0;
+	return (0);
+}

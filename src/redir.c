@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/23 15:52:33 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/11/30 13:29:46 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ int	my_write(char *str, int i)
 		write(2, ": command not found\n", 20);
 	}
 	else if (i == 1)
+	{
 		write(2, str, ft_strlen(str));
 		write(2, "minishell: Bad file descriptor\n", 31);
+	}
 	return (-1);
 }
 
