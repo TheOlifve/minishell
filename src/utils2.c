@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 12:11:50 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/25 22:57:09 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/01 19:38:37 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	ft_concat(t_ms *ms, char *cmd)
 		ms->my_cmd = NULL;
 	}
 	tmp2 = ft_join(tmp, cmd, 3);
-	free(tmp);
+	if (ms->my_cmd != NULL)
+		free(ms->my_cmd);
 	ms->my_cmd = ft_strdup(tmp2);
 	free(tmp2);
 }
@@ -78,24 +79,14 @@ char	*ft_join(char *str, char *str2, int i)
 
 	tmp = NULL;
 	tmp2 = NULL;
-	if (i == 0)
-		return (ft_strjoin(str, str2));
-	else if (i == 2)
-	{
-		if (!str)
-			str = ft_strdup("");
-		tmp = ft_strjoin(str, str2);
+	if (str == NULL)
+		str = ft_strdup("");
+	tmp = ft_strjoin(str, str2);
+	if (i == 2)
 		tmp2 = ft_strjoin(tmp, "|");
-		free(tmp);
-		return (tmp2);
-	}
 	else
-	{
-		if (!str)
-			str = ft_strdup("");
-		tmp = ft_strjoin(str, str2);
 		tmp2 = ft_strjoin(tmp, " ");
-		free(tmp);
-		return (tmp2);
-	}
+	free(str);
+	free(tmp);
+	return (tmp2);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:47:43 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/30 13:49:20 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:27:00 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	file_cmd(t_ms *ms, int i, char *tmp)
 	{
 		ms->x = file_cmd2(&file[i], i, -1);
 		if (ms->x == 2)
-			tmp = ft_strtrim(ft_strdup(file[i]), ")");
+			tmp = ft_strtrim(ft_strdup(file[i]), ")");//leak
 		else
 			tmp = ft_strdup(file[i]);
 		if (ft_strncmp(file[i], ">>", 2) == 0 && file[i] != NULL)
@@ -94,4 +94,5 @@ void	file_cmd(t_ms *ms, int i, char *tmp)
 			file_cmd3(ms, &file[i], i);
 		free(tmp);
 	}
+	doublefree(file);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/27 15:19:33 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/01 17:14:07 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,24 +76,27 @@ int	open_files(t_ms *ms, char **file, int fd)
 		{
 			*file += 2;
 			fd = open(*file, O_RDWR | O_APPEND | O_CREAT, 0644);
+			*file -= 2;
 		}
 		else if (ft_strncmp(*file, ">", 1) == 0 && *file != NULL)
 		{
 			*file += 1;
 			fd = open(*file, O_RDWR | O_TRUNC | O_CREAT, 0644);
+			*file -= 1;
 		}
 		else if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
 		{
 			*file += 2;
 			fd = open("src/heredoc", O_RDWR);
+			*file -= 2;
 		}
 		else if (ft_strncmp(*file, "<", 1) == 0 && *file != NULL)
 		{
 			*file += 1;
 			fd = open_files_help(ms, file, fd);
+			*file -= 1;
 		}
 		file++;
 	}
-	// doublefree(file);
 	return (fd);
 }

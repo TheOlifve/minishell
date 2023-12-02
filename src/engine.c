@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   engine.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/30 13:45:39 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/01 20:32:47 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,9 @@ int	exec_builtin(t_ms *ms, char **cmd)
 	i = 0;
 	if (ms->tree[ms->ord]->_redir != NULL)
 	{
-		// system("leaks minishell");
 		tmp = ft_split(ms->tree[ms->ord]->_redir, ' ');
 		i = std_dup(ms, tmp);
 		my_exit(i, 2, ms);
-		doublefree(tmp);
-		// exit(0);
 	}
 	if (i == 1)
 	{
@@ -83,6 +80,7 @@ int	exec_one_cmd(t_ms *ms)
 	}
 	tmp = cmd_builder(ms);
 	cmd = ft_split(tmp, ' ');
+	free(tmp);
 	if (check_built(cmd[0]))
 		return (exec_builtin(ms, cmd));
 	pid = fork();
@@ -122,10 +120,8 @@ void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
 			tmp = ft_join(tmp3, ms->tree[ms->ord]->_redir, 3);
 		}
 		tmp2 = ft_join(str, tmp, 2);
-		if (str)
-			free(str);
-		str = ft_strdup(tmp2);
 		free(tmp);
+		str = ft_strdup(tmp2);
 		free(tmp2);
 		if (ms->tree[ms->ord]->_pipe == NULL)
 			break ;

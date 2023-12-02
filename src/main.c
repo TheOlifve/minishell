@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/03 15:00:36 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/30 14:04:29 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/01 17:37:38 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,11 @@ int	loop(t_ms *m_s, t_lexer *lexer)
 			unlink("src/heredoc");
 		if (access("bonus_help", F_OK) == 0)
 			unlink("bonus_help");
-		free(m_s->args_old);
-		ft_free2(m_s);
+		free(m_s->args);
+		free(m_s->wd_tmp);
+		free(m_s->my_cmd);
+		free(m_s->ptr);
+		doublefree(m_s->str);
 	}
 	return (0);
 }

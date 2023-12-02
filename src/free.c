@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/30 14:36:30 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:11:18 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,15 @@ int	exit_mode(int n, t_ms *ms)
 
 void	ft_free2(t_ms *ms)
 {
-	ms->ord = 0;
-	while (ms->tree[ms->ord])
+	int	i;
+
+	i = 0;
+	while (i < ms->ord)
 	{
 		if (ms->tree[ms->ord] != NULL)
 			free(ms->tree[ms->ord]);
 		ms->tree[ms->ord] = NULL;
-		ms->ord += 1;
+		i++;
 	}
 	ms->ord = 0;
 }

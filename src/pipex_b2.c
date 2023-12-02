@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_b2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 17:21:29 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/27 15:26:57 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/01 19:51:01 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ char	*out_find(char **cmd)
 			if (tmp == NULL)
 				tmp = ft_strdup("");
 			tmp2 = ft_join(tmp, cmd[i], 1);
-			free(tmp);
 			tmp = ft_strdup(tmp2);
 			free(tmp2);
 		}
@@ -51,7 +50,6 @@ char	*in_find(char **cmd)
 			if (tmp == NULL)
 				tmp = ft_strdup("");
 			tmp2 = ft_join(tmp, cmd[i], 1);
-			free(tmp);
 			tmp = ft_strdup(tmp2);
 			free(tmp2);
 		}
@@ -90,17 +88,19 @@ int	std_dup(t_ms *ms, char **file)
 		tmp = ft_split(in_file, ' ');
 		free(in_file);
 		fd = open_files(ms, tmp, -1);
-		free(tmp);
 		if (fd < 0)
 			return (1);
 		my_dup2(fd, 1, ms);
+		doublefree(tmp);
 	}
 	if (out_file != NULL)
 	{
 		tmp2 = ft_split(out_file, ' ');
 		free(out_file);
 		fd = my_dup2(0, open_files(ms, tmp2, -1), ms);
-		free(tmp2);
+		doublefree(tmp2);
 	}
+	doublefree(file);
+	// exit(0);
 	return (fd);
 }

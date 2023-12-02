@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/30 14:17:30 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/01 17:38:06 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,13 +120,9 @@ void	tokenizer(t_ms *m, t_lexer **lexer)
 	while (i-- > 1)
 		lstadd_back(lexer, lstnew());
 	l_analys(m, lexer);
-	doublefree(m->str);
 	while ((*lexer)->prev)
 		*lexer = (*lexer)->prev;
 	parser(*lexer, m);
-	// ft_free2(m);
-	// system("leaks minishell");
-	// exit(0);
 	if (m->p_err == 0)
 		engine(m, -1);
 }

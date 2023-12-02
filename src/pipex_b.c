@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/24 23:08:24 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/01 20:30:21 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,30 +45,34 @@ char	**redir_cut(char **cmd)
 		if (cmd[i][0] == '<' || cmd[i][0] == '>')
 			break ;
 		tmp = ft_join(tmp1, cmd[i], 1);
-		free(tmp1);
 		tmp1 = ft_strdup(tmp);
 		free(tmp);
 		i++;
 	}
 	tmp3 = ft_split(tmp1, ' ');
+	doublefree(cmd);
 	return (tmp3);
 }
 
 int	heredoc_find(t_ms *ms, char **cmd_args)
 {
-	char	*tmp_cmd;
-
 	while (*cmd_args)
 	{
 		if (ft_strncmp(*cmd_args, "<<", 2) == 0 && *cmd_args != NULL)
 		{
-			tmp_cmd = *cmd_args;
 			*cmd_args += 2;
 			if (ft_strcmp(*cmd_args, "\0") == 0)
+			{
+				*cmd_args -= 2;
 				return (err(NULL, NULL, ms, 3));
+			}
 			if (heredoc(*cmd_args, 0, NULL) == 270)
+			{
+				*cmd_args -= 2;
 				return (270);
-			*cmd_args = tmp_cmd;
+			}
+			else
+				*cmd_args -= 2;
 		}
 		cmd_args++;
 	}
@@ -102,7 +106,7 @@ int	child(t_ms *ms, t_pipex *pipex, char *argv)
 	else if (pipex->pid == 0)
 		exit (0);
 	cat_exit(ms, cmd_args[0]);
-	free(cmd_args);
+	doublefree(cmd_args);
 	return (0);
 }
 
