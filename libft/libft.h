@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 10:59:22 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/10 18:53:51 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:04:03 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,22 @@
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
+int		ft_isdigit2(char *str);
 int		ft_isalnum(int c);
 int		ft_isascii(int c);
 int		ft_isprint(int c);
 size_t	ft_strlen(const char *str);
+size_t	ft_strlen1(int str);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
+int		ft_ast(char *str);
 int		ft_strcmp2(char *s1, char *s2);
+int		ft_strcmp3(char *s1, char *s2);
 char	*ft_strchr(char *str, int n);
 char	*ft_strrchr(const char *str, int n);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_strcpm(char *s1, char *s2);
+int		ft_strrcmp2(char *str, char *cmp, int i);
 void	*ft_memset(void *str, int c, size_t n);
 void	*ft_memcpy(void *str, const void *dest, size_t n);
 void	*ft_memmove(void *str, const void *dest, size_t n);
@@ -39,6 +44,7 @@ int		ft_memcmp(const void *str1, const void *str2, size_t n);
 size_t	ft_strlcpy(char *dest, const char *str, size_t destn);
 char	*ft_strdup(const char *str);
 int		ft_atoi(const char *str);
+long	ft_atol(const char *str);
 void	*ft_calloc(size_t p, size_t n);
 char	*ft_strnstr(const char *big, const char *lit, size_t len);
 size_t	ft_strlcat(char *dest, const char *str, size_t destn);

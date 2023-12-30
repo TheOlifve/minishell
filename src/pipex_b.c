@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_b.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 16:04:20 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/12/01 20:30:21 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/20 17:13:22 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char	**redir_cut(char **cmd)
 		i++;
 	}
 	tmp3 = ft_split(tmp1, ' ');
+	free(tmp1);
 	doublefree(cmd);
 	return (tmp3);
 }
@@ -66,42 +67,43 @@ int	heredoc_find(t_ms *ms, char **cmd_args)
 				*cmd_args -= 2;
 				return (err(NULL, NULL, ms, 3));
 			}
-			if (heredoc(*cmd_args, 0, NULL) == 270)
+			g_glob = 5;
+			if (heredoc(*cmd_args, 0, NULL, NULL) == 270)
 			{
+				g_glob = 0;
 				*cmd_args -= 2;
 				return (270);
 			}
 			else
 				*cmd_args -= 2;
+			g_glob = 0;
 		}
 		cmd_args++;
 	}
 	return (0);
 }
 
-int	child(t_ms *ms, t_pipex *pipex, char *argv)
+int	child(t_ms *ms, t_pipex *pipex, char *argv, char **cmd_args)
 {
-	char	**cmd_args;
-	
 	cmd_args = ft_split(argv, ' ');
 	if (!cmd_args)
 		exit_mode(3, ms);
-	heredoc_find(ms, cmd_args);
+	if (heredoc_find(ms, cmd_args) == 270)
+		return (child_doc(cmd_args));
 	if (check_built(cmd_args[0]))
+	{
+		cmd_args = ex_1(cmd_args, -1, -1);
 		return (child_builtin(ms, pipex, cmd_args));
+	}
 	pipex->pid = fork();
+	if (pipex->pid == -1)
+		return (my_write2(ms, cmd_args));
 	if (pipex->pid == 0)
 	{
 		if (cmd_args[0][0] == '<' || cmd_args[0][0] == '>')
 			my_exit(open_files(ms, cmd_args, -1), 1, ms);
 		my_exit(child_dup(ms, pipex, cmd_args, 0), 1, ms);
-		cmd_args = redir_cut(ft_split(argv, ' '));
-		if (cmd_args[0] == NULL)
-			exit (0);
-		pipe_close(pipex);
-		execve(cmd_args[0], cmd_args, ms->envp);
-		my_write(cmd_args[0], 0);
-		exit_mode(7, ms);
+		child_help2(ms, pipex, argv);
 	}
 	else if (pipex->pid == 0)
 		exit (0);
@@ -125,7 +127,7 @@ void	pipex(t_ms *ms, char **argv, int num)
 	pipe_open(&pipex, ms);
 	while (++num <= pipex.pipes_cnt)
 	{
-		child(ms, &pipex, argv[pipex.cmd_crnt]);
+		child(ms, &pipex, argv[pipex.cmd_crnt], NULL);
 		pipex.cmd_crnt++;
 		ms->ord += 1;
 		pipex.index += 1;
@@ -134,7 +136,7 @@ void	pipex(t_ms *ms, char **argv, int num)
 	ms->pipe_cmd = 1;
 	while (wait(ptr) != -1)
 		;
-	ms->exit_num = ptr[0];
+	ms->exit_num = ptr[0] / 256;
 	if (ptr[0] > 0)
 		ft_search(ms);
 }

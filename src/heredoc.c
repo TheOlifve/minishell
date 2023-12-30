@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/12/01 17:14:07 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/20 15:24:38 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,8 @@ void	sig3(void)
 	rl_event_hook = &handler;
 }
 
-int	heredoc(char *str, int file, char *tmp)
+int	heredoc(char *str, int file, char *tmp, char *tmp2)
 {
-	g_glob = 5;
 	file = open("src/heredoc", O_RDWR | O_TRUNC | O_CREAT, 0644);
 	if (file < 0)
 		return (0);
@@ -44,32 +43,57 @@ int	heredoc(char *str, int file, char *tmp)
 		sig3();
 		tmp = readline("heredoc> ");
 		if (g_glob == 7)
+		{
+			free(tmp);
 			return (270);
+		}
 		if (!tmp)
 			break ;
 		if (ft_strcmp2(str, tmp) == -10)
 			break ;
+		tmp2 = ft_strdup(tmp);
 		free(tmp);
-		tmp = ft_strjoin(tmp, "\n");
+		tmp = ft_strjoin(tmp2, "\n");
+		free(tmp2);
 		ft_putstr_fd(tmp, file);
 		free(tmp);
 	}
-	g_glob = 0;
-	free(tmp);
-	close(file);
+	heredoc2(file, tmp);
 	return (0);
 }
 
 int	open_files_help(t_ms *ms, char **file, int fd)
 {
-	fd = open(*file, O_RDWR);
-	if (fd < 0)
-		return (err(NULL, *file, ms, 1));
+	while (*file)
+	{
+		if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
+		{
+			*file += 2;
+			fd = open("src/heredoc", O_RDWR);
+			*file -= 2;
+		}
+		else if (ft_strncmp(*file, "<", 1) == 0 && *file != NULL)
+		{
+			*file += 1;
+			fd = open(*file, O_RDWR);
+			if (fd < 0)
+			{
+				err(NULL, *file, ms, 1);
+				*file -= 1;
+				return (-2);
+			}
+			*file -= 1;
+		}
+		file++;
+	}
 	return (fd);
 }
 
 int	open_files(t_ms *ms, char **file, int fd)
 {
+	char	**file2;
+
+	file2 = file;
 	while (*file)
 	{
 		if (ft_strncmp(*file, ">>", 2) == 0 && *file != NULL)
@@ -84,19 +108,8 @@ int	open_files(t_ms *ms, char **file, int fd)
 			fd = open(*file, O_RDWR | O_TRUNC | O_CREAT, 0644);
 			*file -= 1;
 		}
-		else if (ft_strncmp(*file, "<<", 2) == 0 && *file != NULL)
-		{
-			*file += 2;
-			fd = open("src/heredoc", O_RDWR);
-			*file -= 2;
-		}
-		else if (ft_strncmp(*file, "<", 1) == 0 && *file != NULL)
-		{
-			*file += 1;
-			fd = open_files_help(ms, file, fd);
-			*file -= 1;
-		}
 		file++;
 	}
+	fd = open_files_help(ms, file2, fd);
 	return (fd);
 }

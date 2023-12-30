@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 14:38:53 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/23 15:21:07 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/18 19:56:32 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,21 @@ char	*dol(char *str, char *ft, int n)
 	ft2 = NULL;
 	str2 = ft_strtrim(str, "\n");
 	if (ft == NULL)
-		ft = (str2 + n);
+		ft = ft_strdup(str2 + n);
 	else
 	{
 		ft2 = ft_strjoin(ft, str2 + n);
-		ft = ft2;
+		ft = ft_strdup(ft2);
+		free(ft2);
 	}
+	free(str2);
 	return (ft);
 }
 
 char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
 {
 	char	*str;
+	char	*str2;
 	int		i;
 
 	if (!ptr)
@@ -41,12 +44,14 @@ char	*dollar2(t_ms *ms, char *ptr, int n, char *ft)
 	i = -1;
 	while (ms->envp[++i])
 	{
-		if (ptr != 0 && ft_strncmp(ft_strjoin(ptr, "="),
-				ms->envp[i], ft_strlen(ptr) + 1) == 0)
+		str2 = ft_strjoin(ptr, "=");
+		if (ptr != 0 && ft_strncmp(str2, ms->envp[i], ft_strlen(ptr) + 1) == 0)
 		{
 			str = ft_strtrim(ms->envp[i], "\n");
-			ft = (str + n);
+			ft = ft_strdup(str + n);
+			free(str);
 		}
+		free(str2);
 	}
 	return (ft);
 }
@@ -79,16 +84,16 @@ char	*dollar(t_ms *ms, char *str, int i, int n)
 			ptr = dol2(NULL, str, i, n);
 			while (ptr[n])
 				n++;
-			ft = dollar2(ms, ptr, n + 1, NULL);
-			ms->dol--;
-			if (ft2)
-				ft = ft_strjoin(ft2, ft);
+			if (ft)
+				free(ft);
+			ft = dollar4(ms, ft2, ptr, n);
 			if (ms->dol != 0)
-				ft2 = ft;
+				ft2 = ft_strdup(ft);
 			free(ptr);
 		}
 		i++;
 	}
+	free(ft2);
 	return (ft);
 }
 

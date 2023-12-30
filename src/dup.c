@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 11:27:39 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/30 14:00:36 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/15 16:55:33 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	bonus_dup2(t_ms *ms, int n)
 	{
 		fd = open("bonus_help", O_RDONLY);
 		tmp = get_next_line(fd);
-		while(tmp)
+		while (tmp)
 		{
 			printf("%s", tmp);
 			free(tmp);
@@ -66,7 +66,7 @@ void	bonus_dup(t_ms *ms, int pid)
 {
 	int		ptr[1];
 	int		n;
-	
+
 	n = ms->ord;
 	if (ms->pipe_cmd == 1)
 		n -= 1;
@@ -83,20 +83,18 @@ void	bonus_dup(t_ms *ms, int pid)
 		}
 		while (wait(ptr) != -1)
 			;
-		ms->exit_num = ptr[0];
+		ms->exit_num = ptr[0] / 256;
 		if (ptr[0] > 0)
-		ft_search(ms);
+			ft_search(ms);
 	}
 }
 
-int	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd, int fd)
+int	child_dup(t_ms *ms, t_pipex *pipex, char **cmd, int fd)
 {
 	char	*in_file;
-	char	*out_file;
 	char	**file;
 
 	in_file = in_find(cmd);
-	out_file = out_find(cmd);
 	if (pipex->index == 0 && in_file == NULL)
 		my_dup2(0, pipex->fd[pipex->index][1], ms);
 	else if (pipex->index == pipex->cmd_cnt - 1 && in_file == NULL)
@@ -108,15 +106,13 @@ int	child_dup(t_ms	*ms, t_pipex *pipex, char **cmd, int fd)
 	{
 		file = ft_split(in_file, ' ');
 		fd = open_files(ms, file, -1);
+		doublefree(file);
 		if (fd < 0)
 			return (1);
 		if (pipex->index == pipex->cmd_cnt - 1)
 			my_dup2(fd, 1, ms);
 		else
 			my_dup2(fd, pipex->fd[pipex->index][1], ms);
-		doublefree(file);
 	}
-	if (out_file != NULL)
-		out_dup(ms, pipex, out_file);
-	return (0);
+	return (out_dup(ms, pipex, cmd));
 }

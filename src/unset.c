@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 16:47:35 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/11 15:40:53 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,15 @@ int	ft_remove(t_ms *ms, int pos, char **tmp)
 	j = 0;
 	while (ms->envp && ms->envp[i])
 		i++;
-	free(ms->envp);
+	doublefree(ms->envp);
 	ms->envp = malloc(sizeof(char *) * i);
 	ms->envp[i - 1] = NULL;
 	i = 0;
-	while (tmp && tmp[j] && ms->envp[i])
+	while (tmp && tmp[j])
 	{
 		if (j != pos)
 		{
-			ms->envp[i] = tmp[j];
+			ms->envp[i] = ft_strdup(tmp[j]);
 			i++;
 			j++;
 		}
@@ -109,5 +109,6 @@ int	ft_unset(t_ms *ms, char **str, int i)
 		if (ft_strncmp(tmp[j], str[i], ft_strlen(str[i])) == 0)
 			ft_remove(ms, j, tmp);
 	}
+	doublefree(tmp);
 	return (0);
 }

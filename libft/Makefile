@@ -6,7 +6,7 @@
 #    By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/16 13:39:19 by rugrigor          #+#    #+#              #
-#    Updated: 2023/08/29 13:54:27 by rugrigor         ###   ########.fr        #
+#    Updated: 2023/12/06 19:39:00 by rugrigor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS =  ft_memset.c		\
 		ft_strtrim.c	\
 		ft_split.c		\
 		ft_itoa.c		\
+		ft_atol.c		\
 		ft_strmapi.c	\
 		ft_putchar_fd.c	\
 		ft_putstr_fd.c	\

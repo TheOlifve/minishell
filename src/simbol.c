@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 3223/07/10 14:44:13 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/23 15:38:07 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/19 16:28:28 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	str_join2(t_ms *ms, int i, char c, int n)
 	int		x;
 
 	x = i;
+	ms->user = 1;
 	if (n == 0)
 		while (ms->args_old[x++] == c)
 			n++;
@@ -76,7 +77,7 @@ int	simbol2(t_ms *ms, int i)
 				return (i);
 			else if (ms->args_old[i] == 39)
 				return (i);
-		}	
+		}
 	}
 	else if (ms->args_old[i] && ms->args_old[i] == 39 && ms->c1 % 2 != 0)
 	{
@@ -86,7 +87,7 @@ int	simbol2(t_ms *ms, int i)
 				return (1);
 			else if (ms->args_old[i] == 34)
 				return (2);
-		}		
+		}
 	}
 	return (0);
 }

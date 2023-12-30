@@ -6,38 +6,36 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/27 15:34:29 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/20 14:25:09 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	env2(t_ms *ms, char *oldpwd, int i, int j)
+void	env2(t_ms *ms, char **env, int i, int j)
 {
-	char	**env;
-
 	while (ms->envp[i])
 		i++;
 	env = malloc(sizeof(char *) * (i + 2));
-	if (!env)
-		return ;
 	i = 0;
 	while (ms->envp[i])
 	{
 		if (ft_strncmp(ms->envp[i], "PWD=", 4) == 0
 			&& ft_strncmp(ms->envp[i + 1], "OLDPWD=", 7) == 0)
 		{
-			free(env);
+			env[j] = NULL;
+			doublefree(env);
 			return ;
 		}
 		else if (ft_strncmp(ms->envp[i], "PWD=", 4) == 0)
 		{
-			env[j++] = ms->envp[i++];
-			env[j++] = ft_strjoin("OLD", oldpwd);
+			env[j++] = ft_strdup(ms->envp[i++]);
+			env[j++] = ft_strjoin("OLD", ms->envp[i - 1]);
 		}
-		env[j++] = ms->envp[i++];
+		env[j++] = ft_strdup(ms->envp[i++]);
 	}
 	env[j] = NULL;
+	doublefree(ms->envp);
 	ms->envp = env;
 }
 
@@ -65,37 +63,54 @@ char	*cd2(char *ptr, char *buff, t_ms *ms, int i)
 			return (vp);
 		}
 	}
-	if (buff)
-		vp = ft_strjoin(buff, (ft_strjoin("/", ptr)));
-	else
-		return (ptr);
-	return (vp);
+	return (cd2_help(vp, ptr, buff, NULL));
 }
 
-int	ft_chdir(t_ms *ms, char *ptr, int j)
+int	ft_chdir3(t_ms *ms, char *ptr)
 {
-	char	*vp;
+	if (ptr != NULL && ptr[0] && ptr[0] == '-' && ptr[1] && ptr[1] == '-'
+		&& ptr[2] && ptr[2] == '-')
+	{
+		free (ptr);
+		return (perr("minishell: cd", ms));
+	}
+	else if (ptr != NULL && ptr[0] && ptr[0] == '-' && !ptr[1])
+	{
+		free (ptr);
+		return (pwd(ms, 2, -1, NULL));
+	}
+	else
+	{
+		free(ptr);
+		return (pwd(ms, 0, -1, NULL));
+	}
+	return (0);
+}
+
+int	ft_chdir(t_ms *ms, char *ptr, char *vp, int i)
+{
 	char	*buff;
 
+	buff = getcwd(NULL, 0);
+	if (buff == NULL)
+		chdir4(ms);
+	if ((ptr == NULL && ms->tree[ms->ord]->next->_file)
+		|| (ptr == NULL && ms->tree[ms->ord]->next->_word))
+		free(ptr);
 	if (ptr == NULL && ms->tree[ms->ord]->next->_file)
 		ptr = ft_strdup(ms->tree[ms->ord]->next->_file);
 	else if (ptr == NULL && ms->tree[ms->ord]->next->_word)
 		ptr = ft_strdup(ms->tree[ms->ord]->next->_word);
-	buff = getcwd(NULL, 0);
 	vp = cd2(ptr, buff, ms, -1);
-	chdir(vp);
 	free(buff);
+	while (ms->envp[i])
+		i++;
+	if (chdir(vp) != 0)
+		return (ft_chdir2(ms, ptr, vp));
+	env2(ms, NULL, i, 0);
 	if (ptr && ptr[0] && !(ptr[0] == '-'))
 		free(vp);
-	// system("leaks minishell");
-	env2(ms, ms->envp[j], 0, 0);
-	if (ptr && ptr[0] && ptr[0] == '-' && ptr[1] && ptr[1] == '-'
-		&& ptr[2] && ptr[2] == '-')
-		return (perr("minishell: cd", ms));
-	else if (ptr[0] && ptr[0] == '-' && !ptr[1])
-		return (pwd(ms, 1));
-	else
-		return (pwd(ms, 0));
+	return (ft_chdir3(ms, ptr));
 }
 
 int	cd(t_ms *ms, int j)
@@ -105,21 +120,16 @@ int	cd(t_ms *ms, int j)
 
 	goto_start(ms);
 	while (ms->envp[++j])
-	{
 		if (ft_strncmp(ms->envp[j], "HOME=", 5) == 0)
 			home = ms->envp[j] + 5;
-		if (ft_strncmp(ms->envp[j], "PWD=", 4) == 0)
-			break ;
-	}
 	if (ms->tree[ms->ord]->next == NULL && !ms->tree[ms->ord]->_option)
 	{
 		if (chdir(home) != 0)
 			return (perr("minishell: cd", ms));
-		env2(ms, ms->envp[j], 0, 0);
-		return (pwd(ms, 0));
+		env2(ms, NULL, 0, 0);
+		return (pwd(ms, 0, -1, NULL));
 	}
 	ptr = ft_strdup(ms->tree[ms->ord]->_option);
-	ft_chdir(ms, ptr, j);
-	free (ptr);
+	ft_chdir(ms, ptr, NULL, 0);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/12/01 00:09:44 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/15 16:45:56 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	spaces(t_ms *ms, int i)
 			ptr[i] = 32;
 	i = 0;
 	while (ptr && ptr[i] != '\0')
-	{	
+	{
 		if (ptr[i] != 32)
 		{
 			free(ptr);
@@ -56,6 +56,23 @@ int	spaces(t_ms *ms, int i)
 	}
 	free(ptr);
 	return (1);
+}
+
+void	lexer_free(t_lexer *lexer)
+{
+	while (lexer->prev)
+		lexer = lexer->prev;
+	while (lexer)
+	{
+		free(lexer->id);
+		free(lexer->kw);
+		if (lexer->next)
+			lexer = lexer->next;
+		else
+			break ;
+		free(lexer->prev);
+	}
+	free(lexer);
 }
 
 int	parser(t_lexer *lexer, t_ms *ms)
@@ -76,31 +93,7 @@ int	parser(t_lexer *lexer, t_ms *ms)
 		else
 			break ;
 	}
-	// while (lexer)
-	// {
-	// 	free(lexer->id);
-	// 	free(lexer->kw);
-	// 	if (lexer->next)
-	// 		lexer = lexer->next;
-	// 	else
-	// 		break ;
-	// }
-	// ft_free2(ma
 	ms->ord = 0;
-	// while (ms->tree[ms->ord])
-	// {
-	// 	goto_start(ms);
-	// 	while (ms->tree[ms->ord])
-	// 	{
-	// 		printf("cmd - %s\noption - %s\nfile - %s\nword - %s\nredir - %s\npipe - %s\nand - %s\nor - %s\n",ms->tree[ms->ord]->_cmd,ms->tree[ms->ord]->_option,
-	// 		ms->tree[ms->ord]->_file,ms->tree[ms->ord]->_word,
-	// 		ms->tree[ms->ord]->_redir,ms->tree[ms->ord]->_pipe,
-	// 		ms->tree[ms->ord]->_and,ms->tree[ms->ord]->_or);
-	// 		printf("_____________________________________________________\n");
-	// 		ms->tree[ms->ord] = ms->tree[ms->ord]->next;
-	// 	}
-	// 	ms->ord++;
-	// } 
-	// ms->ord = 0;
+	lexer_free(lexer);
 	return (0);
 }

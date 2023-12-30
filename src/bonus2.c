@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 13:47:43 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/12/01 15:27:00 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/07 16:10:15 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,18 @@ int	file_cmd2(char **file, int i, int j)
 void	file_cmd(t_ms *ms, int i, char *tmp)
 {
 	char	**file;
+	char	*tmp2;
 
 	file = ft_split(ms->tree[ms->ord]->_redir, ' ');
 	while (ms->tree[ms->ord]->_redir && file[++i] && ms->x == 0)
 	{
-		ms->x = file_cmd2(&file[i], i, -1);
+		ms->x = file_cmd2(file, i, -1);
+		tmp2 = ft_strdup(file[i]);
 		if (ms->x == 2)
-			tmp = ft_strtrim(ft_strdup(file[i]), ")");//leak
+			tmp = ft_strtrim(tmp2, ")");
 		else
 			tmp = ft_strdup(file[i]);
+		free(tmp2);
 		if (ft_strncmp(file[i], ">>", 2) == 0 && file[i] != NULL)
 			ms->bonus2 = open(tmp + 2, O_RDWR | O_APPEND | O_CREAT, 0644);
 		else if (ft_strncmp(file[i], ">", 1) == 0 && file[i] != NULL)

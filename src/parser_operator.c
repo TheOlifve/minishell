@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser_operator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/21 16:46:59 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/19 16:15:39 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*redir_build(t_ms *ms, char *opr)
+void	redir_build(t_ms *ms, char *opr)
 {
 	char	*tmp;
 	char	*tmp2;
@@ -23,10 +23,11 @@ char	*redir_build(t_ms *ms, char *opr)
 		tmp2 = ft_strjoin(tmp, opr);
 		free(ms->tree[ms->ord]->_redir);
 		free(tmp);
-		return (tmp2);
+		ms->tree[ms->ord]->_redir = ft_strdup(tmp2);
+		free(tmp2);
+		return ;
 	}
-	tmp2 = ft_strdup(opr);
-	return (tmp2);
+	ms->tree[ms->ord]->_redir = ft_strdup(opr);
 }
 
 int	opr_cmp(char *opr)
@@ -41,14 +42,24 @@ int	opr_cmp(char *opr)
 		return (3);
 }
 
+void	operator_distribute3(t_ms *ms)
+{
+	ms->ord++;
+	ms->bool_word = 0;
+	tree_add_back(&ms->tree[ms->ord], tree_new());
+}
+
 void	operator_distribute2(t_ms *ms, int type, char *opr)
 {
 	if (type == 0)
 	{
-		if (ms->bool_word == 0)
+		if (ms->bool_word == 0 && ms->tree[ms->ord]->_redir == NULL)
+		{
+			free(ms->tree[ms->ord]);
 			ms->tree[ms->ord] = tree_new();
+		}
 		goto_start(ms);
-		ms->tree[ms->ord]->_redir = redir_build(ms, opr);
+		redir_build(ms, opr);
 	}
 	if (type == 1)
 	{
@@ -62,11 +73,7 @@ void	operator_distribute2(t_ms *ms, int type, char *opr)
 	else if (type == 3)
 		ms->tree[ms->ord]->_or = ft_strdup("||");
 	if (type == 1 || type == 2 || type == 3)
-	{
-		ms->ord++;
-		ms->bool_word = 0;
-		tree_add_back(&ms->tree[ms->ord], tree_new());
-	}
+		operator_distribute3(ms);
 }
 
 int	operator_distribute(t_ms *ms, char *opr)

@@ -6,86 +6,38 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/09 18:39:15 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/20 14:36:36 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	check_var(char *str, t_ms *ms)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	if (!str)
-		return (1);
-	j = check_var2(str);
-	if (j == -1)
-	{
-		err("export", str, ms, 0);
-		return (3);
-	}
-	else if (j == -2)
-		return (2);
-	else if (j == -3)
-		return (0);
-	else if (check_var3(str, i, j, ms) != 0)
-		return (3);
-	return (0);
-}
-
-char	*str_replace(char *str)
-{
-	int		i;
-	int		j;
-	char	*str2;
-
-	i = 0;
-	j = 0;
-	while (str[i] && str[i] != '+')
-		i++;
-	if (str[i] == '+' && str[i + 1] == '=')
-	{
-		str2 = ft_strdup(str);
-		j = i + 1;
-		while (str[j])
-		{
-			str[i] = str2[j];
-			i++;
-			j++;
-		}
-		str[i] = '\0';
-	}
-	return (str);
-}
-
 int	append(t_ms *ms, int len, char *str, char **tmp)
 {
 	int		i;
+	char	*tmp_s;
 
-	i = 0;
-	str = str_replace(str);
-	while (ms->envp && ms->envp[i])
+	i = -1;
+	tmp_s = str_replace(ms, str, NULL, NULL);
+	tmp_s = str_replace2(ms, tmp_s, tmp, -1);
+	if (tmp_s == NULL)
+		return (err("export", str, ms, 0));
+	len = is_plus(ms, len, 1);
+	while (ms->envp && ms->envp[++i])
 	{
-		if (ft_strncmp(tmp[i], str, len + 1) == 0)
+		if (ft_strncmp(tmp[i], tmp_s, len) == 0)
 		{
-			ms->envp[i] = malloc(sizeof(char *));
-			ms->envp[i] = ft_strdup(str);
+			len = is_plus(ms, len, 0);
+			if (str[len] == '=')
+			{
+				free(ms->envp[i]);
+				ms->envp[i] = ft_strdup(tmp_s);
+			}
+			free(tmp_s);
 			return (0);
 		}
-		i++;
 	}
-	free(ms->envp);
-	ms->envp = malloc(sizeof(char *) * (i + 2));
-	i = 0;
-	while (tmp && tmp[i])
-	{
-		ms->envp[i] = ft_strdup(tmp[i]);
-		i++;
-	}
-	ms->envp[i] = ft_strdup(str);
-	ms->envp[i + 1] = NULL;
+	append2(ms, i, tmp, tmp_s);
 	return (0);
 }
 
@@ -114,30 +66,41 @@ char	**caching(char **str)
 	return (tmp);
 }
 
-int	ft_export(t_ms *ms, char **str, int i, int j)
+void	ft_export4(t_ms *ms, char **str, char **tmp, int i)
+{
+	int	j;
+
+	j = 0;
+	while (str && str[i])
+	{
+		j = 0;
+		tmp = caching(ms->envp);
+		while (str && str[i] && str[i][j] && str[i][j] != '=')
+			j++;
+		append(ms, j, str[i], tmp);
+		doublefree(tmp);
+		i++;
+	}
+}
+
+int	ft_export(t_ms *ms, char **str, int i)
 {
 	int		test;
-	char	**tmp;
 
-	tmp = NULL;
 	if (!str[i])
 		return (1);
-	test = ft_export2(ms, str, i);
-	if (test == 1)
+	while (str && str[i])
 	{
-		i++;
-		ft_export(ms, str, i, 0);
+		test = ft_export2(ms, str, i);
+		if (test == 1 || test == 0)
+			i++;
+		else if (test == 2)
+			return (0);
+		else if (test == 3)
+			return (1);
 	}
-	else if (test == 2)
-		return (0);
-	else if (test == 3)
-		return (1);
 	if (!ms->envp)
 		return (ft_export_env(ms, str, i));
-	tmp = caching(ms->envp);
-	while (str[i] && str[i][j] != '=')
-		j++;
-	append(ms, j, str[i], tmp);
-	free(tmp);
+	ft_export4(ms, str, NULL, 1);
 	return (0);
 }

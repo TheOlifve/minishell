@@ -6,7 +6,7 @@
 /*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:40:23 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/12/01 15:27:56 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/30 22:08:58 by hrahovha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ void	eng2(t_ms *ms, int n)
 		if (ms->tree[n]->_redir && !ms->tree[n]->_pipe)
 			file_cmd(ms, -1, NULL);
 		if (ms->tree[n]->_cmd)
-			ms->tree[n]->_cmd = word_cmp3(ms, priority(ms, ms->tree[n]->_cmd, -1, n));
+			ms->tree[n]->_cmd = word_cmp3(ms,
+					priority(ms, ms->tree[n]->_cmd, -1, n));
 		if (ms->tree[n]->_option)
 			ms->tree[n]->_option = priority(ms, ms->tree[n]->_option, -1, n);
 		if (ms->tree[n]->_redir)
@@ -102,7 +103,7 @@ void	eng2(t_ms *ms, int n)
 		n++;
 	}
 	if (access("bonus_help", F_OK) != 0 && ms->prior > 0)
-			ms->bonus = open("bonus_help", O_RDWR | O_APPEND | O_CREAT, 0644);
+		ms->bonus = open("bonus_help", O_RDWR | O_APPEND | O_CREAT, 0644);
 }
 
 int	eng(t_ms *ms)

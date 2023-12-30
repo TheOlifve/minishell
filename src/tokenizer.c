@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/12/01 17:38:06 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/22 11:33:19 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	o_space2(t_ms *ms, int i, int n)
 		str2 = ft_substr(ms->args_old, i, ft_strlen(ms->args_old) - i);
 		free(ms->args_old);
 		ms->args_old = ft_strjoin(str1, str2);
+		free(str1);
+		free(str2);
 		ms->num++;
 	}
 	return (1);
@@ -91,11 +93,13 @@ int	tokenizer2(t_ms *m, int i, int j)
 	m->c1 = 0;
 	m->c2 = 0;
 	m->x = 0;
+	if (wildcard(m, -1, -1) == 1)
+		return (-100);
 	m->str = ft_split(m->args, ' ');
 	while (m && m->str && m->str[++i])
 	{
 		j = -1;
-		while (m->str[i][++j])
+		while (m->str && m->str[i] && m->str[i][++j])
 		{
 			if (m->str[i][j] == 5)
 				m->str[i][j] = 32;
@@ -106,16 +110,22 @@ int	tokenizer2(t_ms *m, int i, int j)
 	return (i);
 }
 
-void	tokenizer(t_ms *m, t_lexer **lexer)
+void	tokenizer(t_ms *m, t_lexer **lexer, int i)
 {
-	int	i;
-	
-	pipe_check(m);
+	if (!*m->args)
+	{
+		printf("minishell: : command not found\n");
+		return ;
+	}
+	if (pipe_check(m) == 1)
+		return ;
 	if (spaces(m, -1) == 1)
 		return ;
 	if (ft_scope(m, -1, 0, 0) == 1)
 		return ;
 	i = tokenizer2(m, -1, -1);
+	if (i == -100)
+		return ;
 	(*lexer) = lstnew();
 	while (i-- > 1)
 		lstadd_back(lexer, lstnew());

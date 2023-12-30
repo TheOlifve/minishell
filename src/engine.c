@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   engine.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/12/01 20:32:47 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/22 11:37:47 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	cmd_find(t_ms *ms, char **cmd)
 	if (ft_strcmp(cmd[0], "export") == 0 && cmd[1] == NULL)
 		return (ft_export3(ms, 0, 0));
 	else if (ft_strcmp(cmd[0], "export") == 0)
-		return (ft_export(ms, cmd, 1, 0));
+		return (ft_export(ms, cmd, 1));
 	else if (ft_strcmp(cmd[0], "unset") == 0)
 		return (ft_unset(ms, cmd, 1));
 	else if (ft_strcmp(cmd[0], "echo") == 0)
@@ -25,11 +25,11 @@ int	cmd_find(t_ms *ms, char **cmd)
 	else if (ft_strcmp(cmd[0], "cd") == 0)
 		return (cd(ms, -1));
 	else if (ft_strcmp(cmd[0], "exit") == 0 && ms->prior > 0)
-		return (0);
+		return (exit4(ms, cmd));
 	else if (ft_strcmp(cmd[0], "exit") == 0)
 		return (exit_mode(0, ms));
 	else if (ft_strcmp(cmd[0], "pwd") == 0)
-		return (pwd(ms, 1));
+		return (pwd(ms, 1, -1, NULL));
 	else if (ft_strcmp(cmd[0], "env") == 0)
 		return (env(ms));
 	return (2);
@@ -38,18 +38,17 @@ int	cmd_find(t_ms *ms, char **cmd)
 int	exec_builtin(t_ms *ms, char **cmd)
 {
 	int		i;
-	char	**tmp;
 
 	i = 0;
 	if (ms->tree[ms->ord]->_redir != NULL)
 	{
-		tmp = ft_split(ms->tree[ms->ord]->_redir, ' ');
-		i = std_dup(ms, tmp);
+		i = std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' '), 0);
 		my_exit(i, 2, ms);
 	}
-	if (i == 1)
+	if (i == -1)
 	{
 		ms->exit_num = 1;
+		doublefree(cmd);
 		return (1);
 	}
 	i = cmd_find(ms, cmd);
@@ -61,46 +60,6 @@ int	exec_builtin(t_ms *ms, char **cmd)
 	else if (i == 1)
 		ms->exit_num = 1;
 	cat_exit(ms, cmd[0]);
-	doublefree(cmd);
-	return (0);
-}
-
-int	exec_one_cmd(t_ms *ms)
-{
-	char	**cmd;
-	char	*tmp;
-	int		pid;
-	int		ptr[1];
-
-	if (ms->tree[ms->ord]->_redir != NULL)
-	{
-		cmd = ft_split(ms->tree[ms->ord]->_redir, ' ');
-		heredoc_find(ms, cmd);
-		doublefree(cmd);
-	}
-	tmp = cmd_builder(ms);
-	cmd = ft_split(tmp, ' ');
-	free(tmp);
-	if (check_built(cmd[0]))
-		return (exec_builtin(ms, cmd));
-	pid = fork();
-	if (pid == 0)
-	{
-		if (ms->tree[ms->ord]->_redir != NULL || ms->prior > 0)
-			my_exit(std_dup(ms, ft_split(ms->tree[ms->ord]->_redir, ' ')), 1, ms);
-		if (cmd[0] == NULL)
-			exit (0);
-		execve (cmd[0], cmd, ms->envp);
-		my_write(cmd[0], 0);
-		doublefree(cmd);
-		exit_mode(7, ms);
-	}
-	while (wait(ptr) != -1)
-		;
-	ms->exit_num = ptr[0];
-	cat_exit(ms, cmd[0]);
-	if (ptr[0] > 0)
-		ft_search(ms);
 	doublefree(cmd);
 	return (0);
 }
@@ -131,6 +90,7 @@ void	exec_pipe_cmd(t_ms *ms, char *str, char *tmp, char *tmp2)
 	argv = ft_split(str, '|');
 	free(str);
 	pipex(ms, argv, -1);
+	doublefree(argv);
 }
 
 int	engine2(t_ms *ms, int n)
@@ -159,9 +119,9 @@ int	engine(t_ms *ms, int n)
 	{
 		if (!ms->tree[ms->ord])
 			break ;
-		n = eng(ms);
 		if (ms->tree[ms->ord])
 			goto_start(ms);
+		n = eng(ms);
 		if (ms->prior == 7)
 			return (bonus_file(ms));
 		if (ms->tree[ms->ord]->_pipe != NULL)

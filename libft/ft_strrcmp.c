@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrcmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 17:38:14 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/10/27 12:49:05 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/11 14:10:59 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-int	ft_ast(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i] && str[i] != '*')
-		i++;
-	return (i);
-}
 
 int	ft_check(char *str)
 {
@@ -73,26 +63,42 @@ int	bkcheck(char *str, char *cmp, int k)
 	return (0);
 }
 
+int	ft_strrcmp2(char *str, char *cmp, int i)
+{
+	if (ftcheck(str, cmp, i) == 0
+		&& bkcheck(str, cmp, i) == 0)
+		free(str);
+	else
+	{
+		free(str);
+		return (1);
+	}
+	return (0);
+}
+
 int	ft_strrcmp(char *st, char *cmp)
 {
 	int		i;
 	int		j;
+	int		check;
 	char	*str;
 
 	i = ft_ast(cmp);
 	j = ft_check(cmp);
 	str = ft_strtrim(st, "\n");
 	if (i == 0)
-		return (bkcheck(str, cmp, i));
-	else if (j == 0)
-		return (ftcheck(str, cmp, i));
-	else
 	{
-		if (ftcheck(str, cmp, i) == 0
-			&& bkcheck(str, cmp, i) == 0)
-			return (0);
-		else
-			return (1);
+		check = bkcheck(str, cmp, i);
+		free(str);
+		return (check);
 	}
+	else if (j == 0)
+	{
+		check = ftcheck(str, cmp, i);
+		free(str);
+		return (check);
+	}
+	else
+		return (ft_strrcmp2(str, cmp, i));
 	return (0);
 }

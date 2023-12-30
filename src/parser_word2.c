@@ -6,11 +6,24 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:32:34 by hrahovha          #+#    #+#             */
-/*   Updated: 2023/11/30 14:28:36 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/06 12:01:45 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	doublefree(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
 
 char	*cmd_build(t_ms *ms, char *word)
 {

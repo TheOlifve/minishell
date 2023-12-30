@@ -6,11 +6,19 @@
 /*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 12:44:07 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/30 13:29:46 by rugrigor         ###   ########.fr       */
+/*   Updated: 2023/12/20 17:08:09 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	my_write2(t_ms *ms, char **cmd_args)
+{
+	ms->exit_num = 1;
+	ms->kloun = 128123;
+	doublefree(cmd_args);
+	return (1);
+}
 
 int	my_write(char *str, int i)
 {

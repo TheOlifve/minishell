@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 19:12:25 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/11/23 15:58:20 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/18 13:26:13 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,19 @@ char	*exit_num(t_ms *ms)
 		return (tmp);
 	}
 	return (ft_itoa(ms->exit_num));
+}
+
+int	ft_chdir2(t_ms *ms, char *ptr, char *vp)
+{
+	if (ptr && ptr[0] && !(ptr[0] == '-'))
+		free(vp);
+	else if (ptr && ptr[0] && ptr[0] == '-')
+	{
+		free(ptr);
+		return (err(NULL, NULL, ms, 5));
+	}
+	free(ptr);
+	return (perr("minishell: cd", ms));
 }
 
 int	perr(char *str, t_ms *ms)
@@ -59,15 +72,6 @@ int	get_cmd(char *path, char *cmd)
 		j--;
 		i--;
 	}
-	return (1);
-}
-
-int	help_helper(char *join, char *ptr, char *lex, t_ms *ms)
-{
-	free(join);
-	ms->ptr = ptr;
-	if (ft_strncmp(lex, "./", 2) == 0)
-		ms->ptr = lex;
 	return (1);
 }
 

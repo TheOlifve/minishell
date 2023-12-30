@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hrahovha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rugrigor <rugrigor@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 12:11:50 by rugrigor          #+#    #+#             */
-/*   Updated: 2023/12/01 19:38:37 by hrahovha         ###   ########.fr       */
+/*   Updated: 2023/12/18 12:50:17 by rugrigor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_concat(t_ms *ms, char *cmd)
+void	ft_concat(t_ms *ms, char *cmd, int i, char *tmp)
 {
-	char	*tmp;
 	char	*tmp2;
 
-	tmp = NULL;
+	while (cmd[++i])
+		if (cmd[i] == 32)
+			cmd[i] = 6;
 	if (ms->my_cmd == NULL)
 	{
 		ms->my_cmd = ft_strdup(" ");
@@ -44,7 +45,7 @@ int	space_help(t_ms *ms, int x, int n)
 
 	i = x;
 	while (ms->args_old && ms->args_old[--x] == 32)
-			n++;
+		n++;
 	str1 = ft_substr(ms->args_old, 0, i - n);
 	str2 = ft_substr(ms->args_old, i, ft_strlen(ms->args_old) - (i - n - 1));
 	free(ms->args_old);
