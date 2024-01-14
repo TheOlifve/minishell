@@ -39,7 +39,7 @@ To install `minishell` just run `make` in the root of the cloned repository.
 
 Minishell's architecture is designed to provide a modular and efficient command-line interface. The project is structured into five distinct modules, each responsible for a specific aspect of Minishell's functionality. These modules work together cohesively to deliver seamless user experience. The following sections outline each module's purpose and functionality.
 
-![Minishells architecture](README/Architecture.svg)
+![Minishells architecture](README/Architecture.png)
 
 ### Module Descriptions
 
