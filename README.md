@@ -46,6 +46,5 @@ Minishell's architecture is designed to provide a modular and efficient command-
 - 	`Input` module reads the user input and displays a prompt when waiting for a new command. This module uses the `readline` library, which provides line editing and command history capabilities. Custom signals required for the project are part of this module as well.
 -	`Lexical Analysis` module generates a list of tokens from the given input to be later used to break it down into an abstract syntax tree.
 -	`Parser` interprets the string of tokens and builds an AST.
--	`Expansion` module is responsible for shell expansions. Our project supports all bash-performed expansions, although on a more limited scale.
 -	`Execution` unit executes the commands in the processed AST. This module handles built-ins, process creation, and process management. Additionally, it handles input/output redirection and pipelines, command lists, and subshell execution.
 -	`Exit Status` unit collects the exit status after execution, storing it in a special variable `?`. It also cleans up the memory that is no longer in use.
