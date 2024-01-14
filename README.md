@@ -1,5 +1,5 @@
 # Minishell
-(README/minishell.mov)
+![Quick Demo](https://github.com/TheOlifve/minishell/blob/main/README/minishell-quick-demo.gif)
 ## Description
 
 Minishell is a lightweight implementation of POSIX shell designed to provide a minimalistic command-line interface for interacting with an operating system.
