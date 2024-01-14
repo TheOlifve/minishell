@@ -37,15 +37,14 @@ To install `minishell` just run `make` in the root of the cloned repository.
 
 ## Architecture
 
-Minishell's architecture is designed to provide a modular and efficient command-line interface. The project is structured into six distinct modules, each responsible for a specific aspect of Minishell's functionality. These modules work together cohesively to deliver seamless user experience. The following sections outline each module's purpose and functionality.
+Minishell's architecture is designed to provide a modular and efficient command-line interface. The project is structured into five distinct modules, each responsible for a specific aspect of Minishell's functionality. These modules work together cohesively to deliver seamless user experience. The following sections outline each module's purpose and functionality.
 
-![Minishells architecture](Assets/Architecture.svg)
+![Minishells architecture](README/Architecture.png)
 
 ### Module Descriptions
 
 - 	`Input` module reads the user input and displays a prompt when waiting for a new command. This module uses the `readline` library, which provides line editing and command history capabilities. Custom signals required for the project are part of this module as well.
 -	`Lexical Analysis` module generates a list of tokens from the given input to be later used to break it down into an abstract syntax tree.
 -	`Parser` interprets the string of tokens and builds an AST.
--	`Expansion` module is responsible for shell expansions. Our project supports all bash-performed expansions, although on a more limited scale.
 -	`Execution` unit executes the commands in the processed AST. This module handles built-ins, process creation, and process management. Additionally, it handles input/output redirection and pipelines, command lists, and subshell execution.
 -	`Exit Status` unit collects the exit status after execution, storing it in a special variable `?`. It also cleans up the memory that is no longer in use.
